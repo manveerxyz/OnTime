@@ -1,5 +1,6 @@
 package com.manveerbasra.ontime;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,12 +17,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
         // only for testing
-        Alarm alarm1 = new Alarm(8, 48, "am", true);
-        Alarm alarm2 = new Alarm(10, 45, "pm", false,
+        Alarm alarm1 = new Alarm(8, 48, "AM", true);
+        Alarm alarm2 = new Alarm(10, 45, "PM", false,
                 new String[] {"Monday", "Tuesday"});
 
         Alarm[] alarms = new Alarm[] {
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Link to AddAlarmActivity
+                Intent intent = new Intent(MainActivity.this, AddAlarmActivity.class);
+                startActivity(intent);
             }
         });
     }

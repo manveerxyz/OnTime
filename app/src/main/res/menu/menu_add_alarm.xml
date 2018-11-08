@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.manveerbasra.ontime.MainActivity">
+    <item
+        android:id="@+id/action_alarm_save"
+        android:orderInCategory="100"
+        android:title="@string/action_alarm_save"
+        android:icon="@drawable/ic_check_white_24dp"
+        app:showAsAction="ifRoom" />
+</menu>

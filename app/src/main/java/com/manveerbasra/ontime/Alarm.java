@@ -23,7 +23,7 @@ public class Alarm {
     public Alarm(int hour, int minute, String meridian, boolean active) {
         this.hour = hour;
         this.minute = minute;
-        this.meridian = meridian;
+        this.meridian = meridian.toUpperCase();
         this.active = active;
 
         this.repeat = false;
@@ -39,7 +39,7 @@ public class Alarm {
     public Alarm(int hour, int minute, String meridian, boolean active, String[] activeDays) {
         this.hour = hour;
         this.minute = minute;
-        this.meridian = meridian;
+        this.meridian = meridian.toUpperCase();
         this.active = active;
 
         this.repeat = true;

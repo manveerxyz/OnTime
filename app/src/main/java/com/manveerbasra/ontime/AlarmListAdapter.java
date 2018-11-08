@@ -46,8 +46,10 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
 
         if (alarm.isActive()) {
             activeSwitch.setChecked(true);
+            timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
         } else {
             activeSwitch.setChecked(false);
+            timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorLightGrey));
         }
 
 

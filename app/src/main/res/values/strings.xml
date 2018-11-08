@@ -2,5 +2,7 @@
     <string name="app_name">OnTime</string>
     <string name="action_settings">Settings</string>
 
-    <string name="edit">EDIT</string>
+    <string name="add_alarm">Add New Alarm</string>
+    <string name="set_time">Set time</string>
+    <string name="action_alarm_save">Save Alarm</string>
 </resources>
