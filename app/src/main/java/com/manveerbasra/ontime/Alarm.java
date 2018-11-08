@@ -11,15 +11,45 @@ public class Alarm {
     private int minute;
     private boolean active;
     private boolean repeat;
-    private boolean am;
-    private HashMap<String, Boolean> activeDays;
+    private String meridian;
+    private String[] activeDays;
 
-    public Alarm(int hour, int minute) {
+    /**
+     * Initialize Alarm object with time hour, minute, and meridian
+     * @param hour hour of alarm
+     * @param minute minute of alarm
+     * @param meridian meridian of time either am or pm
+     */
+    public Alarm(int hour, int minute, String meridian, boolean active) {
         this.hour = hour;
         this.minute = minute;
-        this.active = false;
+        this.meridian = meridian;
+        this.active = active;
+
+        this.repeat = false;
+        this.activeDays = new String[0];
     }
 
+    /**
+     * Initialize Alarm object with time hour, minute, and meridian, and repeat + activeDays
+     * @param hour hour of alarm
+     * @param minute minute of alarm
+     * @param meridian meridian of time either am or pm
+     */
+    public Alarm(int hour, int minute, String meridian, boolean active, String[] activeDays) {
+        this.hour = hour;
+        this.minute = minute;
+        this.meridian = meridian;
+        this.active = active;
+
+        this.repeat = true;
+        this.activeDays = activeDays;
+    }
+
+    /**
+     * Return a string representation of time
+     * @return a string concatenation of hour, time and meridian.
+     */
     public String getStringTime() {
         String hour = Integer.toString(this.hour);
 
@@ -30,14 +60,7 @@ public class Alarm {
             minute = Integer.toString(this.minute);
         }
 
-        String meridiem;
-        if (am) {
-            meridiem = "am";
-        } else {
-            meridiem = "pm";
-        }
-
-        return hour + ":" + minute + " " + meridiem;
+        return hour + ":" + minute + " " + meridian;
     }
 
     public int getHour() {
@@ -72,11 +95,25 @@ public class Alarm {
         this.repeat = repeat;
     }
 
-    public HashMap<String, Boolean> getActiveDays() {
-        return activeDays;
+    /**
+     * Return a comma seperated of activeDays
+     * @return comma seperated String of activeDays String[]
+     */
+    public String getStringOfActiveDays() {
+        StringBuilder builder = new StringBuilder();
+        for (String day: activeDays) {
+            day = day + ", ";
+            builder.append(day);
+        }
+
+        if (builder.length() > 1) {
+            builder.setLength(builder.length() - 2);
+        }
+
+        return builder.toString();
     }
 
-    public void setActiveDays(HashMap<String, Boolean> activeDays) {
+    public void setActiveDays(String[] activeDays) {
         this.activeDays = activeDays;
     }
 }

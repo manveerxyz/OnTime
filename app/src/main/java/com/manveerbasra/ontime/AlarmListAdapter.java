@@ -21,21 +21,35 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
         Alarm alarm = getItem(position);
 
+        // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_alarm, parent, false);
         }
 
+        // Get views to populate data
         TextView timeTextView = convertView.findViewById(R.id.alarm_time_text);
+        TextView repetitionTextView = convertView.findViewById(R.id.alarm_repetition_text);
         Switch activeSwitch = convertView.findViewById(R.id.alarm_active_switch);
 
+        // Populate data into views
         timeTextView.setText(alarm.getStringTime());
+
+        if (alarm.isRepeat()) {
+            String repetitionText = "repeat - " + alarm.getStringOfActiveDays();
+            repetitionTextView.setText(repetitionText);
+        } else {
+            repetitionTextView.setText("no repeat");
+        }
+
         if (alarm.isActive()) {
             activeSwitch.setChecked(true);
         } else {
             activeSwitch.setChecked(false);
         }
+
 
         return convertView;
     }

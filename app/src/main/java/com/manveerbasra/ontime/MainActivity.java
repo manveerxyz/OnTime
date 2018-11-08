@@ -20,10 +20,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // only for testing
-        Alarm alarm1 = new Alarm(8, 48);
+        Alarm alarm1 = new Alarm(8, 48, "am", true);
+        Alarm alarm2 = new Alarm(10, 45, "pm", false,
+                new String[] {"Monday", "Tuesday"});
 
         Alarm[] alarms = new Alarm[] {
-                alarm1
+                alarm1,
+                alarm2
         };
 
         ListView alarmListView = findViewById(R.id.alarm_list);
