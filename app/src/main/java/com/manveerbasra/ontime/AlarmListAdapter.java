@@ -39,7 +39,7 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
             String repetitionText = alarm.getStringOfActiveDays();
             repetitionTextView.setText(repetitionText);
         } else {
-            repetitionTextView.setText("no repeat");
+            repetitionTextView.setText(getContext().getString(R.string.no_repeat));
         }
 
         if (alarm.isActive()) {

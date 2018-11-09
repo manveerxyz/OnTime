@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // only for testing
-        Alarm alarm1 = new Alarm(8, 48, "AM", true);
+        Alarm alarm1 = new Alarm(8, 48, "AM");
         Alarm alarm2 = new Alarm(10, 45, "PM", false,
                 new String[] {"Saturday", "Sunday"});
 

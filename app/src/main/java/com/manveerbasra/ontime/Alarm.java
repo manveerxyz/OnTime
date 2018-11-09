@@ -15,16 +15,24 @@ public class Alarm {
     private String[] activeDays;
 
     /**
+     * Empty Constructor for Alarm Object
+     */
+    public Alarm() {
+        this.active = true;
+    }
+
+    /**
      * Initialize Alarm object with time hour, minute, and meridian
-     * @param hour hour of alarm
-     * @param minute minute of alarm
+     *
+     * @param hour     hour of alarm
+     * @param minute   minute of alarm
      * @param meridian meridian of time either am or pm
      */
-    public Alarm(int hour, int minute, String meridian, boolean active) {
+    public Alarm(int hour, int minute, String meridian) {
         this.hour = hour;
         this.minute = minute;
         this.meridian = meridian.toUpperCase();
-        this.active = active;
+        this.active = true;
 
         this.repeat = false;
         this.activeDays = new String[0];
@@ -32,8 +40,9 @@ public class Alarm {
 
     /**
      * Initialize Alarm object with time hour, minute, and meridian, and repeat + activeDays
-     * @param hour hour of alarm
-     * @param minute minute of alarm
+     *
+     * @param hour     hour of alarm
+     * @param minute   minute of alarm
      * @param meridian meridian of time either am or pm
      */
     public Alarm(int hour, int minute, String meridian, boolean active, String[] activeDays) {
@@ -48,6 +57,7 @@ public class Alarm {
 
     /**
      * Return a string representation of time
+     *
      * @return a string concatenation of hour, time and meridian.
      */
     public String getStringTime() {
@@ -65,6 +75,7 @@ public class Alarm {
 
     /**
      * Return a user-readable representation of activeDays
+     *
      * @return readable String of activeDays array
      */
     public String getStringOfActiveDays() {
@@ -76,7 +87,7 @@ public class Alarm {
         boolean sunInArray = false; // "Sunday" in activeDays
 
         StringBuilder builder = new StringBuilder();
-        for (String day: activeDays) {
+        for (String day : activeDays) {
             if (day.equals("Saturday")) {
                 satInArray = true;
             } else if (day.equals("Sunday")) {
@@ -86,12 +97,10 @@ public class Alarm {
             builder.append(formattedDay);
         }
 
-        if (satInArray && sunInArray) {
-            if (activeDays.length == 5) {
-                return "weekdays";
-            } else if (activeDays.length == 2) {
-                return "weekends";
-            }
+        if (satInArray && sunInArray && activeDays.length == 2) {
+            return "weekends";
+        } else if (!satInArray && !sunInArray && activeDays.length == 5) {
+            return "weekdays";
         }
 
         if (builder.length() > 1) {
@@ -99,6 +108,12 @@ public class Alarm {
         }
 
         return builder.toString();
+    }
+
+    public void setTime(int hour, int minute, String meridian) {
+        this.hour = hour;
+        this.minute = minute;
+        this.meridian = meridian;
     }
 
     public int getHour() {
@@ -115,6 +130,14 @@ public class Alarm {
 
     public void setMinute(int minute) {
         this.minute = minute;
+    }
+
+    public String getMeridian() {
+        return meridian;
+    }
+
+    public void setMeridian(String meridian) {
+        this.meridian = meridian;
     }
 
     public boolean isActive() {
@@ -136,5 +159,9 @@ public class Alarm {
 
     public void setActiveDays(String[] activeDays) {
         this.activeDays = activeDays;
+    }
+
+    public String[] getActiveDays() {
+        return this.activeDays;
     }
 }
