@@ -1,13 +1,9 @@
 package com.manveerbasra.ontime;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,15 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.lang.reflect.Array;
-import java.sql.SQLOutput;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Locale;
 
 public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDaysDialogFragment.OnDialogCompleteListener {
 
@@ -31,7 +21,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     TextView timeTextView;
     TextView repeatTextView;
     Calendar calendar;
-    Alarm alarm;
+    AlarmDataManager alarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +30,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         daysOfWeek = getResources().getStringArray(R.array.days_of_week);
         calendar = Calendar.getInstance();
-        alarm = new Alarm();
+        alarm = new AlarmDataManager();
 
         setInitialAlarmTime();
         setInitialRepetition();
@@ -117,6 +107,10 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         });
     }
 
+    /**
+     * Get Bundle of arguments for SetRepeatDaysDialogFragment, arguments include alarm's active days.
+     * @return Bundle of arguments
+     */
     @NonNull
     private Bundle getBundle() {
         Bundle args = new Bundle();
@@ -157,7 +151,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         if (selectedDaysBools.length > 0) {
             ArrayList<String> selectedDays = new ArrayList<>();
 
-
+            // convert a array of boolean days to a String ArrayList of days
             int i = 0;
             for (boolean bool : selectedDaysBools) {
                 if (bool) {
@@ -165,8 +159,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                 }
                 i++;
             }
-
-            System.out.println(selectedDays);
 
             // Convert selectedDays to Array and apply that to alarm
             String[] activeDays = new String[selectedDays.size()];
@@ -198,7 +190,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_alarm_save) {
-            // TODO: Save Alarm
+            // TODO: Save AlarmDataManager
             return true;
         }
 

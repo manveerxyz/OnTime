@@ -3,7 +3,6 @@ package com.manveerbasra.ontime;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,7 +10,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.manveerbasra.ontime.db.Alarm;
+import com.manveerbasra.ontime.db.AlarmDatabase;
+import com.manveerbasra.ontime.db.utils.DatabaseInitializer;
+
+import java.sql.SQLOutput;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    private AlarmDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,15 +28,24 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
-        // only for testing
-        Alarm alarm1 = new Alarm(8, 48, "AM");
-        Alarm alarm2 = new Alarm(10, 45, "PM", false,
-                new String[] {"Saturday", "Sunday"});
+//        // only for testing
+//        AlarmDataManager alarm1 = new AlarmDataManager(8, 48, "AM");
+//        AlarmDataManager alarm2 = new AlarmDataManager(10, 45, "PM", false,
+//                new String[] {"Saturday", "Sunday"});
+//
+//        AlarmDataManager[] alarms = new AlarmDataManager[] {
+//                alarm1,
+//                alarm2
+//        };
 
-        Alarm[] alarms = new Alarm[] {
-                alarm1,
-                alarm2
-        };
+        // Note: Db references should not be in an activity.
+        db = AlarmDatabase.getInMemoryDatabase(getApplicationContext());
+        DatabaseInitializer.populateSync(db);
+
+        List<Alarm> alarmsList = db.alarmModel().loadAllAlarms();
+        System.out.println(alarmsList);
+        Alarm[] alarms = new Alarm[alarmsList.size()];
+        alarms = alarmsList.toArray(alarms);
 
         ListView alarmListView = findViewById(R.id.alarm_list);
         alarmListView.setAdapter(new AlarmListAdapter(MainActivity.this, alarms));

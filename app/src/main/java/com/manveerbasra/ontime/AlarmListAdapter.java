@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.manveerbasra.ontime.db.Alarm;
+
 public class AlarmListAdapter extends ArrayAdapter<Alarm> {
 
     public AlarmListAdapter(@NonNull Context context, @NonNull Alarm[] alarms) {
@@ -27,22 +29,26 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_alarm, parent, false);
         }
 
+        if (alarm == null) { // Ensures dereference isn't null
+            return convertView;
+        }
+
         // Get views to populate data
         TextView timeTextView = convertView.findViewById(R.id.alarm_time_text);
         TextView repetitionTextView = convertView.findViewById(R.id.alarm_repetition_text);
         Switch activeSwitch = convertView.findViewById(R.id.alarm_active_switch);
 
         // Populate data into views
-        timeTextView.setText(alarm.getStringTime());
+        timeTextView.setText(AlarmDataManager.convertToStringTime(alarm.hour, alarm.minute, alarm.meridian));
 
-        if (alarm.isRepeat()) {
-            String repetitionText = alarm.getStringOfActiveDays();
+        if (alarm.repeat) {
+            String repetitionText = alarm.activeDays;
             repetitionTextView.setText(repetitionText);
         } else {
             repetitionTextView.setText(getContext().getString(R.string.no_repeat));
         }
 
-        if (alarm.isActive()) {
+        if (alarm.active) {
             activeSwitch.setChecked(true);
             timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
             repetitionTextView.setTextColor(getContext().getResources().getColor(R.color.colorWhite));
@@ -51,7 +57,6 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
             timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorGrey500));
             repetitionTextView.setTextColor(getContext().getResources().getColor(R.color.colorGrey500));
         }
-
 
         return convertView;
     }
