@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         // only for testing
         Alarm alarm1 = new Alarm(8, 48, "AM", true);
         Alarm alarm2 = new Alarm(10, 45, "PM", false,
-                new String[] {"Monday", "Tuesday"});
+                new String[] {"Saturday", "Sunday"});
 
         Alarm[] alarms = new Alarm[] {
                 alarm1,

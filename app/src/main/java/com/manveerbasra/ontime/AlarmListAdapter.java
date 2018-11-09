@@ -10,8 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.List;
-
 public class AlarmListAdapter extends ArrayAdapter<Alarm> {
 
     public AlarmListAdapter(@NonNull Context context, @NonNull Alarm[] alarms) {
@@ -38,7 +36,7 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
         timeTextView.setText(alarm.getStringTime());
 
         if (alarm.isRepeat()) {
-            String repetitionText = "repeat - " + alarm.getStringOfActiveDays();
+            String repetitionText = alarm.getStringOfActiveDays();
             repetitionTextView.setText(repetitionText);
         } else {
             repetitionTextView.setText("no repeat");
@@ -49,7 +47,7 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
             timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
         } else {
             activeSwitch.setChecked(false);
-            timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorLightGrey));
+            timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorGrey500));
         }
 
 

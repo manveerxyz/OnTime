@@ -3,14 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:orientation="vertical"
-    android:paddingEnd="30dp"
-    android:paddingStart="30dp">
+    android:paddingEnd="20dp"
+    android:paddingStart="20dp">
 
-    <LinearLayout
+    <Switch
+        android:id="@+id/alarm_active_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="20dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/alarm_active_switch"
         android:orientation="vertical">
 
         <TextView
@@ -18,8 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textSize="36sp"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:textSize="36sp" />
 
         <TextView
             android:id="@+id/alarm_repetition_text"
@@ -33,21 +42,11 @@
         android:id="@+id/alarm_edit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical"
-        android:layout_toStartOf="@id/alarm_active_switch"
-        android:padding="7dp"
-        android:layout_marginEnd="8dp"
-        android:background="?android:selectableItemBackground"
-        android:src="@drawable/ic_edit_white_24dp" />
-
-    <Switch
-        android:id="@+id/alarm_active_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical" />
-
+        android:layout_gravity="center_vertical"
+        android:background="?android:selectableItemBackground"
+        android:padding="7dp"
+        android:src="@drawable/ic_edit_white_24dp" />
 
 </RelativeLayout>

@@ -63,6 +63,44 @@ public class Alarm {
         return hour + ":" + minute + " " + meridian;
     }
 
+    /**
+     * Return a user-readable representation of activeDays
+     * @return readable String of activeDays array
+     */
+    public String getStringOfActiveDays() {
+        if (activeDays.length == 7) {
+            return "everyday";
+        }
+
+        boolean satInArray = false; // "Saturday" in activeDays
+        boolean sunInArray = false; // "Sunday" in activeDays
+
+        StringBuilder builder = new StringBuilder();
+        for (String day: activeDays) {
+            if (day.equals("Saturday")) {
+                satInArray = true;
+            } else if (day.equals("Sunday")) {
+                sunInArray = true;
+            }
+            String formattedDay = day.substring(0, 3) + ", ";
+            builder.append(formattedDay);
+        }
+
+        if (satInArray && sunInArray) {
+            if (activeDays.length == 5) {
+                return "weekdays";
+            } else if (activeDays.length == 2) {
+                return "weekends";
+            }
+        }
+
+        if (builder.length() > 1) {
+            builder.setLength(builder.length() - 2);
+        }
+
+        return builder.toString();
+    }
+
     public int getHour() {
         return hour;
     }
@@ -95,23 +133,6 @@ public class Alarm {
         this.repeat = repeat;
     }
 
-    /**
-     * Return a comma seperated of activeDays
-     * @return comma seperated String of activeDays String[]
-     */
-    public String getStringOfActiveDays() {
-        StringBuilder builder = new StringBuilder();
-        for (String day: activeDays) {
-            day = day + ", ";
-            builder.append(day);
-        }
-
-        if (builder.length() > 1) {
-            builder.setLength(builder.length() - 2);
-        }
-
-        return builder.toString();
-    }
 
     public void setActiveDays(String[] activeDays) {
         this.activeDays = activeDays;
