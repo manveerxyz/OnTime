@@ -4,7 +4,8 @@
 
     <string name="add_alarm">Add New Alarm</string>
     <string name="set_time">Set Time</string>
-    <string name="set_repeat">Repeat</string>
+    <string name="repeat">Repeat</string>
+    <string name="set_repeat">Set Repeat</string>
     <string name="no_repeat">no repeat</string>
     <string name="never">never</string>
     <string name="action_alarm_save">Save Alarm</string>

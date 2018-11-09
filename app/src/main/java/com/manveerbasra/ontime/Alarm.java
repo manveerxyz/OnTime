@@ -81,6 +81,8 @@ public class Alarm {
     public String getStringOfActiveDays() {
         if (activeDays.length == 7) {
             return "everyday";
+        } else if (activeDays.length == 0) {
+            return "never";
         }
 
         boolean satInArray = false; // "Saturday" in activeDays

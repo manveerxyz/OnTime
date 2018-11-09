@@ -28,12 +28,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="5dp"
+            android:fontFamily="@string/font_family_medium"
             android:textSize="36sp" />
 
         <TextView
             android:id="@+id/alarm_repetition_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@string/font_family_medium"
             android:textSize="14sp" />
 
     </LinearLayout>

@@ -10,71 +10,100 @@
     <RelativeLayout
         android:id="@+id/add_alarm_time_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="75dp"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="vertical"
+        android:gravity="center_vertical"
         android:padding="14dp">
 
-        <LinearLayout
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:orientation="vertical"
-            android:paddingEnd="50dp"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_set_time_white_24dp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingEnd="14dp"
             android:paddingStart="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@string/font_family_medium"
                 android:text="@string/set_time"
-                android:textSize="20sp" />
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/add_alarm_time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@string/font_family_medium"
+                android:textSize="16sp" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorGrey800" />
 
     <RelativeLayout
         android:id="@+id/add_alarm_repeat_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="75dp"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="vertical"
+        android:gravity="center_vertical"
         android:padding="14dp">
 
-        <LinearLayout
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:orientation="vertical"
-            android:paddingEnd="50dp"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_repeat_white_24dp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingEnd="14dp"
             android:paddingStart="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/set_repeat"
-                android:textSize="20sp" />
+                android:layout_alignParentStart="true"
+                android:fontFamily="@string/font_family_medium"
+                android:text="@string/repeat"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/add_alarm_repeat_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@string/font_family_medium"
+                android:textSize="16sp" />
 
-        </LinearLayout>
+        </RelativeLayout>
+
 
     </RelativeLayout>
-
 
 
 </LinearLayout>
