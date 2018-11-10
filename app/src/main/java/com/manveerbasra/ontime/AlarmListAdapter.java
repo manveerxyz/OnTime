@@ -14,8 +14,14 @@ import android.widget.TextView;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.db.AlarmDbHelper;
 
+/**
+ * ArrayAdapter used to populate MainActivity Alarms ListView
+ */
 public class AlarmListAdapter extends ArrayAdapter<AlarmDataManager> {
 
+    /**
+     * Used to access AlarmDatabase
+     */
     private AlarmDbHelper dbHelper;
 
     public AlarmListAdapter(@NonNull Context context, @NonNull AlarmDataManager[] alarms) {

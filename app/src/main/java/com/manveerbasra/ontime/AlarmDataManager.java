@@ -1,7 +1,5 @@
 package com.manveerbasra.ontime;
 
-import java.util.HashMap;
-
 /**
  * Represent an AlarmDataManager Object
  */
@@ -17,12 +15,27 @@ public class AlarmDataManager {
 
     /**
      * Empty Constructor for AlarmDataManager Object
+     * <p>
+     * Called when AddAlarmActivity is created
      */
     public AlarmDataManager() {
         this.active = true;
         this.activeDays = new String[0];
     }
 
+    /**
+     * Full Constructor for AlarmDataManager Object
+     * <p>
+     * Called when AlarmDbHelper getsAllAlarms()
+     *
+     * @param id         int alarm id (for db use)
+     * @param hour       int alarm hour
+     * @param minute     int alarm minute
+     * @param meridian   int alarm meridian, either AM or PM
+     * @param active     boolean of whether alarm is active or not
+     * @param repeat     boolean of whether alarm repeats or not
+     * @param activeDays String Array of days alarm is active on
+     */
     public AlarmDataManager(int id, int hour, int minute, String meridian, boolean active, boolean repeat, String[] activeDays) {
         this.id = id;
         this.hour = hour;
@@ -91,12 +104,11 @@ public class AlarmDataManager {
         return builder.toString();
     }
 
-    public void setTime(int hour, int minute, String meridian) {
-        this.hour = hour;
-        this.minute = minute;
-        this.meridian = meridian;
-    }
-
+    /**
+     * Set hour, minute, and meridian from String time
+     *
+     * @param time String of format "hh:mm aa"
+     */
     public void setTime(String time) {
         String[] parts = time.split(":");
         String[] parts2 = parts[1].split(" ");
@@ -106,30 +118,24 @@ public class AlarmDataManager {
         this.meridian = parts2[1];
     }
 
-    public int getId() { return id; }
+    /**
+     * General getters and setters
+     */
+
+    public int getId() {
+        return id;
+    }
 
     public int getHour() {
         return hour;
-    }
-
-    public void setHour(int hour) {
-        this.hour = hour;
     }
 
     public int getMinute() {
         return minute;
     }
 
-    public void setMinute(int minute) {
-        this.minute = minute;
-    }
-
     public String getMeridian() {
         return meridian;
-    }
-
-    public void setMeridian(String meridian) {
-        this.meridian = meridian;
     }
 
     public boolean isActive() {

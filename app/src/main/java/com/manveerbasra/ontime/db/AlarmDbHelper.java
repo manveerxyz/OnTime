@@ -32,6 +32,10 @@ public class AlarmDbHelper {
         db.alarmModel().insertAlarm(alarm);
     }
 
+    /**
+     * Update AlarmDataManager object in database
+     * @param alarmDM AlarmDataManager object
+     */
     public void updateAlarm(final AlarmDataManager alarmDM) {
         Alarm alarm = new Alarm();
         alarm.id = alarmDM.getId();

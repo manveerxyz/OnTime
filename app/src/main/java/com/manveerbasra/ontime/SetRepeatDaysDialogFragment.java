@@ -12,10 +12,18 @@ import android.support.v4.app.DialogFragment;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * Fragment used to display Alarm active days to user
+ */
 public class SetRepeatDaysDialogFragment extends DialogFragment {
 
-    public static interface OnDialogCompleteListener {
-        public abstract void onDialogComplete(boolean[] selectedDays);
+    /**
+     * Listener for Dialog Completion
+     *
+     * Implemented in AddAlarmActivity
+     */
+    public interface OnDialogCompleteListener {
+        void onDialogComplete(boolean[] selectedDays);
     }
 
     private OnDialogCompleteListener completeListener;
@@ -31,6 +39,7 @@ public class SetRepeatDaysDialogFragment extends DialogFragment {
         }
     }
 
+    // End of DialogCompleteListener methods
 
     private boolean[] activeDays;
 
