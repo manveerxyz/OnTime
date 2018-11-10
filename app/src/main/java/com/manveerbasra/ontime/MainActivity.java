@@ -35,13 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         dbHelper = new AlarmDbHelper(getApplicationContext());
 
-        //testing only
-        AlarmDataManager alarm1 = new AlarmDataManager(8, 48, "AM");
-        AlarmDataManager alarm2 = new AlarmDataManager(10, 45, "PM", false, true,
-                new String[] {"Saturday", "Sunday"});
-        dbHelper.addAlarm(alarm1);
-        dbHelper.addAlarm(alarm2);
-
         displaySavedAlarms();
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -63,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         // Populate ListView with alarms
         alarmListView = findViewById(R.id.alarm_list);
         alarmListView.setAdapter(new AlarmListAdapter(MainActivity.this, alarms));
+
+        TextView emptyListText = findViewById(R.id.no_alarms_text);
+        alarmListView.setEmptyView(emptyListText);
     }
 
     @Override

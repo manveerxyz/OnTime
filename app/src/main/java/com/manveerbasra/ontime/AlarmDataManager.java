@@ -23,34 +23,6 @@ public class AlarmDataManager {
         this.activeDays = new String[0];
     }
 
-    /**
-     * Initialize AlarmDataManager object with time hour, minute, and meridian
-     *
-     * @param hour     hour of alarm
-     * @param minute   minute of alarm
-     * @param meridian meridian of time either am or pm
-     */
-    public AlarmDataManager(int hour, int minute, String meridian) {
-        this.hour = hour;
-        this.minute = minute;
-        this.meridian = meridian.toUpperCase();
-        this.active = true;
-
-        this.repeat = false;
-        this.activeDays = new String[0];
-    }
-
-
-    public AlarmDataManager(int hour, int minute, String meridian, boolean active, boolean repeat, String[] activeDays) {
-        this.hour = hour;
-        this.minute = minute;
-        this.meridian = meridian.toUpperCase();
-        this.active = active;
-
-        this.repeat = repeat;
-        this.activeDays = activeDays;
-    }
-
     public AlarmDataManager(int id, int hour, int minute, String meridian, boolean active, boolean repeat, String[] activeDays) {
         this.id = id;
         this.hour = hour;
@@ -123,6 +95,15 @@ public class AlarmDataManager {
         this.hour = hour;
         this.minute = minute;
         this.meridian = meridian;
+    }
+
+    public void setTime(String time) {
+        String[] parts = time.split(":");
+        String[] parts2 = parts[1].split(" ");
+
+        this.hour = Integer.parseInt(parts[0]);
+        this.minute = Integer.parseInt(parts2[0]);
+        this.meridian = parts2[1];
     }
 
     public int getId() { return id; }

@@ -1,6 +1,7 @@
 package com.manveerbasra.ontime;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.manveerbasra.ontime.db.AlarmDbHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +25,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     TextView repeatTextView;
     Calendar calendar;
     AlarmDataManager alarm;
+    AlarmDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         daysOfWeek = getResources().getStringArray(R.array.days_of_week);
         calendar = Calendar.getInstance();
         alarm = new AlarmDataManager();
+
+        dbHelper = new AlarmDbHelper(getApplicationContext());
 
         setInitialAlarmTime();
         setInitialRepetition();
@@ -50,6 +56,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         String currentTime = getFormattedTime(hour, minute);
         timeTextView = findViewById(R.id.add_alarm_time_text);
         timeTextView.setText(currentTime);
+        alarm.setTime(currentTime);
+
     }
 
     /**
@@ -58,6 +66,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     private void setInitialRepetition() {
         repeatTextView = findViewById(R.id.add_alarm_repeat_text);
         repeatTextView.setText(getString(R.string.never));
+        alarm.setRepeat(false);
     }
 
     /**
@@ -78,6 +87,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         String formattedTime = getFormattedTime(selectedHour, selectedMinute);
                         timeTextView.setText(formattedTime);
+                        alarm.setTime(formattedTime);
                     }
                 }, hour, minute, false);
                 timePicker.setTitle("Select Time");
@@ -190,8 +200,9 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_alarm_save) {
-            // TODO: Save AlarmDataManager
-            return true;
+            dbHelper.addAlarm(alarm);
+            Intent intent = new Intent(AddAlarmActivity.this, MainActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
