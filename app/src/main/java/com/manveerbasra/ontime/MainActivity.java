@@ -8,10 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.db.AlarmDatabase;
+import com.manveerbasra.ontime.db.AlarmDbHelper;
 import com.manveerbasra.ontime.db.utils.DatabaseInitializer;
 
 import java.sql.SQLOutput;
@@ -19,7 +23,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AlarmDatabase db;
+    private AlarmDbHelper dbHelper;
+    private ListView alarmListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,27 +33,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
-//        // only for testing
-//        AlarmDataManager alarm1 = new AlarmDataManager(8, 48, "AM");
-//        AlarmDataManager alarm2 = new AlarmDataManager(10, 45, "PM", false,
-//                new String[] {"Saturday", "Sunday"});
-//
-//        AlarmDataManager[] alarms = new AlarmDataManager[] {
-//                alarm1,
-//                alarm2
-//        };
+        dbHelper = new AlarmDbHelper(getApplicationContext());
 
-        // Note: Db references should not be in an activity.
-        db = AlarmDatabase.getInMemoryDatabase(getApplicationContext());
-        DatabaseInitializer.populateSync(db);
+        //testing only
+        AlarmDataManager alarm1 = new AlarmDataManager(8, 48, "AM");
+        AlarmDataManager alarm2 = new AlarmDataManager(10, 45, "PM", false, true,
+                new String[] {"Saturday", "Sunday"});
+        dbHelper.addAlarm(alarm1);
+        dbHelper.addAlarm(alarm2);
 
-        List<Alarm> alarmsList = db.alarmModel().loadAllAlarms();
-        System.out.println(alarmsList);
-        Alarm[] alarms = new Alarm[alarmsList.size()];
-        alarms = alarmsList.toArray(alarms);
-
-        ListView alarmListView = findViewById(R.id.alarm_list);
-        alarmListView.setAdapter(new AlarmListAdapter(MainActivity.this, alarms));
+        displaySavedAlarms();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +52,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * Initialize dbHelper, get saved alarms, and initialize ListView of alarms
+     */
+    private void displaySavedAlarms() {
+        // Get saved alarms
+        AlarmDataManager[] alarms = dbHelper.getAllAlarms();
+        // Populate ListView with alarms
+        alarmListView = findViewById(R.id.alarm_list);
+        alarmListView.setAdapter(new AlarmListAdapter(MainActivity.this, alarms));
     }
 
     @Override

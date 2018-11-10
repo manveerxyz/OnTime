@@ -7,6 +7,7 @@ import java.util.HashMap;
  */
 public class AlarmDataManager {
 
+    private int id;
     private int hour;
     private int minute;
     private boolean active;
@@ -19,6 +20,7 @@ public class AlarmDataManager {
      */
     public AlarmDataManager() {
         this.active = true;
+        this.activeDays = new String[0];
     }
 
     /**
@@ -38,20 +40,25 @@ public class AlarmDataManager {
         this.activeDays = new String[0];
     }
 
-    /**
-     * Initialize AlarmDataManager object with time hour, minute, and meridian, and repeat + activeDays
-     *
-     * @param hour     hour of alarm
-     * @param minute   minute of alarm
-     * @param meridian meridian of time either am or pm
-     */
-    public AlarmDataManager(int hour, int minute, String meridian, boolean active, String[] activeDays) {
+
+    public AlarmDataManager(int hour, int minute, String meridian, boolean active, boolean repeat, String[] activeDays) {
         this.hour = hour;
         this.minute = minute;
         this.meridian = meridian.toUpperCase();
         this.active = active;
 
-        this.repeat = true;
+        this.repeat = repeat;
+        this.activeDays = activeDays;
+    }
+
+    public AlarmDataManager(int id, int hour, int minute, String meridian, boolean active, boolean repeat, String[] activeDays) {
+        this.id = id;
+        this.hour = hour;
+        this.minute = minute;
+        this.meridian = meridian.toUpperCase();
+        this.active = active;
+
+        this.repeat = repeat;
         this.activeDays = activeDays;
     }
 
@@ -71,19 +78,6 @@ public class AlarmDataManager {
         }
 
         return hour + ":" + minute + " " + meridian;
-    }
-
-    public static String convertToStringTime(int hour, int minute, String meridian) {
-        String hourString = Integer.toString(hour);
-
-        String minuteString;
-        if (minute < 10) {
-            minuteString = "0" + Integer.toString(minute);
-        } else {
-            minuteString = Integer.toString(minute);
-        }
-
-        return hourString + ":" + minuteString + " " + meridian;
     }
 
     /**
@@ -125,45 +119,13 @@ public class AlarmDataManager {
         return builder.toString();
     }
 
-    public static String convertToStringOfActiveDays(String[] activeDays) {
-        if (activeDays.length == 7) {
-            return "everyday";
-        } else if (activeDays.length == 0) {
-            return "never";
-        }
-
-        boolean satInArray = false; // "Saturday" in activeDays
-        boolean sunInArray = false; // "Sunday" in activeDays
-
-        StringBuilder builder = new StringBuilder();
-        for (String day : activeDays) {
-            if (day.equals("Saturday")) {
-                satInArray = true;
-            } else if (day.equals("Sunday")) {
-                sunInArray = true;
-            }
-            String formattedDay = day.substring(0, 3) + ", ";
-            builder.append(formattedDay);
-        }
-
-        if (satInArray && sunInArray && activeDays.length == 2) {
-            return "weekends";
-        } else if (!satInArray && !sunInArray && activeDays.length == 5) {
-            return "weekdays";
-        }
-
-        if (builder.length() > 1) {
-            builder.setLength(builder.length() - 2);
-        }
-
-        return builder.toString();
-    }
-
     public void setTime(int hour, int minute, String meridian) {
         this.hour = hour;
         this.minute = minute;
         this.meridian = meridian;
     }
+
+    public int getId() { return id; }
 
     public int getHour() {
         return hour;

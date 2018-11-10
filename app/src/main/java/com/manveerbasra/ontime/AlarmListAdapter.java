@@ -7,22 +7,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.manveerbasra.ontime.db.Alarm;
+import com.manveerbasra.ontime.db.AlarmDbHelper;
 
-public class AlarmListAdapter extends ArrayAdapter<Alarm> {
+public class AlarmListAdapter extends ArrayAdapter<AlarmDataManager> {
 
-    public AlarmListAdapter(@NonNull Context context, @NonNull Alarm[] alarms) {
+    private AlarmDbHelper dbHelper;
+
+    public AlarmListAdapter(@NonNull Context context, @NonNull AlarmDataManager[] alarms) {
         super(context, 0, alarms);
+        dbHelper = new AlarmDbHelper(getContext());
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        Alarm alarm = getItem(position);
+        AlarmDataManager alarm = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -38,17 +43,34 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
         TextView repetitionTextView = convertView.findViewById(R.id.alarm_repetition_text);
         Switch activeSwitch = convertView.findViewById(R.id.alarm_active_switch);
 
-        // Populate data into views
-        timeTextView.setText(AlarmDataManager.convertToStringTime(alarm.hour, alarm.minute, alarm.meridian));
+        addSwitchListener(alarm, timeTextView, repetitionTextView, activeSwitch);
+        populateViews(alarm, timeTextView, repetitionTextView, activeSwitch);
 
-        if (alarm.repeat) {
-            String repetitionText = alarm.activeDays;
+
+        return convertView;
+    }
+
+    /**
+     * Populate Views with alarm data
+     * @param alarm AlarmDataManager object
+     * @param timeTextView TextView that displays alarm time
+     * @param repetitionTextView TextView that displays alarm repetition
+     * @param activeSwitch Switch for alarm's active/nonactive state
+     */
+    private void populateViews(AlarmDataManager alarm, TextView timeTextView, TextView repetitionTextView, Switch activeSwitch) {
+        // Set timeTextView
+        timeTextView.setText(alarm.getStringTime());
+
+        // Set repeatTextView
+        if (alarm.isRepeat()) {
+            String repetitionText = alarm.getStringOfActiveDays();
             repetitionTextView.setText(repetitionText);
         } else {
             repetitionTextView.setText(getContext().getString(R.string.no_repeat));
         }
 
-        if (alarm.active) {
+        // Set TextView colors based on alarm's active state
+        if (alarm.isActive()) {
             activeSwitch.setChecked(true);
             timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
             repetitionTextView.setTextColor(getContext().getResources().getColor(R.color.colorWhite));
@@ -57,7 +79,31 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
             timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorGrey500));
             repetitionTextView.setTextColor(getContext().getResources().getColor(R.color.colorGrey500));
         }
+    }
 
-        return convertView;
+    /**
+     * When activeSwitch's checked state changes, update colors and database.
+     * @param alarm AlarmDataManager object
+     * @param timeTextView TextView that displays alarm time
+     * @param repetitionTextView TextView that displays alarm repetition
+     * @param activeSwitch Switch for alarm's active/nonactive state
+     */
+    private void addSwitchListener(final AlarmDataManager alarm, final TextView timeTextView, final TextView repetitionTextView, Switch activeSwitch) {
+        activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    alarm.setActive(true);
+                    timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
+                    repetitionTextView.setTextColor(getContext().getResources().getColor(R.color.colorWhite));
+                } else {
+                    alarm.setActive(false);
+                    timeTextView.setTextColor(getContext().getResources().getColor(R.color.colorGrey500));
+                    repetitionTextView.setTextColor(getContext().getResources().getColor(R.color.colorGrey500));
+                }
+                dbHelper.updateAlarm(alarm);
+                AlarmDataManager[] alarms = dbHelper.getAllAlarms();
+            }
+        });
     }
 }
