@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +26,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_ALARM_ACTIVITY_REQUEST_CODE = 1;
+    public static final int EDIT_ALARM_ACTIVITY_REQUEST_CODE = 2;
 
     /**
      * Used to access AlarmDatabase
@@ -75,10 +75,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updates AlarmViewModel with data received from AddAlarmActivity.
+     *
+     * Handles both new Alarms and edited Alarms.
+     *
+     * @param requestCode request code varies on whether alarm is added or edited
+     * @param resultCode whether activity successfully completed
+     * @param data reply Intent, contains extras
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_ALARM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            // Get Extras.
             String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
             boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
             String[] activeDays = data.getStringArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
@@ -92,11 +102,45 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            // Create new AlarmEntity object.
             AlarmEntity alarm = new AlarmEntity(time, active, activeDays);
+            // Insert into ViewModel.
             alarmViewModel.insert(alarm);
 
-            View view = findViewById(R.id.fab); // Snackbar on this view pushes FAB up to display
-            Snackbar.make(view, "Alarm Saved", Snackbar.LENGTH_SHORT).show();
+            Toast.makeText(
+                    getApplicationContext(),
+                    R.string.alarm_saved,
+                    Toast.LENGTH_LONG).show();
+
+        } else if (requestCode == EDIT_ALARM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            // Get Extras.
+            int id = data.getIntExtra(AddAlarmActivity.EXTRA_ID, -1);
+            String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
+            boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
+            String[] activeDays = data.getStringArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+
+            // Convert String timeStr to Date object.
+            DateFormat formatter = new SimpleDateFormat("hh:mm aa");
+            Date time = null;
+            try {
+                time = formatter.parse(timeStr);
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+
+            // Get AlarmEntity object that was edited.
+            AlarmEntity alarm = alarmViewModel.getById(id);
+            // Update AlarmEntity object.
+            alarm.setTime(time);
+            alarm.setActive(active);
+            alarm.setActiveDays(activeDays);
+            // Update in ViewModel.
+            alarmViewModel.update(alarm);
+
+            Toast.makeText(
+                    getApplicationContext(),
+                    R.string.alarm_saved,
+                    Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(
                     getApplicationContext(),

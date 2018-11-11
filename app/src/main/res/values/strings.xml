@@ -11,7 +11,9 @@
     <string name="no_repeat">no repeat</string>
     <string name="never">never</string>
     <string name="action_alarm_save">Save Alarm</string>
-    <string name="alarm_not_saved">Alarm Not Saved</string>
+
+    <string name="alarm_not_saved">Alarm not saved</string>
+    <string name="alarm_saved">Alarm saved</string>
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>

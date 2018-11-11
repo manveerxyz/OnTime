@@ -1,5 +1,6 @@
 package com.manveerbasra.ontime.db;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -18,9 +19,16 @@ import java.util.Date;
 public class AlarmEntity implements Alarm {
     @PrimaryKey(autoGenerate = true)
     public int id;
+
+    @ColumnInfo(name = "alarm_time")
     public Date time;
+
+    @ColumnInfo(name = "alarm_active")
     public boolean active;
+
+    @ColumnInfo(name = "alarm_active_days")
     public String[] activeDays;
+
 
     @Override
     public int getId() {

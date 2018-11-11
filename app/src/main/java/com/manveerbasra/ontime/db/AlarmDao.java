@@ -7,6 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import java.util.Date;
 import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
@@ -16,6 +17,9 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 public interface AlarmDao {
     @Query("select * from alarms")
     LiveData<List<AlarmEntity>> getAllAlarms();
+
+    @Query("SELECT * FROM alarms WHERE id=:id")
+    AlarmEntity getById(int id);
 
     @Insert(onConflict = IGNORE)
     void insert(AlarmEntity alarm);

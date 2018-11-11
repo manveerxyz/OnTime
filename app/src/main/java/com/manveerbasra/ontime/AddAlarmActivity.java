@@ -16,19 +16,25 @@ import android.widget.TimePicker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDaysDialogFragment.OnDialogCompleteListener {
 
     // Key values for returning intent.
+    public static final String EXTRA_ID = "com.manveerbasra.ontime.ID";
     public static final String EXTRA_TIME = "com.manveerbasra.ontime.TIME";
     public static final String EXTRA_ACTIVE = "com.manveerbasra.ontime.ACTIVE";
     public static final String EXTRA_ACTIVE_DAYS = "com.manveerbasra.ontime.ACTIVEDAYS";
+
+    // AlarmEntity attributes.
+    int alarmID;
+    String time;
+    String[] activeDays;
 
     String[] daysOfWeek;
     TextView timeTextView;
     TextView repeatTextView;
     Calendar calendar;
-    String[] activeDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +44,22 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         daysOfWeek = getResources().getStringArray(R.array.days_of_week);
         calendar = Calendar.getInstance();
 
-        setInitialAlarmTime();
-        setInitialRepetition();
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_ID)) { // Activity called to edit an alarm.
+            alarmID = intent.getIntExtra(EXTRA_ID, -1);
+            time = intent.getStringExtra(EXTRA_TIME);
+            activeDays = intent.getStringArrayExtra(EXTRA_ACTIVE_DAYS);
+
+            timeTextView = findViewById(R.id.add_alarm_time_text);
+            repeatTextView = findViewById(R.id.add_alarm_repeat_text);
+
+            timeTextView.setText(time);
+            repeatTextView.setText(getStringOfActiveDays());
+        } else {
+            setInitialAlarmTime();
+            setInitialRepetition();
+        }
+
         addSetTimeLayoutListener();
         addSetRepeatLayoutListener();
     }
@@ -77,13 +97,24 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         setTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                int minute = calendar.get(Calendar.MINUTE);
+
+                // Get initial hour and minute values to display in dialog;
+                int hour, minute;
+                if (time == null) {
+                    hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    minute = calendar.get(Calendar.MINUTE);
+                } else {
+                    String[] splitTime = time.split(":");
+                    hour = Integer.parseInt(splitTime[0]);
+                    minute = Integer.parseInt(splitTime[1].substring(0, 2));
+                }
+
                 TimePickerDialog timePicker;
                 timePicker = new TimePickerDialog(AddAlarmActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         String formattedTime = getFormattedTime(selectedHour, selectedMinute);
+                        time = formattedTime;
                         timeTextView.setText(formattedTime);
                     }
                 }, hour, minute, false);
@@ -193,6 +224,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
             String time = timeTextView.getText().toString();
 
+            // Add user-selected extras.
+            replyIntent.putExtra(EXTRA_ID, alarmID);
             replyIntent.putExtra(EXTRA_TIME, time);
             replyIntent.putExtra(EXTRA_ACTIVE, false);
             replyIntent.putExtra(EXTRA_ACTIVE_DAYS, activeDays);
@@ -233,6 +266,10 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         return formattedTime;
     }
 
+    /**
+     * Get a user readable representation of the String Array activeDays
+     * @return String representation of activeDays
+     */
     public String getStringOfActiveDays() {
         if (activeDays.length == 7) {
             return "everyday";
@@ -240,8 +277,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             return "never";
         }
 
-        boolean satInArray = false; // "Saturday" in activeDays
-        boolean sunInArray = false; // "Sunday" in activeDays
+        boolean satInArray = false; // "Saturday" in activeDays.
+        boolean sunInArray = false; // "Sunday" in activeDays.
 
         StringBuilder builder = new StringBuilder();
         for (String day : activeDays) {
@@ -261,7 +298,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         }
 
         if (builder.length() > 1) {
-            builder.setLength(builder.length() - 2);
+            builder.setLength(builder.length() - 2); // Cut-off extra comma.
         }
 
         return builder.toString();

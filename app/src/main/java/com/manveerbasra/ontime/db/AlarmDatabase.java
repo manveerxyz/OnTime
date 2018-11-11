@@ -4,10 +4,14 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
+
+import com.manveerbasra.ontime.db.converter.DateConverter;
+import com.manveerbasra.ontime.db.converter.StringArrayConverter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,6 +21,7 @@ import java.util.Date;
  * Backend Database
  */
 @Database(entities = {AlarmEntity.class}, version = 1, exportSchema = false)
+@TypeConverters({DateConverter.class, StringArrayConverter.class})
 public abstract class AlarmDatabase extends RoomDatabase {
 
     private static AlarmDatabase INSTANCE;

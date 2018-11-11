@@ -2,6 +2,7 @@ package com.manveerbasra.ontime;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -29,12 +32,14 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         private final TextView timeTextView;
         private final TextView repetitionTextView;
         private final Switch activeSwitch;
+        private final ImageButton editButton;
 
         private AlarmViewHolder(View itemView) {
             super(itemView);
             timeTextView = itemView.findViewById(R.id.alarm_time_text);
             repetitionTextView = itemView.findViewById(R.id.alarm_repetition_text);
             activeSwitch = itemView.findViewById(R.id.alarm_active_switch);
+            editButton = itemView.findViewById(R.id.alarm_edit_button);
         }
     }
 
@@ -82,6 +87,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         }
 
         addSwitchListener(alarm, viewHolder, resources);
+        addEditListener(alarm, viewHolder);
     }
 
     void setAlarms(List<AlarmEntity> alarms) {
@@ -113,6 +119,22 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                     viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorGrey500));
                 }
                 alarmViewModel.update(alarm);
+            }
+        });
+    }
+
+    private void addEditListener(final AlarmEntity alarm, final AlarmViewHolder viewHolder) {
+        viewHolder.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, AddAlarmActivity.class);
+
+                intent.putExtra(AddAlarmActivity.EXTRA_ID, alarm.getId());
+                intent.putExtra(AddAlarmActivity.EXTRA_TIME, alarm.getStringTime());
+                intent.putExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS, alarm.getActiveDays());
+
+                ((MainActivity) context).startActivityForResult(intent, MainActivity.EDIT_ALARM_ACTIVITY_REQUEST_CODE);
             }
         });
     }
