@@ -14,6 +14,9 @@ import java.util.List;
 public class StringArrayConverter {
     @TypeConverter
     public String[] fromString(String value) {
+        if (value.equals("")) {
+            return new String[0];
+        }
         List<String> list = new ArrayList<>(Arrays.asList(value.split(",")));
         String[] arr = new String[list.size()];
         arr = list.toArray(arr);
@@ -23,6 +26,9 @@ public class StringArrayConverter {
     @TypeConverter
     public String arrayToString(String[] arr) {
         StringBuilder builder = new StringBuilder();
+        if (arr == null || arr.length == 0) {
+            return "";
+        }
         for (String item: arr) {
             builder.append(item + ",");
         }
