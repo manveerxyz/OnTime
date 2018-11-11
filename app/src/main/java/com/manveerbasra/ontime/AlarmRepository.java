@@ -47,6 +47,14 @@ public class AlarmRepository {
         new insertAsyncTask(alarmModel).execute(alarm);
     }
 
+    /**
+     * Asynchronously update AlarmEntity in db to prevent UI stalls.
+     * @param alarm AlarmEntity to update.
+     */
+    public void update(AlarmEntity alarm) {
+        new updateAsyncTask(alarmModel).execute(alarm);
+    }
+
     private static class insertAsyncTask extends AsyncTask<AlarmEntity, Void, Void> {
 
         private AlarmDao alarmModel;
@@ -58,6 +66,21 @@ public class AlarmRepository {
         @Override
         protected Void doInBackground(final AlarmEntity... params) {
             alarmModel.insert(params[0]);
+            return null;
+        }
+    }
+
+    private static class updateAsyncTask extends AsyncTask<AlarmEntity, Void, Void> {
+
+        private AlarmDao alarmModel;
+
+        updateAsyncTask(AlarmDao alarmModel) {
+            this.alarmModel = alarmModel;
+        }
+
+        @Override
+        protected Void doInBackground(final AlarmEntity... params) {
+            alarmModel.update(params[0]);
             return null;
         }
     }

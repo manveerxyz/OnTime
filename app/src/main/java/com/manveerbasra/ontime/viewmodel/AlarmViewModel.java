@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * View Model to keep a reference to the alarm repository and
  * an up-to-date list of all alarm.
- *
  * Completely separates UI from Repository
  */
 
@@ -33,5 +32,9 @@ public class AlarmViewModel extends AndroidViewModel {
 
     public void insert(AlarmEntity alarm) {
         repository.insert(alarm);
+    }
+
+    public void update(AlarmEntity alarm) {
+        repository.update(alarm);
     }
 }

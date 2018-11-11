@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "alarms")
-@TypeConverters({StringArrayConverter.class, DateConverter.class})
+@TypeConverters({DateConverter.class, StringArrayConverter.class})
 public class AlarmEntity implements Alarm {
     @PrimaryKey(autoGenerate = true)
     public int id;
@@ -85,8 +85,7 @@ public class AlarmEntity implements Alarm {
     @Ignore
     public String getStringTime() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm aa");
-        String time = dateFormatter.format(this.time);
-        return time;
+        return dateFormatter.format(this.time);
     }
 
     @Ignore

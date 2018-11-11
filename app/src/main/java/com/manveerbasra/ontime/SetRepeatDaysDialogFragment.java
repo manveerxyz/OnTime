@@ -62,11 +62,7 @@ public class SetRepeatDaysDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int selectedDay,
                                         boolean isChecked) {
-                        if (isChecked) {
-                            activeDays[selectedDay] = true;
-                        } else {
-                            activeDays[selectedDay] = false;
-                        }
+                        activeDays[selectedDay] = isChecked;
                     }
                 });
         // Set the action buttons
