@@ -1,5 +1,6 @@
 package com.manveerbasra.ontime.db;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -13,27 +14,24 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface AlarmDao {
-    @Query("select * from alarm")
-    List<Alarm> loadAllAlarms();
-
-    @Query("select * from alarm where id = :id")
-    Alarm loadAlarmById(int id);
+    @Query("select * from alarms")
+    LiveData<List<AlarmEntity>> getAllAlarms();
 
     @Insert(onConflict = IGNORE)
-    void insertAlarm(Alarm alarm);
+    void insert(AlarmEntity alarm);
 
     @Update
-    void update(Alarm alarm);
+    void update(AlarmEntity alarm);
 
     @Delete
-    void deleteAlarm(Alarm alarm);
+    void deleteAlarm(AlarmEntity alarm);
 
     @Insert(onConflict = IGNORE)
-    void insertOrReplaceAlarms(Alarm... alarms);
+    void insertOrReplaceAlarms(AlarmEntity... alarms);
 
     @Delete
-    void deleteAlarms(Alarm alarm1, Alarm alarm2);
+    void deleteAlarms(AlarmEntity alarm1, AlarmEntity alarm2);
 
-    @Query("DELETE FROM Alarm")
+    @Query("DELETE FROM alarms")
     void deleteAll();
 }

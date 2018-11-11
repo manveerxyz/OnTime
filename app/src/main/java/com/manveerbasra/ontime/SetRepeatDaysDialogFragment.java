@@ -13,7 +13,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
- * Fragment used to display Alarm active days to user
+ * Fragment used to display AlarmEntity active days to user
  */
 public class SetRepeatDaysDialogFragment extends DialogFragment {
 

@@ -16,22 +16,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    packagingOptions {
-        exclude 'META-INF/proguard/androidx-annotations.pro'
-    }
 }
-
-//ext {
-//    buildToolsVersion = "25.0.2"
-//    supportLibVersion = "25.3.1"
-//    archRoomVersion = "1.0.0-alpha1"
-//}
-//allprojects {
-//    repositories {
-//        jcenter()
-//        maven { url 'https://maven.google.com' }
-//    }
-//}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -46,5 +31,8 @@ dependencies {
 
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+
+    implementation "android.arch.lifecycle:extensions:$room_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$room_version"
 
 }

@@ -1,4 +1,4 @@
-package com.manveerbasra.ontime.db;
+package com.manveerbasra.ontime.db.converter;
 
 import android.arch.persistence.room.TypeConverter;
 
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Class to handle conversions between String[] and String
  *
- * Used in Alarm.java as a @TypeConverter
+ * Used in AlarmEntity.java as a @TypeConverter
  */
 public class StringArrayConverter {
     @TypeConverter

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,20 +13,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.manveerbasra.ontime.db.AlarmDbHelper;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
 public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDaysDialogFragment.OnDialogCompleteListener {
 
+    // Key values for returning intent.
+    public static final String EXTRA_TIME = "com.manveerbasra.ontime.TIME";
+    public static final String EXTRA_ACTIVE = "com.manveerbasra.ontime.ACTIVE";
+    public static final String EXTRA_ACTIVE_DAYS = "com.manveerbasra.ontime.ACTIVEDAYS";
+
     String[] daysOfWeek;
     TextView timeTextView;
     TextView repeatTextView;
     Calendar calendar;
-    AlarmDataManager alarm;
-    AlarmDbHelper dbHelper;
+    String[] activeDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +37,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         daysOfWeek = getResources().getStringArray(R.array.days_of_week);
         calendar = Calendar.getInstance();
-        alarm = new AlarmDataManager();
-
-        dbHelper = new AlarmDbHelper(getApplicationContext());
 
         setInitialAlarmTime();
         setInitialRepetition();
@@ -56,7 +56,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         String currentTime = getFormattedTime(hour, minute);
         timeTextView = findViewById(R.id.add_alarm_time_text);
         timeTextView.setText(currentTime);
-        alarm.setTime(currentTime);
 
     }
 
@@ -66,7 +65,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     private void setInitialRepetition() {
         repeatTextView = findViewById(R.id.add_alarm_repeat_text);
         repeatTextView.setText(getString(R.string.never));
-        alarm.setRepeat(false);
     }
 
     /**
@@ -87,7 +85,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         String formattedTime = getFormattedTime(selectedHour, selectedMinute);
                         timeTextView.setText(formattedTime);
-                        alarm.setTime(formattedTime);
                     }
                 }, hour, minute, false);
                 timePicker.setTitle("Select Time");
@@ -107,9 +104,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             @Override
             public void onClick(View view) {
                 SetRepeatDaysDialogFragment setRepeatDaysDialogFragment = new SetRepeatDaysDialogFragment();
+
                 Bundle args = getBundle();
-
-
                 setRepeatDaysDialogFragment.setArguments(args);
                 // Display dialog
                 setRepeatDaysDialogFragment.show(getSupportFragmentManager(), "A");
@@ -124,9 +120,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     @NonNull
     private Bundle getBundle() {
         Bundle args = new Bundle();
-
-        // Get current active days and convert them to an ArrayList of ints
-        String[] activeDays = alarm.getActiveDays();
 
         // Populate an array of 7 false's
         ArrayList<Boolean> activeDaysBooleans = new ArrayList<>();
@@ -171,17 +164,13 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             }
 
             // Convert selectedDays to Array and apply that to alarm
-            String[] activeDays = new String[selectedDays.size()];
+            activeDays = new String[selectedDays.size()];
             activeDays = selectedDays.toArray(activeDays);
-            alarm.setRepeat(true);
-            alarm.setActiveDays(activeDays);
 
-            String formattedActiveDays = alarm.getStringOfActiveDays();
+            String formattedActiveDays = getStringOfActiveDays();
             repeatTextView.setText(formattedActiveDays);
         } else {
-            String[] activeDays = new String[0];
-            alarm.setRepeat(false);
-            alarm.setActiveDays(activeDays);
+            activeDays = new String[0];
 
             repeatTextView.setText(getString(R.string.never));
         }
@@ -200,9 +189,16 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_alarm_save) {
-            dbHelper.addAlarm(alarm);
-            Intent intent = new Intent(AddAlarmActivity.this, MainActivity.class);
-            startActivity(intent);
+            Intent replyIntent = new Intent();
+
+            String time = timeTextView.getText().toString();
+
+            replyIntent.putExtra(EXTRA_TIME, time);
+            replyIntent.putExtra(EXTRA_ACTIVE, false);
+            replyIntent.putExtra(EXTRA_ACTIVE_DAYS, activeDays);
+
+            setResult(RESULT_OK, replyIntent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -235,5 +231,39 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         }
 
         return formattedTime;
+    }
+
+    public String getStringOfActiveDays() {
+        if (activeDays.length == 7) {
+            return "everyday";
+        } else if (activeDays.length == 0) {
+            return "never";
+        }
+
+        boolean satInArray = false; // "Saturday" in activeDays
+        boolean sunInArray = false; // "Sunday" in activeDays
+
+        StringBuilder builder = new StringBuilder();
+        for (String day : activeDays) {
+            if (day.equals("Saturday")) {
+                satInArray = true;
+            } else if (day.equals("Sunday")) {
+                sunInArray = true;
+            }
+            String formattedDay = day.substring(0, 3) + ", ";
+            builder.append(formattedDay);
+        }
+
+        if (satInArray && sunInArray && activeDays.length == 2) {
+            return "weekends";
+        } else if (!satInArray && !sunInArray && activeDays.length == 5) {
+            return "weekdays";
+        }
+
+        if (builder.length() > 1) {
+            builder.setLength(builder.length() - 2);
+        }
+
+        return builder.toString();
     }
 }
