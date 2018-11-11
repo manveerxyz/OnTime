@@ -79,7 +79,7 @@ public class AlarmEntity implements Alarm {
 
     @Ignore
     public boolean isRepeat() {
-        return (activeDays == null || activeDays.length == 0);
+        return (activeDays != null && activeDays.length > 0);
     }
 
     @Ignore
