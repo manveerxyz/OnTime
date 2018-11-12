@@ -52,6 +52,14 @@ public class AlarmViewModel extends AndroidViewModel {
     }
 
     /**
+     * Delete AlarmEntity in repository
+     * @param alarm AlarmEntity object to delete
+     */
+    public void delete(AlarmEntity alarm) {
+        repository.delete(alarm);
+    }
+
+    /**
      * Get AlarmEntity by id from repository
      * @param id AlarmEntity's int id
      * @return requested AlarmEntity object

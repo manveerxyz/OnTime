@@ -28,7 +28,7 @@ public interface AlarmDao {
     void update(AlarmEntity alarm);
 
     @Delete
-    void deleteAlarm(AlarmEntity alarm);
+    void delete(AlarmEntity alarm);
 
     @Insert(onConflict = IGNORE)
     void insertOrReplaceAlarms(AlarmEntity... alarms);

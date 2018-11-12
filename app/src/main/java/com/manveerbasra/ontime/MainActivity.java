@@ -115,32 +115,44 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == EDIT_ALARM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get Extras.
             int id = data.getIntExtra(AddAlarmActivity.EXTRA_ID, -1);
-            String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
-            boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
-            String[] activeDays = data.getStringArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+            if (data.hasExtra(AddAlarmActivity.EXTRA_DELETE)) { // Alarm to be deleted.
+                // Get AlarmEntity object to be deleted.
+                AlarmEntity alarm = alarmViewModel.getById(id);
+                // Delete alarm.
+                alarmViewModel.delete(alarm);
 
-            // Convert String timeStr to Date object.
-            DateFormat formatter = new SimpleDateFormat("hh:mm aa");
-            Date time = null;
-            try {
-                time = formatter.parse(timeStr);
-            } catch (java.text.ParseException e) {
-                e.printStackTrace();
+                Toast.makeText(
+                        getApplicationContext(),
+                        R.string.alarm_deleted,
+                        Toast.LENGTH_LONG).show();
+            } else {
+                String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
+                boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
+                String[] activeDays = data.getStringArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+
+                // Convert String timeStr to Date object.
+                DateFormat formatter = new SimpleDateFormat("hh:mm aa");
+                Date time = null;
+                try {
+                    time = formatter.parse(timeStr);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+
+                // Get AlarmEntity object that was edited.
+                AlarmEntity alarm = alarmViewModel.getById(id);
+                // Update AlarmEntity object.
+                alarm.setTime(time);
+                alarm.setActive(active);
+                alarm.setActiveDays(activeDays);
+                // Update in ViewModel.
+                alarmViewModel.update(alarm);
+
+                Toast.makeText(
+                        getApplicationContext(),
+                        R.string.alarm_saved,
+                        Toast.LENGTH_LONG).show();
             }
-
-            // Get AlarmEntity object that was edited.
-            AlarmEntity alarm = alarmViewModel.getById(id);
-            // Update AlarmEntity object.
-            alarm.setTime(time);
-            alarm.setActive(active);
-            alarm.setActiveDays(activeDays);
-            // Update in ViewModel.
-            alarmViewModel.update(alarm);
-
-            Toast.makeText(
-                    getApplicationContext(),
-                    R.string.alarm_saved,
-                    Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(
                     getApplicationContext(),

@@ -57,6 +57,14 @@ public class AlarmRepository {
     }
 
     /**
+     * Asynchronously delete AlarmEntity in db to prevent UI stalls.
+     * @param alarm AlarmEntity to delete.
+     */
+    public void delete(AlarmEntity alarm) {
+        new deleteAsyncTask(alarmModel).execute(alarm);
+    }
+
+    /**
      * Asynchronously get AlarmEntity by id to prevent UI stalls.
      * @param id AlarmEntity int id
      * @return requested AlarmEntity object
@@ -99,6 +107,24 @@ public class AlarmRepository {
         @Override
         protected Void doInBackground(final AlarmEntity... params) {
             alarmModel.update(params[0]);
+            return null;
+        }
+    }
+
+    /**
+     * Delete by AlarmEntity
+     */
+    private static class deleteAsyncTask extends AsyncTask<AlarmEntity, Void, Void> {
+
+        private AlarmDao alarmModel;
+
+        deleteAsyncTask(AlarmDao alarmModel) {
+            this.alarmModel = alarmModel;
+        }
+
+        @Override
+        protected Void doInBackground(final AlarmEntity... params) {
+            alarmModel.delete(params[0]);
             return null;
         }
     }

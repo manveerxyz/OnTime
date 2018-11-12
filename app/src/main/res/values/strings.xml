@@ -5,6 +5,7 @@
     <string name="no_alarms">No alarms yet :( \nClick \'+\' to add an alarm.</string>
 
     <string name="add_alarm">Add New Alarm</string>
+    <string name="edit_alarm">Edit Alarm</string>
     <string name="set_time">Set Time</string>
     <string name="repeat">Repeat</string>
     <string name="set_repeat">Set Repeat</string>
@@ -14,7 +15,10 @@
 
     <string name="alarm_not_saved">Alarm not saved</string>
     <string name="alarm_saved">Alarm saved</string>
+    <string name="alarm_deleted">Alarm deleted</string>
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+
+    <string name="delete_alarm">Delete Alarm</string>
 </resources>

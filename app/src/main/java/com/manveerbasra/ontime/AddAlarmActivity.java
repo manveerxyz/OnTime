@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -25,16 +26,19 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     public static final String EXTRA_TIME = "com.manveerbasra.ontime.TIME";
     public static final String EXTRA_ACTIVE = "com.manveerbasra.ontime.ACTIVE";
     public static final String EXTRA_ACTIVE_DAYS = "com.manveerbasra.ontime.ACTIVEDAYS";
+    public static final String EXTRA_DELETE = "com.manveerbasra.ontime.DELETE";
 
     // AlarmEntity attributes.
     int alarmID;
     String time;
     String[] activeDays;
-
+    // Data objects
     String[] daysOfWeek;
+    Calendar calendar;
+    // View objects
     TextView timeTextView;
     TextView repeatTextView;
-    Calendar calendar;
+    Button deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         daysOfWeek = getResources().getStringArray(R.array.days_of_week);
         calendar = Calendar.getInstance();
+        deleteButton = findViewById(R.id.add_alarm_delete);
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_ID)) { // Activity called to edit an alarm.
@@ -55,7 +60,11 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
             timeTextView.setText(time);
             repeatTextView.setText(getStringOfActiveDays());
+            setTitle(R.string.edit_alarm);
+
+            addDeleteButtonListener();
         } else {
+            deleteButton.setVisibility(View.GONE);
             setInitialAlarmTime();
             setInitialRepetition();
         }
@@ -85,6 +94,22 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     private void setInitialRepetition() {
         repeatTextView = findViewById(R.id.add_alarm_repeat_text);
         repeatTextView.setText(getString(R.string.never));
+    }
+
+    private void addDeleteButtonListener() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent replyIntent = new Intent();
+
+                // Add user-selected extras.
+                replyIntent.putExtra(EXTRA_ID, alarmID);
+                replyIntent.putExtra(EXTRA_DELETE, true);
+
+                setResult(RESULT_OK, replyIntent);
+                finish();
+            }
+        });
     }
 
     /**
