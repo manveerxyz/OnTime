@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:orientation="vertical"
-    android:paddingEnd="20dp"
-    android:paddingStart="20dp">
+    android:paddingEnd="@dimen/alarm_margin"
+    android:paddingStart="@dimen/alarm_margin">
 
     <Switch
         android:id="@+id/alarm_active_switch"
@@ -29,14 +29,14 @@
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="5dp"
             android:fontFamily="@string/font_family_medium"
-            android:textSize="36sp" />
+            android:textSize="@dimen/alarm_text_size" />
 
         <TextView
             android:id="@+id/alarm_repetition_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/font_family_medium"
-            android:textSize="14sp" />
+            android:textSize="@dimen/small_text_size" />
 
     </LinearLayout>
 
@@ -49,6 +49,6 @@
         android:layout_gravity="center_vertical"
         android:background="?android:selectableItemBackground"
         android:padding="7dp"
-        android:src="@drawable/ic_edit_white_24dp" />
+        android:src="@drawable/ic_edit_24dp" />
 
 </RelativeLayout>

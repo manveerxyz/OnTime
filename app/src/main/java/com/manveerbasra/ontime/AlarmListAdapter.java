@@ -79,7 +79,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         if (alarm.isActive()) {
             viewHolder.activeSwitch.setChecked(true);
             viewHolder.timeTextView.setTextColor(resources.getColor(R.color.colorAccent));
-            viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorWhite));
+            viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorDarkText));
         } else {
             viewHolder.activeSwitch.setChecked(false);
             viewHolder.timeTextView.setTextColor(resources.getColor(R.color.colorGrey500));
@@ -112,7 +112,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                 if (checked) {
                     alarm.setActive(true);
                     viewHolder.timeTextView.setTextColor(resources.getColor(R.color.colorAccent));
-                    viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorWhite));
+                    viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorDarkText));
                 } else {
                     alarm.setActive(false);
                     viewHolder.timeTextView.setTextColor(resources.getColor(R.color.colorGrey500));
