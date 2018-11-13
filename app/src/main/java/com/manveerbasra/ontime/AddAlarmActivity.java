@@ -28,7 +28,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     public static final String EXTRA_ACTIVE_DAYS = "com.manveerbasra.ontime.ACTIVEDAYS";
     public static final String EXTRA_DELETE = "com.manveerbasra.ontime.DELETE";
 
-    // AlarmEntity attributes.
+    // Alarm attributes.
     int alarmID;
     String time;
     String[] activeDays;

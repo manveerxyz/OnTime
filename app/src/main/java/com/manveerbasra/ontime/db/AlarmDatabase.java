@@ -20,7 +20,7 @@ import java.util.Date;
 /**
  * Backend Database
  */
-@Database(entities = {AlarmEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {Alarm.class}, version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class, StringArrayConverter.class})
 public abstract class AlarmDatabase extends RoomDatabase {
 
@@ -86,7 +86,7 @@ public abstract class AlarmDatabase extends RoomDatabase {
             }
             String[] activeDays = new String[] {"Monday", "Tuesday"};
 
-            AlarmEntity alarm = new AlarmEntity(time, false, activeDays);
+            Alarm alarm = new Alarm(time, false, activeDays);
             alarmModel.insert(alarm);
             return null;
         }

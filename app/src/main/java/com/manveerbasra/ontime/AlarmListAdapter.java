@@ -5,19 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.manveerbasra.ontime.db.AlarmEntity;
+import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
 
 import java.util.Collections;
@@ -44,7 +41,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
     }
 
     private final LayoutInflater mInflater;
-    private List<AlarmEntity> alarms = Collections.emptyList(); // Cached copy of alarms
+    private List<Alarm> alarms = Collections.emptyList(); // Cached copy of alarms
     private AlarmViewModel alarmViewModel;
 
     AlarmListAdapter(Context context) {
@@ -63,7 +60,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
     @Override
     public void onBindViewHolder(@NonNull AlarmViewHolder viewHolder, int position) {
         Resources resources = viewHolder.itemView.getContext().getResources();
-        AlarmEntity alarm = alarms.get(position);
+        Alarm alarm = alarms.get(position);
 
         viewHolder.timeTextView.setText(alarm.getStringTime());
 
@@ -90,7 +87,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         addEditListener(alarm, viewHolder);
     }
 
-    void setAlarms(List<AlarmEntity> alarms) {
+    void setAlarms(List<Alarm> alarms) {
         this.alarms = alarms;
         notifyDataSetChanged();
     }
@@ -105,7 +102,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         return alarms.get(position).getId();
     }
 
-    private void addSwitchListener(final AlarmEntity alarm, final AlarmViewHolder viewHolder, final Resources resources) {
+    private void addSwitchListener(final Alarm alarm, final AlarmViewHolder viewHolder, final Resources resources) {
         viewHolder.activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -123,7 +120,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         });
     }
 
-    private void addEditListener(final AlarmEntity alarm, final AlarmViewHolder viewHolder) {
+    private void addEditListener(final Alarm alarm, final AlarmViewHolder viewHolder) {
         viewHolder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

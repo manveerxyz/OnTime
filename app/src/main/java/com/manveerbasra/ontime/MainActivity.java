@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.manveerbasra.ontime.db.AlarmEntity;
+import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
 
 import java.text.DateFormat;
@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
         alarmViewModel = ViewModelProviders.of(this).get(AlarmViewModel.class);
 
         // Add an observer on the LiveData returned by getAllAlarms.
-        alarmViewModel.getAllAlarms().observe(this, new Observer<List<AlarmEntity>>() {
+        alarmViewModel.getAllAlarms().observe(this, new Observer<List<Alarm>>() {
             @Override
-            public void onChanged(@Nullable final List<AlarmEntity> alarms) {
+            public void onChanged(@Nullable final List<Alarm> alarms) {
                 // Update the cached copy of the words in the adapter.
                 adapter.setAlarms(alarms);
             }
@@ -102,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            // Create new AlarmEntity object.
-            AlarmEntity alarm = new AlarmEntity(time, active, activeDays);
+            // Create new Alarm object.
+            Alarm alarm = new Alarm(time, active, activeDays);
             // Insert into ViewModel.
             alarmViewModel.insert(alarm);
 
@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
             // Get Extras.
             int id = data.getIntExtra(AddAlarmActivity.EXTRA_ID, -1);
             if (data.hasExtra(AddAlarmActivity.EXTRA_DELETE)) { // Alarm to be deleted.
-                // Get AlarmEntity object to be deleted.
-                AlarmEntity alarm = alarmViewModel.getById(id);
+                // Get Alarm object to be deleted.
+                Alarm alarm = alarmViewModel.getById(id);
                 // Delete alarm.
                 alarmViewModel.delete(alarm);
 
@@ -139,9 +139,9 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                // Get AlarmEntity object that was edited.
-                AlarmEntity alarm = alarmViewModel.getById(id);
-                // Update AlarmEntity object.
+                // Get Alarm object that was edited.
+                Alarm alarm = alarmViewModel.getById(id);
+                // Update Alarm object.
                 alarm.setTime(time);
                 alarm.setActive(active);
                 alarm.setActiveDays(activeDays);

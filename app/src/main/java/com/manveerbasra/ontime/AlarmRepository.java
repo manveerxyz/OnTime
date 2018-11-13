@@ -4,11 +4,10 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.db.AlarmDao;
-import com.manveerbasra.ontime.db.AlarmEntity;
 import com.manveerbasra.ontime.db.AlarmDatabase;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -19,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 public class AlarmRepository {
 
     private AlarmDao alarmModel;
-    private LiveData<List<AlarmEntity>> allAlarms;
+    private LiveData<List<Alarm>> allAlarms;
 
     /**
      * Application is used instead of Context in order to prevent memory leaks
@@ -36,49 +35,49 @@ public class AlarmRepository {
      * Observed LiveData will notify the observer when data has changed
      * @return List of AlarmEntitys wrapped in a LiveData object
      */
-    public LiveData<List<AlarmEntity>> getAllAlarms() {
+    public LiveData<List<Alarm>> getAllAlarms() {
         return allAlarms;
     }
 
     /**
-     * Asynchronously insert AlarmEntity into db to prevent UI stalls.
-     * @param alarm AlarmEntity to insert.
+     * Asynchronously insert Alarm into db to prevent UI stalls.
+     * @param alarm Alarm to insert.
      */
-    public void insert(AlarmEntity alarm) {
+    public void insert(Alarm alarm) {
         new insertAsyncTask(alarmModel).execute(alarm);
     }
 
     /**
-     * Asynchronously update AlarmEntity in db to prevent UI stalls.
-     * @param alarm AlarmEntity to update.
+     * Asynchronously update Alarm in db to prevent UI stalls.
+     * @param alarm Alarm to update.
      */
-    public void update(AlarmEntity alarm) {
+    public void update(Alarm alarm) {
         new updateAsyncTask(alarmModel).execute(alarm);
     }
 
     /**
-     * Asynchronously delete AlarmEntity in db to prevent UI stalls.
-     * @param alarm AlarmEntity to delete.
+     * Asynchronously delete Alarm in db to prevent UI stalls.
+     * @param alarm Alarm to delete.
      */
-    public void delete(AlarmEntity alarm) {
+    public void delete(Alarm alarm) {
         new deleteAsyncTask(alarmModel).execute(alarm);
     }
 
     /**
-     * Asynchronously get AlarmEntity by id to prevent UI stalls.
-     * @param id AlarmEntity int id
-     * @return requested AlarmEntity object
+     * Asynchronously get Alarm by id to prevent UI stalls.
+     * @param id Alarm int id
+     * @return requested Alarm object
      * @throws ExecutionException error thrown from AsyncTask
      * @throws InterruptedException error thrown from AsyncTask
      */
-    public AlarmEntity getById(int id) throws ExecutionException, InterruptedException {
+    public Alarm getById(int id) throws ExecutionException, InterruptedException {
         return new getByIdAsyncTask(alarmModel).execute(id).get();
     }
 
     /**
-     * Insert by AlarmEntity
+     * Insert by Alarm
      */
-    private static class insertAsyncTask extends AsyncTask<AlarmEntity, Void, Void> {
+    private static class insertAsyncTask extends AsyncTask<Alarm, Void, Void> {
 
         private AlarmDao alarmModel;
 
@@ -87,16 +86,16 @@ public class AlarmRepository {
         }
 
         @Override
-        protected Void doInBackground(final AlarmEntity... params) {
+        protected Void doInBackground(final Alarm... params) {
             alarmModel.insert(params[0]);
             return null;
         }
     }
 
     /**
-     * Update by AlarmEntity
+     * Update by Alarm
      */
-    private static class updateAsyncTask extends AsyncTask<AlarmEntity, Void, Void> {
+    private static class updateAsyncTask extends AsyncTask<Alarm, Void, Void> {
 
         private AlarmDao alarmModel;
 
@@ -105,16 +104,16 @@ public class AlarmRepository {
         }
 
         @Override
-        protected Void doInBackground(final AlarmEntity... params) {
+        protected Void doInBackground(final Alarm... params) {
             alarmModel.update(params[0]);
             return null;
         }
     }
 
     /**
-     * Delete by AlarmEntity
+     * Delete by Alarm
      */
-    private static class deleteAsyncTask extends AsyncTask<AlarmEntity, Void, Void> {
+    private static class deleteAsyncTask extends AsyncTask<Alarm, Void, Void> {
 
         private AlarmDao alarmModel;
 
@@ -123,16 +122,16 @@ public class AlarmRepository {
         }
 
         @Override
-        protected Void doInBackground(final AlarmEntity... params) {
+        protected Void doInBackground(final Alarm... params) {
             alarmModel.delete(params[0]);
             return null;
         }
     }
 
     /**
-     * Get AlarmEntity by id
+     * Get Alarm by id
      */
-    private static class getByIdAsyncTask extends android.os.AsyncTask<Integer, Void, AlarmEntity> {
+    private static class getByIdAsyncTask extends android.os.AsyncTask<Integer, Void, Alarm> {
 
         private AlarmDao alarmModel;
 
@@ -141,7 +140,7 @@ public class AlarmRepository {
         }
 
         @Override
-        protected AlarmEntity doInBackground(final Integer... params) {
+        protected Alarm doInBackground(final Integer... params) {
             return alarmModel.getById(params[0]);
         }
     }

@@ -5,7 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
 import com.manveerbasra.ontime.AlarmRepository;
-import com.manveerbasra.ontime.db.AlarmEntity;
+import com.manveerbasra.ontime.db.Alarm;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 public class AlarmViewModel extends AndroidViewModel {
 
     private AlarmRepository repository;
-    private LiveData<List<AlarmEntity>> allAlarms;
+    private LiveData<List<Alarm>> allAlarms;
 
     public AlarmViewModel(Application application) {
         super(application);
@@ -27,50 +27,50 @@ public class AlarmViewModel extends AndroidViewModel {
     }
 
     /**
-     * Get a List of all AlarmEntity objects in repository. List is wrapped in LiveData
+     * Get a List of all Alarm objects in repository. List is wrapped in LiveData
      * in order to be observed and updated efficiently
-     * @return LiveData wrapped List of AlarmEntity objects
+     * @return LiveData wrapped List of Alarm objects
      */
-    public LiveData<List<AlarmEntity>> getAllAlarms() {
+    public LiveData<List<Alarm>> getAllAlarms() {
         return allAlarms;
     }
 
     /**
-     * Insert new AlarmEntity in repository
-     * @param alarm AlarmEntity object to insert
+     * Insert new Alarm in repository
+     * @param alarm Alarm object to insert
      */
-    public void insert(AlarmEntity alarm) {
+    public void insert(Alarm alarm) {
         repository.insert(alarm);
     }
 
     /**
-     * Update AlarmEntity in repository
-     * @param alarm AlarmEntity object to update
+     * Update Alarm in repository
+     * @param alarm Alarm object to update
      */
-    public void update(AlarmEntity alarm) {
+    public void update(Alarm alarm) {
         repository.update(alarm);
     }
 
     /**
-     * Delete AlarmEntity in repository
-     * @param alarm AlarmEntity object to delete
+     * Delete Alarm in repository
+     * @param alarm Alarm object to delete
      */
-    public void delete(AlarmEntity alarm) {
+    public void delete(Alarm alarm) {
         repository.delete(alarm);
     }
 
     /**
-     * Get AlarmEntity by id from repository
-     * @param id AlarmEntity's int id
-     * @return requested AlarmEntity object
+     * Get Alarm by id from repository
+     * @param id Alarm's int id
+     * @return requested Alarm object
      */
-    public AlarmEntity getById(int id) {
+    public Alarm getById(int id) {
         try {
             return repository.getById(id);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return new AlarmEntity();
+        return new Alarm();
     }
 
 }

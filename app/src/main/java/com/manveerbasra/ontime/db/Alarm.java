@@ -8,15 +8,13 @@ import android.arch.persistence.room.TypeConverters;
 
 import com.manveerbasra.ontime.db.converter.DateConverter;
 import com.manveerbasra.ontime.db.converter.StringArrayConverter;
-import com.manveerbasra.ontime.model.Alarm;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "alarms")
 @TypeConverters({DateConverter.class, StringArrayConverter.class})
-public class AlarmEntity implements Alarm {
+public class Alarm {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
@@ -30,7 +28,6 @@ public class AlarmEntity implements Alarm {
     public String[] activeDays;
 
 
-    @Override
     public int getId() {
         return id;
     }
@@ -39,7 +36,6 @@ public class AlarmEntity implements Alarm {
         this.id = id;
     }
 
-    @Override
     public Date getTime() {
         return time;
     }
@@ -48,7 +44,6 @@ public class AlarmEntity implements Alarm {
         this.time = time;
     }
 
-    @Override
     public boolean isActive() {
         return active;
     }
@@ -57,7 +52,6 @@ public class AlarmEntity implements Alarm {
         this.active = active;
     }
 
-    @Override
     public String[] getActiveDays() {
         return activeDays;
     }
@@ -66,20 +60,13 @@ public class AlarmEntity implements Alarm {
         this.activeDays = activeDays;
     }
 
-    public AlarmEntity() {
-    }
-
-    public AlarmEntity(Alarm alarm) {
-        this.id = alarm.getId();
-        this.time = alarm.getTime();
-        this.active = alarm.isActive();
-        this.activeDays = alarm.getActiveDays();
+    public Alarm() {
     }
 
     // Ignored Methods
 
     @Ignore
-    public AlarmEntity(Date time, boolean active, String[] activeDays) {
+    public Alarm(Date time, boolean active, String[] activeDays) {
         this.time = time;
         this.active = active;
         this.activeDays = activeDays;

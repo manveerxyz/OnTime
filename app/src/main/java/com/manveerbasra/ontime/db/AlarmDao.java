@@ -7,7 +7,6 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import java.util.Date;
 import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
@@ -16,25 +15,25 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface AlarmDao {
     @Query("select * from alarms")
-    LiveData<List<AlarmEntity>> getAllAlarms();
+    LiveData<List<Alarm>> getAllAlarms();
 
     @Query("SELECT * FROM alarms WHERE id=:id")
-    AlarmEntity getById(int id);
+    Alarm getById(int id);
 
     @Insert(onConflict = IGNORE)
-    void insert(AlarmEntity alarm);
+    void insert(Alarm alarm);
 
     @Update
-    void update(AlarmEntity alarm);
+    void update(Alarm alarm);
 
     @Delete
-    void delete(AlarmEntity alarm);
+    void delete(Alarm alarm);
 
     @Insert(onConflict = IGNORE)
-    void insertOrReplaceAlarms(AlarmEntity... alarms);
+    void insertOrReplaceAlarms(Alarm... alarms);
 
     @Delete
-    void deleteAlarms(AlarmEntity alarm1, AlarmEntity alarm2);
+    void deleteAlarms(Alarm alarm1, Alarm alarm2);
 
     @Query("DELETE FROM alarms")
     void deleteAll();

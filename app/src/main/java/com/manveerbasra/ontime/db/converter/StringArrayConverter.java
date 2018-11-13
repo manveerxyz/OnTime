@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Class to handle conversions between String[] and String
  *
- * Used in AlarmEntity.java as a @TypeConverter
+ * Used in Alarm.java as a @TypeConverter
  */
 public class StringArrayConverter {
     @TypeConverter
