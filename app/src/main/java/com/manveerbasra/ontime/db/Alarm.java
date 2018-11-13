@@ -118,4 +118,8 @@ public class Alarm {
         return builder.toString();
     }
 
+    @Ignore
+    public long getTimeInMillis() {
+        return this.time.getTime();
+    }
 }
