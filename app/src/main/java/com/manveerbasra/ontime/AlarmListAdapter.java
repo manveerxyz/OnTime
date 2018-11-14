@@ -43,10 +43,12 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
     private final LayoutInflater mInflater;
     private List<Alarm> alarms = Collections.emptyList(); // Cached copy of alarms
     private AlarmViewModel alarmViewModel;
+    private final TextView emptyTextView;
 
     AlarmListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
         alarmViewModel = ViewModelProviders.of((MainActivity) context).get(AlarmViewModel.class);
+        emptyTextView = ((MainActivity) context).findViewById(R.id.no_alarms_text);
         setHasStableIds(true);
     }
 
@@ -94,6 +96,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
 
     @Override
     public int getItemCount() {
+        emptyTextView.setVisibility(alarms.size() > 0 ? View.GONE : View.VISIBLE);
         return alarms.size();
     }
 
