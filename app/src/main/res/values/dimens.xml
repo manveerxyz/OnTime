@@ -1,7 +1,7 @@
 <resources>
     <!-- Margins. -->
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="alarm_margin">20dp</dimen>
+    <dimen name="alarm_margin">20dp</dimen> <!-- Margin around Alarm item -->
 
     <!-- Text sizes. -->
     <dimen name="alarm_text_size">36sp</dimen>

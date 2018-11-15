@@ -55,6 +55,10 @@ public class AlarmRepository {
         new updateAsyncTask(alarmModel).execute(alarm);
     }
 
+    public void updateActive(Alarm alarm) {
+        new updateActiveAsyncTask(alarmModel).execute(alarm);
+    }
+
     /**
      * Asynchronously delete Alarm in db to prevent UI stalls.
      * @param alarm Alarm to delete.
@@ -93,7 +97,7 @@ public class AlarmRepository {
     }
 
     /**
-     * Update by Alarm
+     * Update Active by Id
      */
     private static class updateAsyncTask extends AsyncTask<Alarm, Void, Void> {
 
@@ -106,6 +110,24 @@ public class AlarmRepository {
         @Override
         protected Void doInBackground(final Alarm... params) {
             alarmModel.update(params[0]);
+            return null;
+        }
+    }
+
+    /**
+     * Update by Alarm
+     */
+    private static class updateActiveAsyncTask extends AsyncTask<Alarm, Void, Void> {
+
+        private AlarmDao alarmModel;
+
+        updateActiveAsyncTask(AlarmDao alarmModel) {
+            this.alarmModel = alarmModel;
+        }
+
+        @Override
+        protected Void doInBackground(final Alarm... params) {
+            alarmModel.updateActive(params[0].getId(), params[0].isActive());
             return null;
         }
     }

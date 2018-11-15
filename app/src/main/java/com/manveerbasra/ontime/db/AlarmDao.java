@@ -17,7 +17,7 @@ public interface AlarmDao {
     @Query("select * from alarms")
     LiveData<List<Alarm>> getAllAlarms();
 
-    @Query("SELECT * FROM alarms WHERE id=:id")
+    @Query("SELECT * FROM alarms WHERE alarm_id=:id")
     Alarm getById(int id);
 
     @Insert(onConflict = IGNORE)
@@ -28,6 +28,9 @@ public interface AlarmDao {
 
     @Delete
     void delete(Alarm alarm);
+
+    @Query("UPDATE alarms set alarm_active=:active where alarm_id=:id")
+    void updateActive(int id, boolean active);
 
     @Insert(onConflict = IGNORE)
     void insertOrReplaceAlarms(Alarm... alarms);

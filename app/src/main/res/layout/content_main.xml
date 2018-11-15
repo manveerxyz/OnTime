@@ -15,7 +15,7 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="@string/no_alarms"
-        android:textSize="16sp" />
+        android:textSize="@dimen/med_text_size" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/alarm_list"

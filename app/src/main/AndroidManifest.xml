@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.manveerbasra.ontime">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +24,9 @@
         <activity android:name=".AddAlarmActivity"
             android:label="@string/add_alarm"
             android:parentActivityName=".MainActivity"/>
+
+        <receiver android:name=".alarmmanager.AlarmReceiver" />
+        <service android:name=".alarmmanager.AlarmNotificationService" />
     </application>
 
 </manifest>

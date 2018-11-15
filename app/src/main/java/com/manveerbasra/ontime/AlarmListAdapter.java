@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.manveerbasra.ontime.alarmmanager.AlarmHandler;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
 
@@ -24,6 +26,8 @@ import java.util.List;
  * ArrayAdapter used to populate MainActivity Alarms ListView
  */
 public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.AlarmViewHolder> {
+
+    private final String TAG = "AlarmListAdapter";
 
     class AlarmViewHolder extends RecyclerView.ViewHolder {
         private final TextView timeTextView;
@@ -40,16 +44,24 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         }
     }
 
+    // Layout members
     private final LayoutInflater mInflater;
-    private List<Alarm> alarms = Collections.emptyList(); // Cached copy of alarms
-    private AlarmViewModel alarmViewModel;
     private final TextView emptyTextView;
+    // Data list (cached copy of alarms)
+    private List<Alarm> alarms = Collections.emptyList();
+    // To handle interactions with database
+    private AlarmViewModel alarmViewModel;
+    // To schedule alarms
+    private AlarmHandler alarmHandler;
 
     AlarmListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        alarmViewModel = ViewModelProviders.of((MainActivity) context).get(AlarmViewModel.class);
         emptyTextView = ((MainActivity) context).findViewById(R.id.no_alarms_text);
-        setHasStableIds(true);
+
+        alarmViewModel = ViewModelProviders.of((MainActivity) context).get(AlarmViewModel.class);
+        alarmHandler = new AlarmHandler(context, ((MainActivity) context).findViewById(R.id.fab));
+
+        setHasStableIds(true); // so Switch interaction has smooth animations
     }
 
     @NonNull
@@ -64,9 +76,9 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         Resources resources = viewHolder.itemView.getContext().getResources();
         Alarm alarm = alarms.get(position);
 
-        viewHolder.timeTextView.setText(alarm.getStringTime());
+        viewHolder.timeTextView.setText(alarm.getStringTime()); // set alarm time
 
-        // Set repeatTextView
+        // Set repeatTextView text
         if (alarm.isRepeat()) {
             String repetitionText = alarm.getStringOfActiveDays();
             viewHolder.repetitionTextView.setText(repetitionText);
@@ -85,11 +97,13 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
             viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorGrey500));
         }
 
+        // Add Button click listeners
         addSwitchListener(alarm, viewHolder, resources);
-        addEditListener(alarm, viewHolder);
+        addEditButtonListener(alarm, viewHolder);
     }
 
     void setAlarms(List<Alarm> alarms) {
+        Log.i(TAG, "updating alarms data-set");
         this.alarms = alarms;
         notifyDataSetChanged();
     }
@@ -105,6 +119,12 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         return alarms.get(position).getId();
     }
 
+    /**
+     * Add OnCheckedChange Listener to alarm's "active" switch
+     * @param alarm Alarm object
+     * @param viewHolder Alarm's ViewHolder object, containing Switch
+     * @param resources Resources file to get color values from
+     */
     private void addSwitchListener(final Alarm alarm, final AlarmViewHolder viewHolder, final Resources resources) {
         viewHolder.activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -113,17 +133,23 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                     alarm.setActive(true);
                     viewHolder.timeTextView.setTextColor(resources.getColor(R.color.colorAccent));
                     viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorDarkText));
+                    // schedule alarm
+                    Log.i(TAG, "scheduling alarm: " + alarm.getId());
+                    alarmHandler.scheduleAlarm(alarm);
                 } else {
                     alarm.setActive(false);
                     viewHolder.timeTextView.setTextColor(resources.getColor(R.color.colorGrey500));
                     viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorGrey500));
                 }
-                alarmViewModel.update(alarm);
+
+                // Update database and schedule alarm
+                Log.i(TAG, "updating database with alarm: " + alarm.getId());
+                alarmViewModel.updateActive(alarm);
             }
         });
     }
 
-    private void addEditListener(final Alarm alarm, final AlarmViewHolder viewHolder) {
+    private void addEditButtonListener(final Alarm alarm, final AlarmViewHolder viewHolder) {
         viewHolder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

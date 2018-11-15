@@ -5,17 +5,21 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
+import android.util.Log;
 
 import com.manveerbasra.ontime.db.converter.DateConverter;
 import com.manveerbasra.ontime.db.converter.StringArrayConverter;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Entity(tableName = "alarms")
 @TypeConverters({DateConverter.class, StringArrayConverter.class})
 public class Alarm {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name="alarm_id")
     public int id;
 
     @ColumnInfo(name = "alarm_time")
@@ -119,7 +123,16 @@ public class Alarm {
     }
 
     @Ignore
-    public long getTimeInMillis() {
-        return this.time.getTime();
+    public long getTimeToRing() {
+        String[] timeString = new SimpleDateFormat("HH:mm").format(this.time).split(":");
+        int hour = Integer.parseInt(timeString[0]);
+        int minute = Integer.parseInt(timeString[1]);
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Log.i("Alarm.java", calendar.getTime().toString());
+        return calendar.getTimeInMillis() - System.currentTimeMillis();
     }
 }
