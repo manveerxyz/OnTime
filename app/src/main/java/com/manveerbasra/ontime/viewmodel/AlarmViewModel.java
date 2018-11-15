@@ -51,6 +51,10 @@ public class AlarmViewModel extends AndroidViewModel {
         repository.update(alarm);
     }
 
+    /**
+     * Update Alarm's activity in repository
+     * @param alarm Alarm object to update
+     */
     public void updateActive(Alarm alarm) {
         repository.updateActive(alarm);
     }

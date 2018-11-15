@@ -55,6 +55,10 @@ public class AlarmRepository {
         new updateAsyncTask(alarmModel).execute(alarm);
     }
 
+    /**
+     * Asynchronously update Alarm's activity in db to prevent UI stalls.
+     * @param alarm Alarm to update.
+     */
     public void updateActive(Alarm alarm) {
         new updateActiveAsyncTask(alarmModel).execute(alarm);
     }
@@ -115,7 +119,7 @@ public class AlarmRepository {
     }
 
     /**
-     * Update by Alarm
+     * Update Active by Alarm Id
      */
     private static class updateActiveAsyncTask extends AsyncTask<Alarm, Void, Void> {
 
