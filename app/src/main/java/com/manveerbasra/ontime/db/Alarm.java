@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 @Entity(tableName = "alarms")
 @TypeConverters({DateConverter.class, StringArrayConverter.class})
@@ -133,6 +134,6 @@ public class Alarm {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         Log.i("Alarm.java", calendar.getTime().toString());
-        return calendar.getTimeInMillis() - System.currentTimeMillis();
+        return calendar.getTimeInMillis();
     }
 }
