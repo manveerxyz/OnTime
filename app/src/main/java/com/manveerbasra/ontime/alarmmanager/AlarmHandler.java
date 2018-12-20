@@ -50,7 +50,11 @@ public class AlarmHandler {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
 
+        Calendar cal = Calendar.getInstance();
+        // add 30 seconds to the calendar object
+        cal.add(Calendar.SECOND, 30);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
     }
 }
