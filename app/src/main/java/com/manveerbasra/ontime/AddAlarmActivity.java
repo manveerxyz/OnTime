@@ -132,6 +132,11 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                     String[] splitTime = time.split(":");
                     hour = Integer.parseInt(splitTime[0]);
                     minute = Integer.parseInt(splitTime[1].substring(0, 2));
+                    if (splitTime[1].endsWith("PM") ) {
+                        hour += 12;
+                    } else if (splitTime[1].endsWith("AM")) {
+                        if (hour == 12) hour = 0;
+                    }
                 }
 
                 TimePickerDialog timePicker;
