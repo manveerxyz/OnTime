@@ -29,6 +29,9 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
 
     private final String TAG = "AlarmListAdapter";
 
+    /**
+     * View for each alarm
+     */
     class AlarmViewHolder extends RecyclerView.ViewHolder {
         private final TextView timeTextView;
         private final TextView repetitionTextView;
@@ -102,6 +105,10 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         addEditButtonListener(alarm, viewHolder);
     }
 
+    /**
+     * Update current list of alarms and update UI
+     * @param alarms List of updated alarms
+     */
     void setAlarms(List<Alarm> alarms) {
         Log.i(TAG, "updating alarms data-set");
         this.alarms = alarms;
@@ -140,6 +147,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                     alarm.setActive(false);
                     viewHolder.timeTextView.setTextColor(resources.getColor(R.color.colorGrey500));
                     viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorGrey500));
+                    alarmHandler.cancelAlarm(alarm);
                 }
 
                 // Update database and schedule alarm
@@ -149,6 +157,11 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         });
     }
 
+    /**
+     * Add OnClickListener to alarm's edit button to open EditAlarmActivity (AddAlarmActivity.java)
+     * @param alarm Alarm object
+     * @param viewHolder Alarm's ViewHolder object, containing edit button
+     */
     private void addEditButtonListener(final Alarm alarm, final AlarmViewHolder viewHolder) {
         viewHolder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override

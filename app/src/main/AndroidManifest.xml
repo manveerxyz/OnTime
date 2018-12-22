@@ -25,9 +25,13 @@
             android:label="@string/add_alarm"
             android:parentActivityName=".MainActivity"/>
 
-        <service android:name=".alarmmanager.AlarmNotificationService" />
-
         <receiver  android:process=":remote" android:name=".alarmmanager.AlarmReceiver"></receiver>
+
+        <receiver android:name=".alarmmanager.AlarmStopReceiver"  android:exported="true">
+            <intent-filter>
+                <action android:name="Stop Alarm"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
