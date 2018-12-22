@@ -1,4 +1,4 @@
-package com.manveerbasra.ontime.alarmmanager;
+package com.manveerbasra.ontime.alarmmanager.receiver;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -11,6 +11,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.manveerbasra.ontime.R;
+import com.manveerbasra.ontime.alarmmanager.AlarmHandler;
+import com.manveerbasra.ontime.alarmmanager.AlarmSoundControl;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -21,8 +23,11 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "received alarm intent");
 
+        int alarmID = intent.getIntExtra(AlarmHandler.EXTRA_ID, 0);
 
+        // Create Stop Receiver intent to stop alarm ringing
         Intent stopAlarmIntent = new Intent(context, AlarmStopReceiver.class);
+        stopAlarmIntent.putExtra(AlarmHandler.EXTRA_ID, alarmID);
         stopAlarmIntent.setAction("Stop Alarm");
         PendingIntent stopAlarmPendingIntent =
                 PendingIntent.getBroadcast(context, 0, stopAlarmIntent, 0);
@@ -44,10 +49,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                         stopAlarmPendingIntent)
                 .build();
 
-        Log.i(TAG, "displaying notification");
+        // Play alarm ringing sound
         AlarmSoundControl alarmSoundControl = AlarmSoundControl.getInstance();
         alarmSoundControl.playAlarmSound(context.getApplicationContext());
-        notificationManager.notify(1, notification);
 
+        Log.i(TAG, "displaying notification for alarm " + alarmID);
+        notificationManager.notify(alarmID, notification);
     }
 }

@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Singleton class to control Alarm Ringing Sound
  */
-class AlarmSoundControl {
+public class AlarmSoundControl {
 
     private final String TAG = "AlarmSoundControl";
 

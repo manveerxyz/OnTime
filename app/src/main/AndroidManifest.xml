@@ -27,10 +27,10 @@
             android:parentActivityName=".MainActivity" />
 
         <receiver
-            android:name=".alarmmanager.AlarmReceiver"
+            android:name=".alarmmanager.receiver.AlarmReceiver"
             android:process=":remote" />
         <receiver
-            android:name=".alarmmanager.AlarmStopReceiver"
+            android:name=".alarmmanager.receiver.AlarmStopReceiver"
             android:process=":remote">
             <intent-filter>
                 <action android:name="Stop Alarm" />

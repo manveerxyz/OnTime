@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.manveerbasra.ontime.R;
+import com.manveerbasra.ontime.alarmmanager.receiver.AlarmReceiver;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
 
@@ -17,6 +18,8 @@ import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
  * Class to control alarm scheduling/cancelling
  */
 public class AlarmHandler {
+
+    public static final String EXTRA_ID = "extra_id";
 
     private final String TAG = "AlarmHandler";
 
@@ -43,7 +46,7 @@ public class AlarmHandler {
         long alarmTimeInMillis = alarm.getTimeToRing();
 
         Intent intent = new Intent(appContext, AlarmReceiver.class);
-        // intent.putExtra() Use to pass alarm data to receiver.
+        intent.putExtra(EXTRA_ID, alarm.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
@@ -65,7 +68,7 @@ public class AlarmHandler {
         AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(appContext, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_NO_CREATE);
 
         Log.i(TAG, "cancelling alarm " + alarm.getId());
         alarmManager.cancel(pendingIntent);
