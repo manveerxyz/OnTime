@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
      * Used to access AlarmDatabase
      */
     private AlarmViewModel alarmViewModel;
+    private View snackbarAnchor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
+        snackbarAnchor = findViewById(R.id.fab);
 
         // Setup adapter to display alarms.
         RecyclerView recyclerView = findViewById(R.id.alarm_list);
@@ -107,10 +109,8 @@ public class MainActivity extends AppCompatActivity {
             // Insert into ViewModel.
             alarmViewModel.insert(alarm);
 
-            Toast.makeText(
-                    getApplicationContext(),
-                    R.string.alarm_saved,
-                    Toast.LENGTH_LONG).show();
+            // Show snackbar to notify user
+            Snackbar.make(snackbarAnchor, R.string.alarm_saved, Snackbar.LENGTH_SHORT).show();
 
         } else if (requestCode == EDIT_ALARM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get Extras.
@@ -121,10 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 // Delete alarm.
                 alarmViewModel.delete(alarm);
 
-                Toast.makeText(
-                        getApplicationContext(),
-                        R.string.alarm_deleted,
-                        Toast.LENGTH_LONG).show();
+                // Show snackbar to notify user
+                Snackbar.make(snackbarAnchor, R.string.alarm_deleted, Snackbar.LENGTH_SHORT).show();
             } else {
                 String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
                 boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
@@ -148,16 +146,12 @@ public class MainActivity extends AppCompatActivity {
                 // Update in ViewModel.
                 alarmViewModel.update(alarm);
 
-                Toast.makeText(
-                        getApplicationContext(),
-                        R.string.alarm_saved,
-                        Toast.LENGTH_LONG).show();
+                // Show snackbar to notify user
+                Snackbar.make(snackbarAnchor, R.string.alarm_saved, Snackbar.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(
-                    getApplicationContext(),
-                    R.string.alarm_not_saved,
-                    Toast.LENGTH_LONG).show();
+            // Show snackbar to notify user
+            Snackbar.make(snackbarAnchor, R.string.alarm_not_saved, Snackbar.LENGTH_SHORT).show();
         }
     }
 

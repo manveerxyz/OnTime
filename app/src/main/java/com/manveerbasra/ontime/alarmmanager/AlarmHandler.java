@@ -4,9 +4,11 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
+import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
 
@@ -46,6 +48,9 @@ public class AlarmHandler {
 
         Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
+
+        // Show snackbar to notify user
+        Snackbar.make(snackbarAnchor, appContext.getString(R.string.alarm_set), Snackbar.LENGTH_SHORT).show();
     }
 
     /**
@@ -64,5 +69,8 @@ public class AlarmHandler {
 
         Log.i(TAG, "cancelling alarm " + alarm.getId());
         alarmManager.cancel(pendingIntent);
+
+        // Show snackbar to notify user
+        Snackbar.make(snackbarAnchor, appContext.getString(R.string.alarm_cancelled), Snackbar.LENGTH_SHORT).show();
     }
 }
