@@ -5,22 +5,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.manveerbasra.ontime.R;
-
-import java.io.IOException;
-
-import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -48,7 +38,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("OnTime")
+                .setContentTitle(context.getString(R.string.app_name))
                 .setContentText("Alarm going off!")
                 .addAction(R.drawable.ic_launcher_background, "Stop",
                         stopAlarmPendingIntent)
@@ -56,14 +46,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Log.i(TAG, "displaying notification");
         AlarmSoundControl alarmSoundControl = AlarmSoundControl.getInstance();
-        alarmSoundControl.playAlarmSound(context);
+        alarmSoundControl.playAlarmSound(context.getApplicationContext());
         notificationManager.notify(1, notification);
-
-        // TODO: Set Activity that opens when Alarm goes off
-        //
-        // Notification notification = new NotificationCompat.Builder(context, "M_CH_ID")
-        //        .setFullScreenIntent(PendingIntent intent, boolean highPriority=true)
-        //        .build();
 
     }
 }

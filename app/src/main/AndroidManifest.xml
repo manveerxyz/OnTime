@@ -21,17 +21,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddAlarmActivity"
+        <activity
+            android:name=".AddAlarmActivity"
             android:label="@string/add_alarm"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
 
-        <receiver  android:process=":remote" android:name=".alarmmanager.AlarmReceiver"></receiver>
-
-        <receiver android:name=".alarmmanager.AlarmStopReceiver"  android:exported="true">
+        <receiver
+            android:name=".alarmmanager.AlarmReceiver"
+            android:process=":remote" />
+        <receiver
+            android:name=".alarmmanager.AlarmStopReceiver"
+            android:process=":remote">
             <intent-filter>
-                <action android:name="Stop Alarm"/>
+                <action android:name="Stop Alarm" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

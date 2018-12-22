@@ -32,7 +32,7 @@ class AlarmSoundControl {
      * Play Alarm Sound
      */
     public void playAlarmSound(Context context) {
-        Log.d(TAG, "Playing alarm ringing sound");
+        Log.i(TAG, "Playing alarm ringing sound");
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(context, getAlarmUri());
