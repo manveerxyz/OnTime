@@ -32,6 +32,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         PendingIntent stopAlarmPendingIntent =
                 PendingIntent.getBroadcast(context, 0, stopAlarmIntent, 0);
 
+        // Create Snooze Receiver intent to snooze alarm ringing
+        Intent snoozeAlarmIntent = new Intent(context, AlarmSnoozeReceiver.class);
+        snoozeAlarmIntent.putExtra(AlarmHandler.EXTRA_ID, alarmID);
+        snoozeAlarmIntent.setAction("Snooze Alarm");
+        PendingIntent snoozeAlarmPendingIntent =
+                PendingIntent.getBroadcast(context, 0, snoozeAlarmIntent, 0);
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Create and add notification channel
@@ -47,6 +54,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentText("Alarm going off!")
                 .addAction(R.drawable.ic_launcher_background, "Stop",
                         stopAlarmPendingIntent)
+                .addAction(R.drawable.ic_launcher_background, "Snooze",
+                        snoozeAlarmPendingIntent)
                 .build();
 
         // Play alarm ringing sound

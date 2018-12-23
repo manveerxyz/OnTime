@@ -11,7 +11,8 @@ import android.view.View;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.alarmmanager.receiver.AlarmReceiver;
 import com.manveerbasra.ontime.db.Alarm;
-import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
+
+import java.util.Calendar;
 
 
 /**
@@ -23,7 +24,6 @@ public class AlarmHandler {
 
     private final String TAG = "AlarmHandler";
 
-    private AlarmViewModel alarmViewModel;
     private Context appContext;
     private View snackbarAnchor;
 
@@ -57,6 +57,26 @@ public class AlarmHandler {
     }
 
     /**
+     * Schedule alarm notification based on time until next alarm
+     * @param timeToRing time to next alarm in milliseconds
+     * @param alarmID ID of alarm to ring
+     */
+    public void scheduleAlarm(int timeToRing, int alarmID) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MILLISECOND, timeToRing);
+        long alarmTimeInMillis = calendar.getTimeInMillis();
+
+        AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(appContext, AlarmReceiver.class);
+        intent.putExtra(EXTRA_ID, alarmID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Log.i(TAG, "setting alarm " + alarmID + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
+    }
+
+    /**
      * Cancel alarm notification using AlarmManager
      * @param alarm Alarm to cancel
      */
@@ -70,8 +90,10 @@ public class AlarmHandler {
         Intent intent = new Intent(appContext, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_NO_CREATE);
 
-        Log.i(TAG, "cancelling alarm " + alarm.getId());
-        alarmManager.cancel(pendingIntent);
+        if (pendingIntent != null) {
+            Log.i(TAG, "cancelling alarm " + alarm.getId());
+            alarmManager.cancel(pendingIntent);
+        }
 
         // Show snackbar to notify user
         Snackbar.make(snackbarAnchor, appContext.getString(R.string.alarm_cancelled), Snackbar.LENGTH_SHORT).show();

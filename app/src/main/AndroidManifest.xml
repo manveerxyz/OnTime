@@ -29,11 +29,20 @@
         <receiver
             android:name=".alarmmanager.receiver.AlarmReceiver"
             android:process=":remote" />
+
         <receiver
             android:name=".alarmmanager.receiver.AlarmStopReceiver"
             android:process=":remote">
             <intent-filter>
                 <action android:name="Stop Alarm" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".alarmmanager.receiver.AlarmSnoozeReceiver"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="Snooze Alarm" />
             </intent-filter>
         </receiver>
 

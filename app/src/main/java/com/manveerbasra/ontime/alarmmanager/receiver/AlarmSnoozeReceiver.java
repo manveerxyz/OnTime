@@ -9,12 +9,9 @@ import android.util.Log;
 import com.manveerbasra.ontime.alarmmanager.AlarmHandler;
 import com.manveerbasra.ontime.alarmmanager.AlarmSoundControl;
 
-/**
- * BroadcastReceiver to stop alarm ringing
- */
-public class AlarmStopReceiver extends BroadcastReceiver {
+public class AlarmSnoozeReceiver extends BroadcastReceiver {
 
-    private final String TAG = "AlarmStopReceiver";
+    private final String TAG = "AlarmSnoozeReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -27,5 +24,9 @@ public class AlarmStopReceiver extends BroadcastReceiver {
         // Dismiss notification
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
+
+        // Schedule next ring
+        AlarmHandler alarmHandler = new AlarmHandler(context, null);
+        alarmHandler.scheduleAlarm(30 * 1000, alarmID);
     }
 }
