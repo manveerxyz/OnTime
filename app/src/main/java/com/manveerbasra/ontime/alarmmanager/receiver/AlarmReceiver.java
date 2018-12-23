@@ -88,10 +88,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                     .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.drawable.ic_launcher_background)
                     .setContentTitle(context.getString(R.string.app_name))
-                    .setContentText("Alarm going off!")
-                    .addAction(R.drawable.ic_launcher_background, "Stop",
+                    .setContentText(context.getString(R.string.alarm_notification_title))
+                    .addAction(R.drawable.ic_launcher_background, context.getString(R.string.stop),
                             stopAlarmPendingIntent)
-                    .addAction(R.drawable.ic_launcher_background, "Snooze",
+                    .addAction(R.drawable.ic_launcher_background, context.getString(R.string.snooze),
                             snoozeAlarmPendingIntent)
                     .build();
     }

@@ -44,7 +44,7 @@ public class AlarmSoundControl {
                 mediaPlayer.start();
             }
         } catch (IOException e) {
-            System.out.println("OOPS");
+            System.out.println("Can't read Alarm uri: " + getAlarmUri());
         }
     }
 

@@ -20,6 +20,11 @@
     <string name="alarm_set">Alarm set</string>
     <string name="alarm_cancelled">Alarm cancelled</string>
 
+    <!-- Notification Strings -->
+    <string name="alarm_notification_title">Alarm going off!</string>
+    <string name="stop">Stop</string>
+    <string name="snooze">Snooze</string>
+
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
