@@ -41,15 +41,15 @@ public class AlarmHandler {
             return;
         }
 
-        AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
-
         long alarmTimeInMillis = alarm.getTimeToRing();
 
+        // Get PendingIntent to AlarmReceiver Broadcast channel
         Intent intent = new Intent(appContext, AlarmReceiver.class);
         intent.putExtra(EXTRA_ID, alarm.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
+        AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
 
         // Show snackbar to notify user
@@ -62,17 +62,18 @@ public class AlarmHandler {
      * @param alarmID ID of alarm to ring
      */
     public void scheduleAlarm(int timeToRing, int alarmID) {
+        // Calculate time until alarm from millis since epoch
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MILLISECOND, timeToRing);
         long alarmTimeInMillis = calendar.getTimeInMillis();
 
-        AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
-
+        // Get PendingIntent to AlarmReceiver Broadcast channel
         Intent intent = new Intent(appContext, AlarmReceiver.class);
         intent.putExtra(EXTRA_ID, alarmID);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Log.i(TAG, "setting alarm " + alarmID + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
+        AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
     }
 
@@ -85,13 +86,14 @@ public class AlarmHandler {
             return;
         }
 
-        AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
-
+        // Get PendingIntent to AlarmReceiver Broadcast channel
         Intent intent = new Intent(appContext, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_NO_CREATE);
 
+        // PendingIntent may be null if the alarm hasn't been set
         if (pendingIntent != null) {
             Log.i(TAG, "cancelling alarm " + alarm.getId());
+            AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(pendingIntent);
         }
 

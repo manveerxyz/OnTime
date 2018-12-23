@@ -9,6 +9,9 @@ import android.util.Log;
 import com.manveerbasra.ontime.alarmmanager.AlarmHandler;
 import com.manveerbasra.ontime.alarmmanager.AlarmSoundControl;
 
+/**
+ * Broadcast Receiver to snooze alarm
+ */
 public class AlarmSnoozeReceiver extends BroadcastReceiver {
 
     private final String TAG = "AlarmSnoozeReceiver";

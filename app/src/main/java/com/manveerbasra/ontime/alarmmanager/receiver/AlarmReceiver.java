@@ -14,6 +14,9 @@ import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.alarmmanager.AlarmHandler;
 import com.manveerbasra.ontime.alarmmanager.AlarmSoundControl;
 
+/**
+ * BroadcastReceiver to setup and display alarm notification
+ */
 public class AlarmReceiver extends BroadcastReceiver {
 
     private final String TAG = "AlarmReceiver";
@@ -25,38 +28,17 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         int alarmID = intent.getIntExtra(AlarmHandler.EXTRA_ID, 0);
 
-        // Create Stop Receiver intent to stop alarm ringing
-        Intent stopAlarmIntent = new Intent(context, AlarmStopReceiver.class);
-        stopAlarmIntent.putExtra(AlarmHandler.EXTRA_ID, alarmID);
-        stopAlarmIntent.setAction("Stop Alarm");
-        PendingIntent stopAlarmPendingIntent =
-                PendingIntent.getBroadcast(context, 0, stopAlarmIntent, 0);
-
-        // Create Snooze Receiver intent to snooze alarm ringing
-        Intent snoozeAlarmIntent = new Intent(context, AlarmSnoozeReceiver.class);
-        snoozeAlarmIntent.putExtra(AlarmHandler.EXTRA_ID, alarmID);
-        snoozeAlarmIntent.setAction("Snooze Alarm");
-        PendingIntent snoozeAlarmPendingIntent =
-                PendingIntent.getBroadcast(context, 0, snoozeAlarmIntent, 0);
-
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Create and add notification channel
         NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, TAG , NotificationManager.IMPORTANCE_HIGH);
         notificationManager.createNotificationChannel(mChannel);
 
-        Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle(context.getString(R.string.app_name))
-                .setContentText("Alarm going off!")
-                .addAction(R.drawable.ic_launcher_background, "Stop",
-                        stopAlarmPendingIntent)
-                .addAction(R.drawable.ic_launcher_background, "Snooze",
-                        snoozeAlarmPendingIntent)
-                .build();
+        Notification notification = buildNotification(
+                context,
+                getStopAlarmIntent(context, alarmID),
+                getSnoozeAlarmIntent(context, alarmID)
+        );
 
         // Play alarm ringing sound
         AlarmSoundControl alarmSoundControl = AlarmSoundControl.getInstance();
@@ -64,5 +46,53 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Log.i(TAG, "displaying notification for alarm " + alarmID);
         notificationManager.notify(alarmID, notification);
+    }
+
+    /**
+     * Get PendingIntent to Snooze Alarm
+     * @param context current App context
+     * @param alarmID ID of alarm to handle
+     * @return PendingIntent to AlarmSnooze(Broadcast)Receiver
+     */
+    private PendingIntent getSnoozeAlarmIntent(Context context, int alarmID) {
+        Intent snoozeAlarmIntent = new Intent(context, AlarmSnoozeReceiver.class);
+        snoozeAlarmIntent.putExtra(AlarmHandler.EXTRA_ID, alarmID);
+        snoozeAlarmIntent.setAction("Snooze Alarm");
+        return PendingIntent.getBroadcast(context, 0, snoozeAlarmIntent, 0);
+    }
+
+    /**
+     * Get PendingIntent to Stop Alarm
+     * @param context current App context
+     * @param alarmID ID of alarm to handle
+     * @return PendingIntent to AlarmStop(Broadcast)Receiver
+     */
+    private PendingIntent getStopAlarmIntent(Context context, int alarmID) {
+        Intent stopAlarmIntent = new Intent(context, AlarmStopReceiver.class);
+        stopAlarmIntent.putExtra(AlarmHandler.EXTRA_ID, alarmID);
+        stopAlarmIntent.setAction("Stop Alarm");
+        return PendingIntent.getBroadcast(context, 0, stopAlarmIntent, 0);
+    }
+
+    /**
+     * Build the alarm notification
+     * @param context current App context
+     * @param stopAlarmPendingIntent PendingIntent object to stop the alarm ringing
+     * @param snoozeAlarmPendingIntent Pending Intent object to snooze the alarm ringing
+     * @return a Notification object of the built alarm notification
+     */
+    private Notification buildNotification(Context context, PendingIntent stopAlarmPendingIntent, PendingIntent snoozeAlarmPendingIntent) {
+        return new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle(context.getString(R.string.app_name))
+                    .setContentText("Alarm going off!")
+                    .addAction(R.drawable.ic_launcher_background, "Stop",
+                            stopAlarmPendingIntent)
+                    .addAction(R.drawable.ic_launcher_background, "Snooze",
+                            snoozeAlarmPendingIntent)
+                    .build();
     }
 }
