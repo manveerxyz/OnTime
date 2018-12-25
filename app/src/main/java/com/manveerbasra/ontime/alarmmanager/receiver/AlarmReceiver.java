@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -21,17 +23,21 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private final String TAG = "AlarmReceiver";
     private final String CHANNEL_ID = "AlarmReceiverChannel";
+    private SharedPreferences preferences;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "received alarm intent");
+
+        // Initialize preferences
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         int alarmID = intent.getIntExtra(AlarmHandler.EXTRA_ID, 0);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Create and add notification channel
-        NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, TAG , NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, TAG, NotificationManager.IMPORTANCE_HIGH);
         notificationManager.createNotificationChannel(mChannel);
 
         Notification notification = buildNotification(
@@ -50,6 +56,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     /**
      * Get PendingIntent to Snooze Alarm
+     *
      * @param context current App context
      * @param alarmID ID of alarm to handle
      * @return PendingIntent to AlarmSnooze(Broadcast)Receiver
@@ -63,6 +70,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     /**
      * Get PendingIntent to Stop Alarm
+     *
      * @param context current App context
      * @param alarmID ID of alarm to handle
      * @return PendingIntent to AlarmStop(Broadcast)Receiver
@@ -76,23 +84,31 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     /**
      * Build the alarm notification
-     * @param context current App context
-     * @param stopAlarmPendingIntent PendingIntent object to stop the alarm ringing
+     *
+     * @param context                  current App context
+     * @param stopAlarmPendingIntent   PendingIntent object to stop the alarm ringing
      * @param snoozeAlarmPendingIntent Pending Intent object to snooze the alarm ringing
      * @return a Notification object of the built alarm notification
      */
     private Notification buildNotification(Context context, PendingIntent stopAlarmPendingIntent, PendingIntent snoozeAlarmPendingIntent) {
-        return new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setPriority(NotificationCompat.PRIORITY_MAX)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.ic_launcher_background)
-                    .setContentTitle(context.getString(R.string.app_name))
-                    .setContentText(context.getString(R.string.alarm_notification_title))
-                    .addAction(R.drawable.ic_launcher_background, context.getString(R.string.stop),
-                            stopAlarmPendingIntent)
-                    .addAction(R.drawable.ic_launcher_background, context.getString(R.string.snooze),
-                            snoozeAlarmPendingIntent)
-                    .build();
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(context.getString(R.string.alarm_notification_title))
+                .addAction(R.drawable.ic_launcher_background, context.getString(R.string.stop),
+                        stopAlarmPendingIntent)
+                .addAction(R.drawable.ic_launcher_background, context.getString(R.string.snooze),
+                        snoozeAlarmPendingIntent);
+
+        // Set vibrate based on preferences, default is vibrate
+        if (!preferences.getBoolean("alarm_ring_vibrate", true)) {
+            Log.i(TAG, "notification vibrate set to false");
+            notification.setVibrate(null);
+        }
+
+        return notification.build();
     }
 }
