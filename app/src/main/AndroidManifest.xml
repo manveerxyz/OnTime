@@ -29,7 +29,6 @@
         <receiver
             android:name=".alarmmanager.receiver.AlarmReceiver"
             android:process=":remote" />
-
         <receiver
             android:name=".alarmmanager.receiver.AlarmStopReceiver"
             android:process=":remote">
@@ -37,7 +36,6 @@
                 <action android:name="Stop Alarm" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".alarmmanager.receiver.AlarmSnoozeReceiver"
             android:process=":remote">
@@ -46,6 +44,14 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.manveerbasra.ontime.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -29,4 +29,39 @@
     <string name="cancel">Cancel</string>
 
     <string name="delete_alarm">Delete Alarm</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+
+    <string name="pref_title_location">Location</string>
+    <string name="pref_default_location">Toronto, ON</string>
+
+
+    <!-- Example settings for Alarm -->
+    <string name="pref_header_alarm">Alarm</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="pref_title_snooze_length">Snooze Length</string>
+    <string-array name="pref_snooze_list_titles">
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+    </string-array>
+    <string-array name="pref_snooze_list_values">
+        <item>60</item>
+        <item>120</item>
+        <item>300</item>
+        <item>600</item>
+    </string-array>
 </resources>
