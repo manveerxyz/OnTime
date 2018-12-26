@@ -152,9 +152,8 @@ public class Alarm {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        if (calendar.getTimeInMillis() < System.currentTimeMillis()) { // alarm time has passed for today
-            setCorrectRingDay(calendar);
-        }
+
+        setCorrectRingDay(calendar);
 
         Log.i("Alarm.java", "Alarm ring time is " + calendar.getTime().toString());
         return calendar.getTimeInMillis();
@@ -170,24 +169,26 @@ public class Alarm {
         Calendar currentCalendar = Calendar.getInstance();
         int day = currentCalendar.get(Calendar.DAY_OF_WEEK);
         day--;
-
-        int i = 0;
-        int activeDayGreater = -1;
-        int firstActiveDay = -1;
-        for (boolean bool : activeDays) {
-            if (bool) {
-                firstActiveDay = i;
+        if (calendar.getTimeInMillis() < System.currentTimeMillis() // alarm time has passed for today
+                || !activeDays[day]) { // current day is not an active day
+            int i = 0;
+            int activeDayGreater = -1;
+            int firstActiveDay = -1;
+            for (boolean bool : activeDays) {
+                if (bool) {
+                    firstActiveDay = i;
+                }
+                if (i > day && bool) {
+                    activeDayGreater = i;
+                }
+                i++;
             }
-            if (i > day && bool) {
-                activeDayGreater = i;
+            if (activeDayGreater != -1) { // There's a later day of the week where the alarm is active
+                calendar.add(Calendar.DAY_OF_MONTH, activeDayGreater - day);
+            } else { // Have to find the first active day next week to set the alarm
+                calendar.add(Calendar.DAY_OF_MONTH, 7 - day);
+                calendar.add(Calendar.DAY_OF_MONTH, firstActiveDay);
             }
-            i++;
-        }
-        if (activeDayGreater != -1) { // There's a later day of the week where the alarm is active
-            calendar.add(Calendar.DAY_OF_MONTH, activeDayGreater - day);
-        } else { // Have to find the first active day next week to set the alarm
-            calendar.add(Calendar.DAY_OF_MONTH, 7 - day);
-            calendar.add(Calendar.DAY_OF_MONTH, firstActiveDay);
         }
     }
 }
