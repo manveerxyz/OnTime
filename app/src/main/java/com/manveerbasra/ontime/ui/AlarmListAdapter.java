@@ -111,6 +111,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
 
     /**
      * Update current list of alarms and update UI
+     *
      * @param alarms List of updated alarms
      */
     public void setAlarms(List<Alarm> alarms) {
@@ -132,9 +133,10 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
 
     /**
      * Add OnCheckedChange Listener to alarm's "active" switch
-     * @param alarm Alarm object
+     *
+     * @param alarm      Alarm object
      * @param viewHolder Alarm's ViewHolder object, containing Switch
-     * @param resources Resources file to get color values from
+     * @param resources  Resources file to get color values from
      */
     private void addSwitchListener(final Alarm alarm, final AlarmViewHolder viewHolder, final Resources resources) {
         viewHolder.activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -163,7 +165,8 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
 
     /**
      * Add OnClickListener to alarm's edit button to open EditAlarmActivity (AddAlarmActivity.java)
-     * @param alarm Alarm object
+     *
+     * @param alarm      Alarm object
      * @param viewHolder Alarm's ViewHolder object, containing edit button
      */
     private void addEditButtonListener(final Alarm alarm, final AlarmViewHolder viewHolder) {

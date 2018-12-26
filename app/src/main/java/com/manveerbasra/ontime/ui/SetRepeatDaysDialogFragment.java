@@ -21,7 +21,7 @@ public class SetRepeatDaysDialogFragment extends DialogFragment {
 
     /**
      * Listener for Dialog Completion
-     *
+     * <p>
      * Implemented in AddAlarmActivity
      */
     public interface OnDialogCompleteListener {
@@ -35,8 +35,7 @@ public class SetRepeatDaysDialogFragment extends DialogFragment {
         super.onAttach(activity);
         try {
             this.completeListener = (OnDialogCompleteListener) activity;
-        }
-        catch (final ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnCompleteListener");
         }
     }
@@ -86,6 +85,7 @@ public class SetRepeatDaysDialogFragment extends DialogFragment {
 
     /**
      * Saved selectedDays by calling completeListener's complete function
+     *
      * @param selectedDays ArrayList of selected days ints
      */
     private void saveSelectedDays(boolean[] selectedDays) {

@@ -84,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Updates AlarmViewModel with data received from AddAlarmActivity.
-     *
+     * <p>
      * Handles both new Alarms and edited Alarms.
      *
      * @param requestCode request code varies on whether alarm is added or edited
-     * @param resultCode whether activity successfully completed
-     * @param data reply Intent, contains extras
+     * @param resultCode  whether activity successfully completed
+     * @param data        reply Intent, contains extras
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -99,12 +99,6 @@ public class MainActivity extends AppCompatActivity {
             String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
             boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
             boolean[] activeDays = data.getBooleanArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
-
-            String activeDaysString = "";
-            for (boolean bool: activeDays) {
-                activeDaysString += bool;
-            }
-            Log.i(TAG, "Received new alarm data with array: " + activeDaysString);
 
             // Convert String timeStr to Date object.
             DateFormat formatter = new SimpleDateFormat("hh:mm aa");
@@ -119,8 +113,6 @@ public class MainActivity extends AppCompatActivity {
             Alarm alarm = new Alarm(time, active, activeDays);
             // Insert into ViewModel.
             alarmViewModel.insert(alarm);
-
-            Log.i(TAG, "Inserted into db, new alarm with array: " + alarm.getStringOfActiveDays());
 
             // Show snackbar to notify user
             Snackbar.make(snackbarAnchor, R.string.alarm_saved, Snackbar.LENGTH_SHORT).show();

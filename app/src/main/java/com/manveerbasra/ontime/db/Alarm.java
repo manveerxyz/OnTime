@@ -20,7 +20,7 @@ import java.util.TimeZone;
 @TypeConverters({DateConverter.class, BooleanArrayConverter.class})
 public class Alarm {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name="alarm_id")
+    @ColumnInfo(name = "alarm_id")
     public int id;
 
     @ColumnInfo(name = "alarm_time")

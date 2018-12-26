@@ -18,6 +18,7 @@ public class AlarmSoundControl {
 
     private static AlarmSoundControl INSTANCE;
     private MediaPlayer mediaPlayer;
+
     private AlarmSoundControl() {
     }
 
@@ -52,13 +53,14 @@ public class AlarmSoundControl {
      * Stop Alarm Sound currently playing
      */
     public void stopAlarmSound() {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
     }
 
     /**
      * Get alarm sound, try to get default, then notification, then ringtone
+     *
      * @return URI for alarm sound
      */
     private Uri getAlarmUri() {

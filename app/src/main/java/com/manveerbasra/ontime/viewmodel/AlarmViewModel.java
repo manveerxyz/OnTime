@@ -29,6 +29,7 @@ public class AlarmViewModel extends AndroidViewModel {
     /**
      * Get a List of all Alarm objects in repository. List is wrapped in LiveData
      * in order to be observed and updated efficiently
+     *
      * @return LiveData wrapped List of Alarm objects
      */
     public LiveData<List<Alarm>> getAllAlarms() {
@@ -37,6 +38,7 @@ public class AlarmViewModel extends AndroidViewModel {
 
     /**
      * Insert new Alarm in repository
+     *
      * @param alarm Alarm object to insert
      */
     public void insert(Alarm alarm) {
@@ -45,6 +47,7 @@ public class AlarmViewModel extends AndroidViewModel {
 
     /**
      * Update Alarm in repository
+     *
      * @param alarm Alarm object to update
      */
     public void update(Alarm alarm) {
@@ -53,6 +56,7 @@ public class AlarmViewModel extends AndroidViewModel {
 
     /**
      * Update Alarm's activity in repository
+     *
      * @param alarm Alarm object to update
      */
     public void updateActive(Alarm alarm) {
@@ -61,6 +65,7 @@ public class AlarmViewModel extends AndroidViewModel {
 
     /**
      * Delete Alarm in repository
+     *
      * @param alarm Alarm object to delete
      */
     public void delete(Alarm alarm) {
@@ -69,6 +74,7 @@ public class AlarmViewModel extends AndroidViewModel {
 
     /**
      * Get Alarm by id from repository
+     *
      * @param id Alarm's int id
      * @return requested Alarm object
      */

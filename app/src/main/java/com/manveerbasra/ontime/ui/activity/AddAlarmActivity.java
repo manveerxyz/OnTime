@@ -187,26 +187,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     private Bundle getBundle() {
         Bundle args = new Bundle();
 
-        // Populate an array of 7 false's
-//        ArrayList<Boolean> activeDaysBooleans = new ArrayList<>();
-//        for (int i = 0; i < 7; i++) {
-//            activeDaysBooleans.add(false);
-//        }
-
-//        boolean[] activeDaysArray = new boolean[7];
-//        if (activeDays != null) {
-//            for (int day : activeDays) {
-//                activeDaysArray[day] = true;
-//            }
-//        }
-
-        // Pass current active days to DialogFragment so it can display selections
-//        boolean[] activeDaysArray = new boolean[activeDaysBooleans.size()];
-//        int index = 0;
-//        for (Boolean object : activeDaysBooleans) {
-//            activeDaysArray[index++] = object;
-//        }
-        Log.i(TAG, "Opening SetRepeatDaysDialog with array: " + getStringOfActiveDays());
         args.putBooleanArray("activeDays", activeDays);
         return args;
     }
@@ -218,27 +198,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
      * @param selectedDaysBools boolean array of selected days of the week
      */
     public void onDialogComplete(boolean[] selectedDaysBools) {
-//        int numSelectedDays = 0;
-//        for (boolean bool : selectedDaysBools) {
-//            if (bool) {
-//                numSelectedDays++;
-//            }
-//        }
-//        activeDays = new int[numSelectedDays];
-//
-//        // convert an array of boolean days to an int array of days
-//        int day = 0;
-//        int i = 0;
-//        for (boolean bool : selectedDaysBools) {
-//            if (bool) {
-//                activeDays[i] = day;
-//                i++;
-//            }
-//            day++;
-//        }
-
         activeDays = selectedDaysBools;
-        Log.i(TAG, "SetRepeatDaysDialog completed with array: " + getStringOfActiveDays());
         String formattedActiveDays = getStringOfActiveDays();
         repeatTextView.setText(formattedActiveDays);
     }
@@ -265,7 +225,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             replyIntent.putExtra(EXTRA_TIME, time);
             replyIntent.putExtra(EXTRA_ACTIVE, false);
             replyIntent.putExtra(EXTRA_ACTIVE_DAYS, activeDays);
-            Log.i(TAG, "Saving alarm with array: " + getStringOfActiveDays());
 
             setResult(RESULT_OK, replyIntent);
             finish();

@@ -23,6 +23,7 @@ public class AlarmRepository {
     /**
      * Application is used instead of Context in order to prevent memory leaks
      * between Activity switches
+     *
      * @param application Application object of global app state
      */
     public AlarmRepository(Application application) {
@@ -33,6 +34,7 @@ public class AlarmRepository {
 
     /**
      * Observed LiveData will notify the observer when data has changed
+     *
      * @return List of AlarmEntitys wrapped in a LiveData object
      */
     public LiveData<List<Alarm>> getAllAlarms() {
@@ -41,6 +43,7 @@ public class AlarmRepository {
 
     /**
      * Asynchronously insert Alarm into db to prevent UI stalls.
+     *
      * @param alarm Alarm to insert.
      */
     public void insert(Alarm alarm) {
@@ -49,6 +52,7 @@ public class AlarmRepository {
 
     /**
      * Asynchronously update Alarm in db to prevent UI stalls.
+     *
      * @param alarm Alarm to update.
      */
     public void update(Alarm alarm) {
@@ -57,6 +61,7 @@ public class AlarmRepository {
 
     /**
      * Asynchronously update Alarm's activity in db to prevent UI stalls.
+     *
      * @param alarm Alarm to update.
      */
     public void updateActive(Alarm alarm) {
@@ -65,6 +70,7 @@ public class AlarmRepository {
 
     /**
      * Asynchronously delete Alarm in db to prevent UI stalls.
+     *
      * @param alarm Alarm to delete.
      */
     public void delete(Alarm alarm) {
@@ -73,9 +79,10 @@ public class AlarmRepository {
 
     /**
      * Asynchronously get Alarm by id to prevent UI stalls.
+     *
      * @param id Alarm int id
      * @return requested Alarm object
-     * @throws ExecutionException error thrown from AsyncTask
+     * @throws ExecutionException   error thrown from AsyncTask
      * @throws InterruptedException error thrown from AsyncTask
      */
     public Alarm getById(int id) throws ExecutionException, InterruptedException {

@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Class to handle conversions between boolean[] and String
- *
+ * <p>
  * Used in Alarm.java as a @TypeConverter
  */
 public class BooleanArrayConverter {
@@ -22,7 +22,7 @@ public class BooleanArrayConverter {
         List<String> list = new ArrayList<>(Arrays.asList(value.split(",")));
 
         int i = 0;
-        for (String item: list) {
+        for (String item : list) {
             arr[i] = Boolean.parseBoolean(item);
             i++;
         }
@@ -35,7 +35,7 @@ public class BooleanArrayConverter {
         if (arr == null) {
             return "";
         }
-        for (boolean item: arr) {
+        for (boolean item : arr) {
             builder.append(item + ",");
         }
         if (builder.length() > 0) { // cut off trailing comma

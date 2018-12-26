@@ -34,6 +34,7 @@ public class AlarmHandler {
 
     /**
      * Schedule alarm notification using AlarmManager
+     *
      * @param alarm Alarm to schedule
      */
     public void scheduleAlarm(Alarm alarm) {
@@ -58,8 +59,9 @@ public class AlarmHandler {
 
     /**
      * Schedule alarm notification based on time until next alarm
+     *
      * @param timeToRing time to next alarm in milliseconds
-     * @param alarmID ID of alarm to ring
+     * @param alarmID    ID of alarm to ring
      */
     public void scheduleAlarm(int timeToRing, int alarmID) {
         // Calculate time until alarm from millis since epoch
@@ -79,6 +81,7 @@ public class AlarmHandler {
 
     /**
      * Cancel alarm notification using AlarmManager
+     *
      * @param alarm Alarm to cancel
      */
     public void cancelAlarm(Alarm alarm) {
