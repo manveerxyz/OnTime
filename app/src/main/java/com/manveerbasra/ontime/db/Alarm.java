@@ -85,12 +85,22 @@ public class Alarm {
         return (activeDays != null && activeDays.length > 0);
     }
 
+    /**
+     * Get alarm ring time in 12 hour format
+     *
+     * @return String of alarm ring time
+     */
     @Ignore
     public String getStringTime() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm aa");
         return dateFormatter.format(this.time);
     }
 
+    /**
+     * Get a simple user-readable representation of activeDays
+     *
+     * @return a String of alarm's active days
+     */
     @Ignore
     public String getStringOfActiveDays() {
         // Build string based on which indices are true in activeDays
@@ -126,6 +136,11 @@ public class Alarm {
         return builder.toString();
     }
 
+    /**
+     * Get time until next alarm ring
+     *
+     * @return time to ring in milliseconds since epoch
+     */
     @Ignore
     public long getTimeToRing() {
         String[] timeString = new SimpleDateFormat("HH:mm").format(this.time).split(":");
@@ -137,11 +152,42 @@ public class Alarm {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        Log.i("Alarm.java", calendar.getTime().toString());
-        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
-            // alarm time has passed for today
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) { // alarm time has passed for today
+            setCorrectRingDay(calendar);
         }
+
+        Log.i("Alarm.java", "Alarm ring time is " + calendar.getTime().toString());
         return calendar.getTimeInMillis();
+    }
+
+    /**
+     * Correctly set the next alarm ring day based on activeDays and current day of week
+     *
+     * @param calendar Calendar object to correctly set date to
+     */
+    @Ignore
+    private void setCorrectRingDay(Calendar calendar) {
+        Calendar currentCalendar = Calendar.getInstance();
+        int day = currentCalendar.get(Calendar.DAY_OF_WEEK);
+        day--;
+
+        int i = 0;
+        int activeDayGreater = -1;
+        int firstActiveDay = -1;
+        for (boolean bool : activeDays) {
+            if (bool) {
+                firstActiveDay = i;
+            }
+            if (i > day && bool) {
+                activeDayGreater = i;
+            }
+            i++;
+        }
+        if (activeDayGreater != -1) { // There's a later day of the week where the alarm is active
+            calendar.add(Calendar.DAY_OF_MONTH, activeDayGreater - day);
+        } else { // Have to find the first active day next week to set the alarm
+            calendar.add(Calendar.DAY_OF_MONTH, 7 - day);
+            calendar.add(Calendar.DAY_OF_MONTH, firstActiveDay);
+        }
     }
 }
