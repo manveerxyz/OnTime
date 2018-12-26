@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.manveerbasra.ontime.R;
+import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
 
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDaysDialogFragment.OnDialogCompleteListener {
+
+    private final String TAG = "AddAlarmActivity";
 
     // Key values for returning intent.
     public static final String EXTRA_ID = "com.manveerbasra.ontime.ID";
@@ -32,9 +36,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     // Alarm attributes.
     int alarmID;
     String time;
-    String[] activeDays;
+    boolean[] activeDays;
     // Data objects
-    String[] daysOfWeek;
     Calendar calendar;
     // View objects
     TextView timeTextView;
@@ -46,7 +49,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alarm);
 
-        daysOfWeek = getResources().getStringArray(R.array.days_of_week);
         calendar = Calendar.getInstance();
         deleteButton = findViewById(R.id.add_alarm_delete);
 
@@ -54,7 +56,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         if (intent.hasExtra(EXTRA_ID)) { // Activity called to edit an alarm.
             alarmID = intent.getIntExtra(EXTRA_ID, -1);
             time = intent.getStringExtra(EXTRA_TIME);
-            activeDays = intent.getStringArrayExtra(EXTRA_ACTIVE_DAYS);
+            activeDays = intent.getBooleanArrayExtra(EXTRA_ACTIVE_DAYS);
 
             timeTextView = findViewById(R.id.add_alarm_time_text);
             repeatTextView = findViewById(R.id.add_alarm_repeat_text);
@@ -65,6 +67,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
             addDeleteButtonListener();
         } else {
+            activeDays = new boolean[7];
             deleteButton.setVisibility(View.GONE);
             setInitialAlarmTime();
             setInitialRepetition();
@@ -133,7 +136,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                     String[] splitTime = time.split(":");
                     hour = Integer.parseInt(splitTime[0]);
                     minute = Integer.parseInt(splitTime[1].substring(0, 2));
-                    if (splitTime[1].endsWith("PM") ) {
+                    if (splitTime[1].endsWith("PM")) {
                         hour += 12;
                     } else if (splitTime[1].endsWith("AM")) {
                         if (hour == 12) hour = 0;
@@ -177,6 +180,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
     /**
      * Get Bundle of arguments for SetRepeatDaysDialogFragment, arguments include alarm's active days.
+     *
      * @return Bundle of arguments
      */
     @NonNull
@@ -184,25 +188,26 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         Bundle args = new Bundle();
 
         // Populate an array of 7 false's
-        ArrayList<Boolean> activeDaysBooleans = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            activeDaysBooleans.add(false);
-        }
+//        ArrayList<Boolean> activeDaysBooleans = new ArrayList<>();
+//        for (int i = 0; i < 7; i++) {
+//            activeDaysBooleans.add(false);
+//        }
 
-        if (activeDays != null && activeDays.length != 0) { // there are some selected repeat days
-            for (String day : activeDays) {
-                int i = Arrays.asList(daysOfWeek).indexOf(day);
-                activeDaysBooleans.set(i, true);
-            }
-        }
+//        boolean[] activeDaysArray = new boolean[7];
+//        if (activeDays != null) {
+//            for (int day : activeDays) {
+//                activeDaysArray[day] = true;
+//            }
+//        }
 
         // Pass current active days to DialogFragment so it can display selections
-        boolean[] activeDaysArray = new boolean[activeDaysBooleans.size()];
-        int index = 0;
-        for (Boolean object : activeDaysBooleans) {
-            activeDaysArray[index++] = object;
-        }
-        args.putBooleanArray("activeDays", activeDaysArray);
+//        boolean[] activeDaysArray = new boolean[activeDaysBooleans.size()];
+//        int index = 0;
+//        for (Boolean object : activeDaysBooleans) {
+//            activeDaysArray[index++] = object;
+//        }
+        Log.i(TAG, "Opening SetRepeatDaysDialog with array: " + getStringOfActiveDays());
+        args.putBooleanArray("activeDays", activeDays);
         return args;
     }
 
@@ -210,32 +215,32 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
      * This method is called when SetRepeatDaysDialogFragment completes, we get the selectedDays
      * and apply that to alarm
      *
-     * @param selectedDaysBools integer array of selected days of the week
+     * @param selectedDaysBools boolean array of selected days of the week
      */
     public void onDialogComplete(boolean[] selectedDaysBools) {
-        if (selectedDaysBools.length > 0) {
-            ArrayList<String> selectedDays = new ArrayList<>();
+//        int numSelectedDays = 0;
+//        for (boolean bool : selectedDaysBools) {
+//            if (bool) {
+//                numSelectedDays++;
+//            }
+//        }
+//        activeDays = new int[numSelectedDays];
+//
+//        // convert an array of boolean days to an int array of days
+//        int day = 0;
+//        int i = 0;
+//        for (boolean bool : selectedDaysBools) {
+//            if (bool) {
+//                activeDays[i] = day;
+//                i++;
+//            }
+//            day++;
+//        }
 
-            // convert a array of boolean days to a String ArrayList of days
-            int i = 0;
-            for (boolean bool : selectedDaysBools) {
-                if (bool) {
-                    selectedDays.add(daysOfWeek[i]);
-                }
-                i++;
-            }
-
-            // Convert selectedDays to Array and apply that to alarm
-            activeDays = new String[selectedDays.size()];
-            activeDays = selectedDays.toArray(activeDays);
-
-            String formattedActiveDays = getStringOfActiveDays();
-            repeatTextView.setText(formattedActiveDays);
-        } else {
-            activeDays = new String[0];
-
-            repeatTextView.setText(getString(R.string.never));
-        }
+        activeDays = selectedDaysBools;
+        Log.i(TAG, "SetRepeatDaysDialog completed with array: " + getStringOfActiveDays());
+        String formattedActiveDays = getStringOfActiveDays();
+        repeatTextView.setText(formattedActiveDays);
     }
 
     @Override
@@ -260,6 +265,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             replyIntent.putExtra(EXTRA_TIME, time);
             replyIntent.putExtra(EXTRA_ACTIVE, false);
             replyIntent.putExtra(EXTRA_ACTIVE_DAYS, activeDays);
+            Log.i(TAG, "Saving alarm with array: " + getStringOfActiveDays());
 
             setResult(RESULT_OK, replyIntent);
             finish();
@@ -299,37 +305,38 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
     /**
      * Get a user readable representation of the String Array activeDays
+     *
      * @return String representation of activeDays
      */
     public String getStringOfActiveDays() {
-        if (activeDays.length == 7) {
+        // Build string based on which indices are true in activeDays
+        StringBuilder builder = new StringBuilder();
+        int activeCount = 0;
+        for (int i = 0; i < 7; i++) {
+            if (activeDays[i]) {
+                String formattedDay = Alarm.daysOfWeek[i].substring(0, 3) + ", ";
+                builder.append(formattedDay);
+                activeCount++;
+            }
+        }
+
+        if (activeCount == 7) {
             return "everyday";
-        } else if (activeDays.length == 0) {
+        } else if (activeCount == 0) {
             return "never";
         }
 
-        boolean satInArray = false; // "Saturday" in activeDays.
-        boolean sunInArray = false; // "Sunday" in activeDays.
+        boolean satInArray = activeDays[6]; // "Saturday" in activeDays
+        boolean sunInArray = activeDays[0]; // "Sunday" in activeDays
 
-        StringBuilder builder = new StringBuilder();
-        for (String day : activeDays) {
-            if (day.equals("Saturday")) {
-                satInArray = true;
-            } else if (day.equals("Sunday")) {
-                sunInArray = true;
-            }
-            String formattedDay = day.substring(0, 3) + ", ";
-            builder.append(formattedDay);
-        }
-
-        if (satInArray && sunInArray && activeDays.length == 2) {
+        if (satInArray && sunInArray && activeCount == 2) {
             return "weekends";
-        } else if (!satInArray && !sunInArray && activeDays.length == 5) {
+        } else if (!satInArray && !sunInArray && activeCount == 5) {
             return "weekdays";
         }
 
         if (builder.length() > 1) {
-            builder.setLength(builder.length() - 2); // Cut-off extra comma.
+            builder.setLength(builder.length() - 2);
         }
 
         return builder.toString();

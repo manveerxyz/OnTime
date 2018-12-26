@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,8 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final String TAG = "MainActivity";
 
     public static final int NEW_ALARM_ACTIVITY_REQUEST_CODE = 1;
     public static final int EDIT_ALARM_ACTIVITY_REQUEST_CODE = 2;
@@ -95,7 +98,13 @@ public class MainActivity extends AppCompatActivity {
             // Get Extras.
             String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
             boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
-            String[] activeDays = data.getStringArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+            boolean[] activeDays = data.getBooleanArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+
+            String activeDaysString = "";
+            for (boolean bool: activeDays) {
+                activeDaysString += bool;
+            }
+            Log.i(TAG, "Received new alarm data with array: " + activeDaysString);
 
             // Convert String timeStr to Date object.
             DateFormat formatter = new SimpleDateFormat("hh:mm aa");
@@ -110,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
             Alarm alarm = new Alarm(time, active, activeDays);
             // Insert into ViewModel.
             alarmViewModel.insert(alarm);
+
+            Log.i(TAG, "Inserted into db, new alarm with array: " + alarm.getStringOfActiveDays());
 
             // Show snackbar to notify user
             Snackbar.make(snackbarAnchor, R.string.alarm_saved, Snackbar.LENGTH_SHORT).show();
@@ -128,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
                 boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
-                String[] activeDays = data.getStringArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+                boolean[] activeDays = data.getBooleanArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
 
                 // Convert String timeStr to Date object.
                 DateFormat formatter = new SimpleDateFormat("hh:mm aa");

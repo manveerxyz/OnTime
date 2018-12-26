@@ -60,7 +60,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
     // To schedule alarms
     private AlarmHandler alarmHandler;
 
-    AlarmListAdapter(Context context) {
+    public AlarmListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
         emptyTextView = ((MainActivity) context).findViewById(R.id.no_alarms_text);
 
@@ -81,6 +81,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
     public void onBindViewHolder(@NonNull AlarmViewHolder viewHolder, int position) {
         Resources resources = viewHolder.itemView.getContext().getResources();
         Alarm alarm = alarms.get(position);
+        Log.i(TAG, "Populating UI with alarm with array: " + alarm.getStringOfActiveDays());
 
         viewHolder.timeTextView.setText(alarm.getStringTime()); // set alarm time
 
