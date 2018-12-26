@@ -1,4 +1,4 @@
-package com.manveerbasra.ontime;
+package com.manveerbasra.ontime.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+
+import com.manveerbasra.ontime.R;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

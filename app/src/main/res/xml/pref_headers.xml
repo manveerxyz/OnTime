@@ -3,12 +3,12 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.manveerbasra.ontime.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="com.manveerbasra.ontime.ui.activity.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_24dp"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.manveerbasra.ontime.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="com.manveerbasra.ontime.ui.activity.SettingsActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_24dp"
         android:title="@string/pref_header_alarm" />
 

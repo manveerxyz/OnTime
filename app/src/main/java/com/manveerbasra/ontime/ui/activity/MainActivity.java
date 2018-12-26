@@ -1,4 +1,4 @@
-package com.manveerbasra.ontime;
+package com.manveerbasra.ontime.ui.activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
+import com.manveerbasra.ontime.ui.AlarmListAdapter;
 import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
 
 import java.text.DateFormat;

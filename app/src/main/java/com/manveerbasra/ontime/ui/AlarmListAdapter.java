@@ -1,4 +1,4 @@
-package com.manveerbasra.ontime;
+package com.manveerbasra.ontime.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -15,8 +15,11 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.alarmmanager.AlarmHandler;
 import com.manveerbasra.ontime.db.Alarm;
+import com.manveerbasra.ontime.ui.activity.AddAlarmActivity;
+import com.manveerbasra.ontime.ui.activity.MainActivity;
 import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
 
 import java.util.Collections;
@@ -109,7 +112,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
      * Update current list of alarms and update UI
      * @param alarms List of updated alarms
      */
-    void setAlarms(List<Alarm> alarms) {
+    public void setAlarms(List<Alarm> alarms) {
         Log.i(TAG, "updating alarms data-set");
         this.alarms = alarms;
         notifyDataSetChanged();

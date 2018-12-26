@@ -1,4 +1,4 @@
-package com.manveerbasra.ontime;
+package com.manveerbasra.ontime.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

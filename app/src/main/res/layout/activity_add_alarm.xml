@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AddAlarmActivity">
+    tools:context=".ui.activity.AddAlarmActivity">
 
     <RelativeLayout
         android:id="@+id/add_alarm_time_layout"

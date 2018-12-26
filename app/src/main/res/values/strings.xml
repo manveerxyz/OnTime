@@ -4,6 +4,7 @@
 
     <string name="no_alarms">No alarms yet :( \nClick \'+\' to add an alarm.</string>
 
+    <!-- AddAlarmActivity -->
     <string name="add_alarm">Add New Alarm</string>
     <string name="edit_alarm">Edit Alarm</string>
     <string name="set_time">Set Time</string>
@@ -13,14 +14,14 @@
     <string name="never">never</string>
     <string name="action_alarm_save">Save Alarm</string>
 
+    <!-- Snackbar -->
     <string name="alarm_not_saved">Alarm not saved</string>
     <string name="alarm_saved">Alarm saved</string>
     <string name="alarm_deleted">Alarm deleted</string>
-
     <string name="alarm_set">Alarm set</string>
     <string name="alarm_cancelled">Alarm cancelled</string>
 
-    <!-- Notification Strings -->
+    <!-- Notification -->
     <string name="alarm_notification_title">Alarm going off!</string>
     <string name="stop">Stop</string>
     <string name="snooze">Snooze</string>
@@ -33,7 +34,7 @@
 
     <!-- Strings related to Settings -->
 
-    <!-- Example General settings -->
+    <!-- General settings -->
     <string name="pref_header_general">General</string>
 
 
@@ -41,7 +42,7 @@
     <string name="pref_default_location">Toronto, ON</string>
 
 
-    <!-- Example settings for Alarm -->
+    <!-- Alarm Settings -->
     <string name="pref_header_alarm">Alarm</string>
 
     <string name="pref_title_new_message_notifications">New message notifications</string>
