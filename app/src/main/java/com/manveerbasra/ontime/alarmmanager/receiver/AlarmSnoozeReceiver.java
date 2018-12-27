@@ -39,6 +39,6 @@ public class AlarmSnoozeReceiver extends BroadcastReceiver {
         // Schedule next ring
         Log.i(TAG, "Snoozing alarm " + alarmID + " for " + snoozeInSecs + " seconds");
         AlarmHandler alarmHandler = new AlarmHandler(context, null);
-        alarmHandler.scheduleAlarm(snoozeInSecs * 1000, alarmID);
+        alarmHandler.scheduleSnoozeAlarm(snoozeInSecs * 1000, alarmID);
     }
 }

@@ -5,16 +5,19 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.manveerbasra.ontime.db.converter.BooleanArrayConverter;
 import com.manveerbasra.ontime.db.converter.DateConverter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Entity(tableName = "alarms")
 @TypeConverters({DateConverter.class, BooleanArrayConverter.class})
@@ -29,8 +32,12 @@ public class Alarm {
     @ColumnInfo(name = "alarm_active")
     public boolean active;
 
+    /**
+     * Must have length 7
+     * i'th item being true means alarm is active on i'th day
+     */
     @ColumnInfo(name = "alarm_active_days")
-    public boolean[] activeDays; // must have length 7
+    public boolean[] activeDays;
 
     public int getId() {
         return id;
@@ -142,7 +149,24 @@ public class Alarm {
      * @return time to ring in milliseconds since epoch
      */
     @Ignore
-    public long getTimeToRing() {
+    public long getTimeToNextRing() {
+        Calendar calendar = getAlarmTimeAsCalendar();
+
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) { // alarm time has passed for today
+            calendar.add(Calendar.DAY_OF_MONTH, 1); // set alarm to ring tomorrow
+        }
+
+        Log.i("Alarm.java", "Alarm ring time is " + calendar.getTime().toString());
+        return calendar.getTimeInMillis();
+    }
+
+    /**
+     * Get Alarm time as a calendar object set to current date
+     *
+     * @return Alarm time parsed into a Calendar object
+     */
+    @NonNull
+    private Calendar getAlarmTimeAsCalendar() {
         String[] timeString = new SimpleDateFormat("HH:mm").format(this.time).split(":");
         int hour = Integer.parseInt(timeString[0]);
         int minute = Integer.parseInt(timeString[1]);
@@ -151,44 +175,54 @@ public class Alarm {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
 
-        setCorrectRingDay(calendar);
-
-        Log.i("Alarm.java", "Alarm ring time is " + calendar.getTime().toString());
-        return calendar.getTimeInMillis();
+        return calendar;
     }
 
     /**
-     * Correctly set the next alarm ring day based on activeDays and current day of week
+     * Get the time to ring in milliseconds since epoch for each day alarm is active
      *
-     * @param calendar Calendar object to correctly set date to
+     * @return a List of milliseconds to the next alarm ring for each active day
      */
     @Ignore
-    private void setCorrectRingDay(Calendar calendar) {
-        Calendar currentCalendar = Calendar.getInstance();
-        int day = currentCalendar.get(Calendar.DAY_OF_WEEK);
-        day--;
-        if (calendar.getTimeInMillis() < System.currentTimeMillis() // alarm time has passed for today
-                || !activeDays[day]) { // current day is not an active day
-            int i = 0;
-            int activeDayGreater = -1;
-            int firstActiveDay = -1;
-            for (boolean bool : activeDays) {
-                if (bool) {
-                    firstActiveDay = i;
-                }
-                if (i > day && bool) {
-                    activeDayGreater = i;
-                }
-                i++;
-            }
-            if (activeDayGreater != -1) { // There's a later day of the week where the alarm is active
-                calendar.add(Calendar.DAY_OF_MONTH, activeDayGreater - day);
-            } else { // Have to find the first active day next week to set the alarm
-                calendar.add(Calendar.DAY_OF_MONTH, 7 - day);
-                calendar.add(Calendar.DAY_OF_MONTH, firstActiveDay);
+    public List<Long> getTimeToWeeklyRings() {
+        Calendar calendar = getAlarmTimeAsCalendar();
+        long currAlarmTime = calendar.getTimeInMillis();
+
+        List<Long> weekRingTimes = new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            if (activeDays[i]) { // if alarm is active on that day
+                weekRingTimes.add(getCorrectRingDay(currAlarmTime, i));
             }
         }
+
+        return weekRingTimes;
+    }
+
+    /**
+     * Correctly get the next alarm ring day based on the day it's active and current day of week
+     *
+     * @param alarmTime long of milliseconds since epoch of alarm time **today**
+     * @param activeDay int of day alarm is active on
+     * @return long of milliseconds since epoch of next alarm ring time on active day
+     */
+    @Ignore
+    private long getCorrectRingDay(long alarmTime, int activeDay) { // TODO handle no repeat days
+        Calendar currentCalendar = Calendar.getInstance();
+        int currDay = currentCalendar.get(Calendar.DAY_OF_WEEK);
+        currDay--; // index using 0 = Sunday
+
+        if (alarmTime < System.currentTimeMillis() // alarm time has passed for today
+                || !activeDays[currDay]) { // current day is not an active day
+
+            if (activeDay > currDay) { // Alarm is active a later day of the week
+                alarmTime += TimeUnit.MILLISECONDS.convert(activeDay - currDay, TimeUnit.DAYS);
+            } else { // Have to move the alarm time to next week's active day
+                alarmTime += TimeUnit.MILLISECONDS.convert(7 - currDay, TimeUnit.DAYS);
+                alarmTime += TimeUnit.MILLISECONDS.convert(activeDay, TimeUnit.DAYS);
+            }
+        }
+        return alarmTime;
     }
 }

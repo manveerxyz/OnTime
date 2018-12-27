@@ -13,6 +13,7 @@ import com.manveerbasra.ontime.alarmmanager.receiver.AlarmReceiver;
 import com.manveerbasra.ontime.db.Alarm;
 
 import java.util.Calendar;
+import java.util.List;
 
 
 /**
@@ -42,28 +43,40 @@ public class AlarmHandler {
             return;
         }
 
-        long alarmTimeInMillis = alarm.getTimeToRing();
-
         // Get PendingIntent to AlarmReceiver Broadcast channel
         Intent intent = new Intent(appContext, AlarmReceiver.class);
         intent.putExtra(EXTRA_ID, alarm.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
         AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
+
+        if (alarm.isRepeat()) {
+            // get list of time to ring in milliseconds for each active day, and repeat weekly
+            List<Long> timeToWeeklyRings = alarm.getTimeToWeeklyRings();
+            Calendar calendar = Calendar.getInstance();
+            for (long millis : timeToWeeklyRings) {
+                calendar.setTimeInMillis(millis);
+                Log.i(TAG, "Setting weekly repeat at " + calendar.getTime().toString());
+//                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, millis, AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+            }
+        } else {
+            long alarmTimeInMillis = alarm.getTimeToNextRing(); // get time until next alarm ring
+
+            Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
+        }
 
         // Show snackbar to notify user
         Snackbar.make(snackbarAnchor, appContext.getString(R.string.alarm_set), Snackbar.LENGTH_SHORT).show();
     }
 
     /**
-     * Schedule alarm notification based on time until next alarm
+     * Schedule alarm notification based on time until next alarm, used to snooze alarm
      *
      * @param timeToRing time to next alarm in milliseconds
      * @param alarmID    ID of alarm to ring
      */
-    public void scheduleAlarm(int timeToRing, int alarmID) {
+    public void scheduleSnoozeAlarm(int timeToRing, int alarmID) {
         // Calculate time until alarm from millis since epoch
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MILLISECOND, timeToRing);
@@ -74,7 +87,7 @@ public class AlarmHandler {
         intent.putExtra(EXTRA_ID, alarmID);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Log.i(TAG, "setting alarm " + alarmID + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
+        Log.i(TAG, "setting snoozed alarm " + alarmID + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
         AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
     }
