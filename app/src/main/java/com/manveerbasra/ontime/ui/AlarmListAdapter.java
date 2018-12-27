@@ -85,7 +85,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         viewHolder.timeTextView.setText(alarm.getStringTime()); // set alarm time
 
         // Set repeatTextView text
-        if (alarm.isRepeat()) {
+        if (alarm.isRepeating()) {
             String repetitionText = alarm.getStringOfActiveDays();
             viewHolder.repetitionTextView.setText(repetitionText);
         } else {

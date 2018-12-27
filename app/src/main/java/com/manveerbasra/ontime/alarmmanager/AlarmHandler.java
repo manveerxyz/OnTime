@@ -52,7 +52,7 @@ public class AlarmHandler {
 
         long nextAlarmRing = 0; // used in Snackbar
 
-        if (alarm.isRepeat()) {
+        if (alarm.isRepeating()) {
             // get list of time to ring in milliseconds for each active day, and repeat weekly
             List<Long> timeToWeeklyRings = alarm.getTimeToWeeklyRings();
             Calendar calendar = Calendar.getInstance();
