@@ -50,6 +50,8 @@ public class AlarmHandler {
 
         AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
 
+        long nextAlarmRing = 0; // used in Snackbar
+
         if (alarm.isRepeat()) {
             // get list of time to ring in milliseconds for each active day, and repeat weekly
             List<Long> timeToWeeklyRings = alarm.getTimeToWeeklyRings();
@@ -57,17 +59,54 @@ public class AlarmHandler {
             for (long millis : timeToWeeklyRings) {
                 calendar.setTimeInMillis(millis);
                 Log.i(TAG, "Setting weekly repeat at " + calendar.getTime().toString());
-//                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, millis, AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, millis, AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+                if (millis < nextAlarmRing || nextAlarmRing == 0) nextAlarmRing = millis;
             }
         } else {
-            long alarmTimeInMillis = alarm.getTimeToNextRing(); // get time until next alarm ring
+            nextAlarmRing = alarm.getTimeToNextRing(); // get time until next alarm ring
 
-            Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
-            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
+            Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + nextAlarmRing + " milliseconds");
+            alarmManager.set(AlarmManager.RTC_WAKEUP, nextAlarmRing, pendingIntent);
         }
 
+        String timeUntilNextRing = getTimeUntilNextRing(nextAlarmRing - System.currentTimeMillis());
         // Show snackbar to notify user
-        Snackbar.make(snackbarAnchor, appContext.getString(R.string.alarm_set), Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(snackbarAnchor,
+                String.format(appContext.getString(R.string.alarm_set), timeUntilNextRing),
+                Snackbar.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Converts milliseconds to # day(s), # hour(s), # minute(s)
+     *
+     * @param millisToRing milliseconds to next alarm ring
+     * @return a user readable String of time until next alarm ring
+     */
+    private String getTimeUntilNextRing(long millisToRing) {
+        long seconds = millisToRing / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        long days = hours / 24;
+
+        minutes -= hours*60;
+        hours -= days*24;
+
+        StringBuilder timeUntilNextRing = new StringBuilder();
+        if (days >= 1) {
+            timeUntilNextRing.append(days);
+            if (days > 1) timeUntilNextRing.append(" days, ");
+            else timeUntilNextRing.append(" day, ");
+        }
+        if (hours >= 1) {
+            timeUntilNextRing.append(hours);
+            if (hours > 1) timeUntilNextRing.append(" hours, ");
+            else timeUntilNextRing.append(" hour, ");
+        }
+        timeUntilNextRing.append(minutes);
+        if (minutes > 1) timeUntilNextRing.append(" minutes");
+        else timeUntilNextRing.append(" minute");
+
+        return timeUntilNextRing.toString();
     }
 
     /**
