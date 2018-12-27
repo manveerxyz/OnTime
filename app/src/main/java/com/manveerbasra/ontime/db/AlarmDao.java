@@ -12,6 +12,9 @@ import java.util.List;
 import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 
+/**
+ * Dao to interact with database at the lowest level
+ */
 @Dao
 public interface AlarmDao {
     @Query("select * from alarms")

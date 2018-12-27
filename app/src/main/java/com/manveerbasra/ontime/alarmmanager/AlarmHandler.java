@@ -94,17 +94,14 @@ public class AlarmHandler {
         StringBuilder timeUntilNextRing = new StringBuilder();
         if (days >= 1) {
             timeUntilNextRing.append(days);
-            if (days > 1) timeUntilNextRing.append(" days, ");
-            else timeUntilNextRing.append(" day, ");
+            timeUntilNextRing.append(days > 1 ? " days, " : " day, ");
         }
         if (hours >= 1) {
             timeUntilNextRing.append(hours);
-            if (hours > 1) timeUntilNextRing.append(" hours, ");
-            else timeUntilNextRing.append(" hour, ");
+            timeUntilNextRing.append(hours > 1 ? " hours, " : " hour, ");
         }
         timeUntilNextRing.append(minutes);
-        if (minutes > 1) timeUntilNextRing.append(" minutes");
-        else timeUntilNextRing.append(" minute");
+        timeUntilNextRing.append(minutes > 1 ? " minutes" : " minute");
 
         return timeUntilNextRing.toString();
     }

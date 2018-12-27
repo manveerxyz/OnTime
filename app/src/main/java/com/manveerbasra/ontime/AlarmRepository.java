@@ -13,7 +13,6 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Abstracted Repository to handle interactions between ViewModels and Database
- * TODO Implement Singleton Pattern
  */
 public class AlarmRepository {
 

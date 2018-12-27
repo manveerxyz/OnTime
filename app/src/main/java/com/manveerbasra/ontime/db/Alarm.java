@@ -22,6 +22,9 @@ import java.util.concurrent.TimeUnit;
 @Entity(tableName = "alarms")
 @TypeConverters({DateConverter.class, BooleanArrayConverter.class})
 public class Alarm {
+
+    // Class members
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "alarm_id")
     public int id;
@@ -38,6 +41,8 @@ public class Alarm {
      */
     @ColumnInfo(name = "alarm_active_days")
     public boolean[] activeDays;
+
+    // Getters/Setters
 
     public int getId() {
         return id;
@@ -87,6 +92,11 @@ public class Alarm {
         this.activeDays = activeDays;
     }
 
+    /**
+     * Iterates through active days to see if one's set to repeat
+     *
+     * @return boolean for whether alarm repeats or not
+     */
     @Ignore
     public boolean isRepeating() {
         boolean isRepeat = false;
@@ -214,7 +224,7 @@ public class Alarm {
      * @return long of milliseconds since epoch of next alarm ring time on active day
      */
     @Ignore
-    private long getCorrectRingDay(long alarmTime, int activeDay) { // TODO handle no repeat days
+    private long getCorrectRingDay(long alarmTime, int activeDay) {
         Calendar currentCalendar = Calendar.getInstance();
         int currDay = currentCalendar.get(Calendar.DAY_OF_WEEK);
         currDay--; // index using 0 = Sunday

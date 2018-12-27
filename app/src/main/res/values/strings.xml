@@ -2,6 +2,16 @@
     <string name="app_name">OnTime</string>
     <string name="action_settings">Settings</string>
 
+    <string-array name="days_of_week">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
     <string name="no_alarms">No alarms yet :( \nClick \'+\' to add an alarm.</string>
 
     <!-- AddAlarmActivity -->

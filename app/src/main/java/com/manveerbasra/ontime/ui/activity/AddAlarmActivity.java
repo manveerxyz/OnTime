@@ -18,8 +18,6 @@ import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 
 public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDaysDialogFragment.OnDialogCompleteListener {
