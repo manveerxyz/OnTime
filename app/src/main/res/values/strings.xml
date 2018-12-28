@@ -15,14 +15,18 @@
     <string name="no_alarms">No alarms yet :( \nClick \'+\' to add an alarm.</string>
 
     <!-- AddAlarmActivity -->
+    <string name="alarm">Alarm</string>
     <string name="add_alarm">Add New Alarm</string>
     <string name="edit_alarm">Edit Alarm</string>
-    <string name="set_time">Set Time</string>
+    <string name="set_time">Time</string>
     <string name="repeat">Repeat</string>
     <string name="set_repeat">Set Repeat</string>
     <string name="no_repeat">no repeat</string>
     <string name="never">never</string>
     <string name="action_alarm_save">Save Alarm</string>
+    <string name="location">Location</string>
+    <string name="set_start_location">Start Location</string>
+    <string name="set_end_location">End Location</string>
 
     <!-- Snackbar -->
     <string name="alarm_not_saved">Alarm not saved</string>
