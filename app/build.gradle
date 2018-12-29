@@ -37,4 +37,6 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$room_version"
 
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
 }

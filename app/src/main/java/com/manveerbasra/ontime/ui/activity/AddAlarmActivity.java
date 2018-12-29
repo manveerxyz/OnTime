@@ -3,6 +3,7 @@ package com.manveerbasra.ontime.ui.activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.manveerbasra.ontime.MapsActivity;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
@@ -23,6 +25,9 @@ import java.util.Calendar;
 public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDaysDialogFragment.OnDialogCompleteListener {
 
     private final String TAG = "AddAlarmActivity";
+
+    private static final int SET_START_LOCATION_ACTIVITY_REQUEST_CODE = 1;
+    private static final int SET_END_LOCATION_ACTIVITY_REQUEST_CODE = 2;
 
     // Key values for returning intent.
     public static final String EXTRA_ID = "com.manveerbasra.ontime.ID";
@@ -40,7 +45,9 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     // View objects
     TextView timeTextView;
     TextView repeatTextView;
+    TextView startLocTextView;
     Button deleteButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +80,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         addSetTimeLayoutListener();
         addSetRepeatLayoutListener();
+        addSetStartLocationListener();
     }
 
 
@@ -177,6 +185,21 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     }
 
     /**
+     * When startLocation Layout is selected, open maps activity
+     */
+    private void addSetStartLocationListener() {
+        RelativeLayout setStartLocButton = findViewById(R.id.add_alarm_start_loc_layout);
+
+        setStartLocButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddAlarmActivity.this, MapsActivity.class);
+                startActivityForResult(intent, SET_START_LOCATION_ACTIVITY_REQUEST_CODE);
+            }
+        });
+    }
+
+    /**
      * Get Bundle of arguments for SetRepeatDaysDialogFragment, arguments include alarm's active days.
      *
      * @return Bundle of arguments
@@ -229,6 +252,28 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Updates UI with data received from MapActivity
+     *
+     * @param requestCode request code varies on whether start or end location set
+     * @param resultCode  whether activity successfully completed
+     * @param data        reply Intent, contains extras that vary based on request code
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SET_START_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            // Get extra
+            String timeStr = data.getStringExtra(MapsActivity.EXTRA_PLACE);
+
+            // Set place to start location textView
+            startLocTextView = findViewById(R.id.add_alarm_start_loc_text);
+            startLocTextView.setText(timeStr);
+
+        }
     }
 
     /**

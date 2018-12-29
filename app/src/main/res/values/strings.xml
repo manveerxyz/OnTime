@@ -79,4 +79,5 @@
         <item>300</item>
         <item>600</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 </resources>
