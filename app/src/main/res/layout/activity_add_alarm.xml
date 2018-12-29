@@ -241,16 +241,23 @@
 
 
     </RelativeLayout>
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true">
 
-    <Button
-        android:id="@+id/add_alarm_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:padding="17dp"
-        android:text="@string/delete_alarm" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_add_alarm_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/colorRed"
+            android:src="@drawable/ic_delete_white_24dp"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
 
 
 </RelativeLayout>

@@ -8,6 +8,7 @@
     <color name="colorGrey500">#9E9E9E</color>
     <color name="colorDarkText">#616161</color>
 
+    <color name="colorRed">#ef5350</color>
     <color name="colorWhite">#FFFFFF</color>
 
 </resources>

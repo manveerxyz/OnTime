@@ -4,12 +4,13 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -45,7 +46,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     TextView repeatTextView;
     TextView startLocTextView;
     TextView endLocTextView;
-    Button deleteButton;
+    FloatingActionButton deleteButton;
 
 
     @Override
@@ -54,7 +55,10 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         setContentView(R.layout.activity_add_alarm);
 
         calendar = Calendar.getInstance();
-        deleteButton = findViewById(R.id.add_alarm_delete);
+        deleteButton = findViewById(R.id.fab_add_alarm_delete);
+
+        startLocTextView = findViewById(R.id.add_alarm_start_loc_text);
+        endLocTextView = findViewById(R.id.add_alarm_end_loc_text);
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_ID)) { // Activity called to edit an alarm.
@@ -72,7 +76,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             addDeleteButtonListener();
         } else {
             activeDays = new boolean[7];
-            deleteButton.setVisibility(View.GONE);
+            deleteButton.hide();
             setInitialAlarmTime();
             setInitialRepetition();
         }
@@ -252,18 +256,23 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_alarm_save) {
-            Intent replyIntent = new Intent();
+            if (startLocTextView.getText().equals(getString(R.string.not_set))
+                    && endLocTextView.getText().equals(getString(R.string.not_set))) {
+                Snackbar.make(findViewById(R.id.fab_add_alarm_delete), getString(R.string.locs_not_selected), Snackbar.LENGTH_SHORT).show();
+            } else {
+                Intent replyIntent = new Intent();
 
-            String time = timeTextView.getText().toString();
+                String time = timeTextView.getText().toString();
 
-            // Add user-selected extras.
-            replyIntent.putExtra(EXTRA_ID, alarmID);
-            replyIntent.putExtra(EXTRA_TIME, time);
-            replyIntent.putExtra(EXTRA_ACTIVE, false);
-            replyIntent.putExtra(EXTRA_ACTIVE_DAYS, activeDays);
+                // Add user-selected extras.
+                replyIntent.putExtra(EXTRA_ID, alarmID);
+                replyIntent.putExtra(EXTRA_TIME, time);
+                replyIntent.putExtra(EXTRA_ACTIVE, false);
+                replyIntent.putExtra(EXTRA_ACTIVE_DAYS, activeDays);
 
-            setResult(RESULT_OK, replyIntent);
-            finish();
+                setResult(RESULT_OK, replyIntent);
+                finish();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -283,17 +292,13 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         if (requestCode == SET_START_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extra
             String place = data.getStringExtra(MapsActivity.EXTRA_PLACE);
-
             // Set place to start location textView
-            startLocTextView = findViewById(R.id.add_alarm_start_loc_text);
             startLocTextView.setText(place);
 
         } else if (requestCode == SET_END_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extra
             String place = data.getStringExtra(MapsActivity.EXTRA_PLACE);
-
             // Set place to start location textView
-            endLocTextView = findViewById(R.id.add_alarm_end_loc_text);
             endLocTextView.setText(place);
         }
     }
