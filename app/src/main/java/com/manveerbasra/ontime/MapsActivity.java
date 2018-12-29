@@ -116,16 +116,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             // Get marker's address
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            List<Address> addressList = new ArrayList<>();
+            List<Address> addressList;
             try {
                 addressList = geocoder.getFromLocation(position.latitude, position.longitude, 1);
             } catch (IOException e) {
                 e.printStackTrace();
+                addressList = null;
             }
 
             // Get user-readable representation of address
-            String placeName = addressList.get(0).getSubThoroughfare() + " "
-                    + addressList.get(0).getThoroughfare();
+            String placeName = "";
+            if (addressList != null) {
+                placeName = addressList.get(0).getSubThoroughfare() + " "
+                        + addressList.get(0).getThoroughfare();
+            }
+
+            if (placeName.equals("") || placeName.equals("null null")) {
+                placeName = marker.getTitle();
+            }
+            placeName = placeName.replace("null", "").trim();
 
             // Add place as extra
             replyIntent.putExtra(EXTRA_PLACE, placeName);
