@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.manveerbasra.ontime.MapsActivity;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
@@ -46,6 +44,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     TextView timeTextView;
     TextView repeatTextView;
     TextView startLocTextView;
+    TextView endLocTextView;
     Button deleteButton;
 
 
@@ -81,6 +80,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         addSetTimeLayoutListener();
         addSetRepeatLayoutListener();
         addSetStartLocationListener();
+        addEndStartLocationListener();
     }
 
 
@@ -200,6 +200,21 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     }
 
     /**
+     * When endLocation Layout is selected, open maps activity
+     */
+    private void addEndStartLocationListener() {
+        RelativeLayout setEndLocButton = findViewById(R.id.add_alarm_end_loc_layout);
+
+        setEndLocButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddAlarmActivity.this, MapsActivity.class);
+                startActivityForResult(intent, SET_END_LOCATION_ACTIVITY_REQUEST_CODE);
+            }
+        });
+    }
+
+    /**
      * Get Bundle of arguments for SetRepeatDaysDialogFragment, arguments include alarm's active days.
      *
      * @return Bundle of arguments
@@ -267,12 +282,19 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         if (requestCode == SET_START_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extra
-            String timeStr = data.getStringExtra(MapsActivity.EXTRA_PLACE);
+            String place = data.getStringExtra(MapsActivity.EXTRA_PLACE);
 
             // Set place to start location textView
             startLocTextView = findViewById(R.id.add_alarm_start_loc_text);
-            startLocTextView.setText(timeStr);
+            startLocTextView.setText(place);
 
+        } else if (requestCode == SET_END_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            // Get extra
+            String place = data.getStringExtra(MapsActivity.EXTRA_PLACE);
+
+            // Set place to start location textView
+            endLocTextView = findViewById(R.id.add_alarm_end_loc_text);
+            endLocTextView.setText(place);
         }
     }
 

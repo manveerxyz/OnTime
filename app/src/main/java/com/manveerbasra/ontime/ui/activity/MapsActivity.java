@@ -111,33 +111,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (id == R.id.action_alarm_save) { // save button clicked
             Intent replyIntent = new Intent();
 
-            // Get chosen marker
+            // Get chosen marker's position
             LatLng position = marker.getPosition();
 
-            // Get marker's address
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            List<Address> addressList;
-            try {
-                addressList = geocoder.getFromLocation(position.latitude, position.longitude, 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-                addressList = null;
-            }
-
-            // Get user-readable representation of address
-            String placeName = "";
-            if (addressList != null) {
-                placeName = addressList.get(0).getSubThoroughfare() + " "
-                        + addressList.get(0).getThoroughfare();
-            }
-
-            if (placeName.equals("") || placeName.equals("null null")) {
-                placeName = marker.getTitle();
-            }
-            placeName = placeName.replace("null", "").trim();
+//            // Get marker's address
+//            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+//            List<Address> addressList;
+//            try {
+//                addressList = geocoder.getFromLocation(position.latitude, position.longitude, 1);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                addressList = null;
+//            }
+//
+//            // Get user-readable representation of address
+//            String placeName = "";
+//            if (addressList != null) {
+//                placeName = addressList.get(0).getSubThoroughfare() + " "
+//                        + addressList.get(0).getThoroughfare();
+//            }
+//
+//            if (placeName.equals("") || placeName.equals("null null")) {
+//                placeName = marker.getTitle();
+//            }
+//            placeName = placeName.replace("null", "").trim();
 
             // Add place as extra
-            replyIntent.putExtra(EXTRA_PLACE, placeName);
+            replyIntent.putExtra(EXTRA_PLACE, marker.getTitle());
             setResult(RESULT_OK, replyIntent);
             finish();
         }
