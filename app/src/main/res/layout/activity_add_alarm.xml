@@ -183,6 +183,7 @@
                 android:fontFamily="@string/font_family_medium"
                 android:maxWidth="185dp"
                 android:maxLines="1"
+                android:text="@string/not_set"
                 android:textSize="@dimen/med_text_size" />
 
         </RelativeLayout>
@@ -231,8 +232,9 @@
                 android:layout_centerVertical="true"
                 android:ellipsize="end"
                 android:fontFamily="@string/font_family_medium"
-                android:maxWidth="195dp"
+                android:maxWidth="185dp"
                 android:maxLines="1"
+                android:text="@string/not_set"
                 android:textSize="@dimen/med_text_size" />
 
         </RelativeLayout>

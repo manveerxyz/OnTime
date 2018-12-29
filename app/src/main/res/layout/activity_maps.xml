@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapsActivity"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    tools:context=".ui.activity.MapsActivity">
 
     <fragment
         android:id="@+id/place_autocomplete"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
+        android:layout_height="wrap_content" />
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/maps_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.manveerbasra.ontime.ui.activity.MapsActivity" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_loc_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_check_white_24dp" />
+    </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

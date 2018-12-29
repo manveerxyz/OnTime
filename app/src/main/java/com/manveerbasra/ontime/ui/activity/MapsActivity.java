@@ -1,13 +1,12 @@
-package com.manveerbasra.ontime;
+package com.manveerbasra.ontime.ui.activity;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -21,16 +20,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import com.manveerbasra.ontime.R;
 
 /**
  * Activity to allow user to choose a location with map aid
  */
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private final String TAG = "MapsActivity";
 
@@ -45,6 +40,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
 
         setPlaceSearchBarListener();
+        setFABClickListener();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -83,6 +79,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+    /**
+     * Setup onClick Listener for FAB save button
+     */
+    public void setFABClickListener() {
+        FloatingActionButton fab = findViewById(R.id.fab_loc_save);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (marker != null) {
+                    Intent replyIntent = new Intent();
+                    // Add place as extra
+                    replyIntent.putExtra(EXTRA_PLACE, marker.getTitle());
+                    setResult(RESULT_OK, replyIntent);
+                    finish();
+                } else {
+                    Snackbar.make(findViewById(R.id.fab_loc_save), getString(R.string.loc_not_selected), Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
     /**
      * Manipulates the map once available.
@@ -96,52 +113,4 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         map = googleMap;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_alarm, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_alarm_save) { // save button clicked
-            Intent replyIntent = new Intent();
-
-            // Get chosen marker's position
-            LatLng position = marker.getPosition();
-
-//            // Get marker's address
-//            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-//            List<Address> addressList;
-//            try {
-//                addressList = geocoder.getFromLocation(position.latitude, position.longitude, 1);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                addressList = null;
-//            }
-//
-//            // Get user-readable representation of address
-//            String placeName = "";
-//            if (addressList != null) {
-//                placeName = addressList.get(0).getSubThoroughfare() + " "
-//                        + addressList.get(0).getThoroughfare();
-//            }
-//
-//            if (placeName.equals("") || placeName.equals("null null")) {
-//                placeName = marker.getTitle();
-//            }
-//            placeName = placeName.replace("null", "").trim();
-
-            // Add place as extra
-            replyIntent.putExtra(EXTRA_PLACE, marker.getTitle());
-            setResult(RESULT_OK, replyIntent);
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

@@ -25,8 +25,11 @@
     <string name="never">never</string>
     <string name="action_alarm_save">Save Alarm</string>
     <string name="location">Location</string>
-    <string name="set_start_location">Start Location</string>
-    <string name="set_end_location">End Location</string>
+    <string name="set_start_location">Starting Point</string>
+    <string name="set_end_location">Destination</string>
+    <string name="not_set">Not Set</string>
+    <string name="action_loc_save">Save Location</string>
+    <string name="loc_not_selected">Choose a location before saving</string>
 
     <!-- Snackbar -->
     <string name="alarm_not_saved">Alarm not saved</string>
