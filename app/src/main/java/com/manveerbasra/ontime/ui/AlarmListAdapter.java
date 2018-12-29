@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.alarmmanager.AlarmHandler;
 import com.manveerbasra.ontime.db.Alarm;
@@ -178,6 +179,13 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                 intent.putExtra(AddAlarmActivity.EXTRA_ID, alarm.getId());
                 intent.putExtra(AddAlarmActivity.EXTRA_TIME, alarm.getStringTime());
                 intent.putExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS, alarm.getActiveDays());
+
+                LatLng start = alarm.getStartPoint();
+                LatLng end = alarm.getEndPoint();
+                intent.putExtra(AddAlarmActivity.EXTRA_START_LAT, start.latitude);
+                intent.putExtra(AddAlarmActivity.EXTRA_START_LON, start.longitude);
+                intent.putExtra(AddAlarmActivity.EXTRA_END_LAT, end.latitude);
+                intent.putExtra(AddAlarmActivity.EXTRA_END_LON, end.longitude);
 
                 ((MainActivity) context).startActivityForResult(intent, MainActivity.EDIT_ALARM_ACTIVITY_REQUEST_CODE);
             }

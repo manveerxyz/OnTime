@@ -29,7 +29,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private final String TAG = "MapsActivity";
 
-    public static final String EXTRA_PLACE = "com.manveerbasra.ontime.PLACE";
+    public static final String EXTRA_PLACE = "com.manveerbasra.ontime.MapsActivity.PLACE";
+    public static final String EXTRA_LATITUDE = "com.manveerbasra.ontime.MapsActivity.LATITUDE";
+    public static final String EXTRA_LONGITUDE = "com.manveerbasra.ontime.MapsActivity.LONGITUDE";
 
     private GoogleMap map;
     private Marker marker;
@@ -89,7 +91,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 if (marker != null) {
                     Intent replyIntent = new Intent();
-                    // Add place as extra
+                    // Add extras
+                    LatLng latLng = marker.getPosition();
+                    replyIntent.putExtra(EXTRA_LATITUDE, latLng.latitude);
+                    replyIntent.putExtra(EXTRA_LONGITUDE, latLng.longitude);
                     replyIntent.putExtra(EXTRA_PLACE, marker.getTitle());
                     setResult(RESULT_OK, replyIntent);
                     finish();

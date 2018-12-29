@@ -8,8 +8,10 @@ import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.db.converter.BooleanArrayConverter;
 import com.manveerbasra.ontime.db.converter.DateConverter;
+import com.manveerbasra.ontime.db.converter.LatLngConverter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Entity(tableName = "alarms")
-@TypeConverters({DateConverter.class, BooleanArrayConverter.class})
+@TypeConverters({DateConverter.class, BooleanArrayConverter.class, LatLngConverter.class})
 public class Alarm {
 
     // Class members
@@ -41,6 +43,11 @@ public class Alarm {
      */
     @ColumnInfo(name = "alarm_active_days")
     public boolean[] activeDays;
+
+    @ColumnInfo(name = "alarm_start_point")
+    public LatLng startPoint;
+    @ColumnInfo(name = "alarm_end_point")
+    public LatLng endPoint;
 
     // Getters/Setters
 
@@ -76,6 +83,22 @@ public class Alarm {
         this.activeDays = activeDays;
     }
 
+    public void setStartPoint(LatLng startPoint) {
+        this.startPoint = startPoint;
+    }
+
+    public void setEndPoint(LatLng endPoint) {
+        this.endPoint = endPoint;
+    }
+
+    public LatLng getStartPoint() {
+        return startPoint;
+    }
+
+    public LatLng getEndPoint() {
+        return endPoint;
+    }
+
     public Alarm() {
     }
 
@@ -86,10 +109,12 @@ public class Alarm {
             {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
     @Ignore
-    public Alarm(Date time, boolean active, boolean[] activeDays) {
+    public Alarm(Date time, boolean active, boolean[] activeDays, LatLng startPoint, LatLng endPoint) {
         this.time = time;
         this.active = active;
         this.activeDays = activeDays;
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
     }
 
     /**

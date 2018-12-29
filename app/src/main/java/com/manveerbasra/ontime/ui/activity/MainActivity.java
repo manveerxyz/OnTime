@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.AlarmListAdapter;
@@ -98,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
             String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
             boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
             boolean[] activeDays = data.getBooleanArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+            double startLat = data.getDoubleExtra(AddAlarmActivity.EXTRA_START_LAT, 0);
+            double startLon = data.getDoubleExtra(AddAlarmActivity.EXTRA_START_LON, 0);
+            double endLat = data.getDoubleExtra(AddAlarmActivity.EXTRA_END_LAT, -5);
+            double endLon = data.getDoubleExtra(AddAlarmActivity.EXTRA_END_LON, 0);
 
             // Convert String timeStr to Date object.
             DateFormat formatter = new SimpleDateFormat("hh:mm aa");
@@ -109,7 +114,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Create new Alarm object.
-            Alarm alarm = new Alarm(time, active, activeDays);
+            Alarm alarm = new Alarm(time, active, activeDays,
+                    new LatLng(startLat, startLon),
+                    new LatLng(endLat, endLon));
             // Insert into ViewModel.
             alarmViewModel.insert(alarm);
 
@@ -131,6 +138,10 @@ public class MainActivity extends AppCompatActivity {
                 String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
                 boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
                 boolean[] activeDays = data.getBooleanArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+                double startLat = data.getDoubleExtra(AddAlarmActivity.EXTRA_START_LAT, 0);
+                double startLon = data.getDoubleExtra(AddAlarmActivity.EXTRA_START_LON, 0);
+                double endLat = data.getDoubleExtra(AddAlarmActivity.EXTRA_END_LAT, 0);
+                double endLon = data.getDoubleExtra(AddAlarmActivity.EXTRA_END_LON, 0);
 
                 // Convert String timeStr to Date object.
                 DateFormat formatter = new SimpleDateFormat("hh:mm aa");
@@ -147,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
                 alarm.setTime(time);
                 alarm.setActive(active);
                 alarm.setActiveDays(activeDays);
+                alarm.setStartPoint(new LatLng(startLat, startLon));
+                alarm.setEndPoint(new LatLng(endLat, endLon));
                 // Update in ViewModel.
                 alarmViewModel.update(alarm);
 

@@ -19,6 +19,7 @@ import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDaysDialogFragment.OnDialogCompleteListener {
@@ -29,16 +30,24 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     private static final int SET_END_LOCATION_ACTIVITY_REQUEST_CODE = 2;
 
     // Key values for returning intent.
-    public static final String EXTRA_ID = "com.manveerbasra.ontime.ID";
-    public static final String EXTRA_TIME = "com.manveerbasra.ontime.TIME";
-    public static final String EXTRA_ACTIVE = "com.manveerbasra.ontime.ACTIVE";
-    public static final String EXTRA_ACTIVE_DAYS = "com.manveerbasra.ontime.ACTIVEDAYS";
-    public static final String EXTRA_DELETE = "com.manveerbasra.ontime.DELETE";
+    public static final String EXTRA_ID = "com.manveerbasra.ontime.AddAlarmActivity.ID";
+    public static final String EXTRA_TIME = "com.manveerbasra.ontime.AddAlarmActivity.TIME";
+    public static final String EXTRA_ACTIVE = "com.manveerbasra.ontime.AddAlarmActivity.ACTIVE";
+    public static final String EXTRA_ACTIVE_DAYS = "com.manveerbasra.ontime.AddAlarmActivity.ACTIVEDAYS";
+    public static final String EXTRA_DELETE = "com.manveerbasra.ontime.AddAlarmActivity.DELETE";
+    public static final String EXTRA_START_LAT = "com.manveerbasra.ontime.AddAlarmActivity.START_LAT";
+    public static final String EXTRA_START_LON = "com.manveerbasra.ontime.AddAlarmActivity.START_LON";
+    public static final String EXTRA_END_LAT = "com.manveerbasra.ontime.AddAlarmActivity.END_LAT";
+    public static final String EXTRA_END_LON = "com.manveerbasra.ontime.AddAlarmActivity.END_LON";
 
     // Alarm attributes.
     int alarmID;
     String time;
     boolean[] activeDays;
+    double startLatitude;
+    double startLongitude;
+    double endLatitude;
+    double endLongitude;
     // Data objects
     Calendar calendar;
     // View objects
@@ -65,6 +74,12 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             alarmID = intent.getIntExtra(EXTRA_ID, -1);
             time = intent.getStringExtra(EXTRA_TIME);
             activeDays = intent.getBooleanArrayExtra(EXTRA_ACTIVE_DAYS);
+            startLongitude = intent.getDoubleExtra(EXTRA_START_LAT, 0);
+            startLatitude = intent.getDoubleExtra(EXTRA_START_LON, 0);
+            endLongitude = intent.getDoubleExtra(EXTRA_END_LAT, 0);
+            endLongitude = intent.getDoubleExtra(EXTRA_END_LON, 0);
+
+            setStartEndPointTextViews();
 
             timeTextView = findViewById(R.id.add_alarm_time_text);
             repeatTextView = findViewById(R.id.add_alarm_repeat_text);
@@ -169,6 +184,16 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     }
 
     /**
+     * Set the location textViews to saved values
+     */
+    public void setStartEndPointTextViews() {
+        // TODO change to use place name instead
+        DecimalFormat df = new DecimalFormat("#.#####");
+        startLocTextView.setText(df.format(startLatitude) + ", " + df.format(startLongitude));
+        endLocTextView.setText(df.format(endLatitude) + ", " + df.format(endLongitude));
+    }
+
+    /**
      * When repeatChangeLayout is selected, open SetRepeatDaysDialogFragment
      */
     private void addSetRepeatLayoutListener() {
@@ -269,6 +294,10 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                 replyIntent.putExtra(EXTRA_TIME, time);
                 replyIntent.putExtra(EXTRA_ACTIVE, false);
                 replyIntent.putExtra(EXTRA_ACTIVE_DAYS, activeDays);
+                replyIntent.putExtra(EXTRA_START_LAT, startLatitude);
+                replyIntent.putExtra(EXTRA_START_LON, startLongitude);
+                replyIntent.putExtra(EXTRA_END_LAT, endLatitude);
+                replyIntent.putExtra(EXTRA_END_LON, endLongitude);
 
                 setResult(RESULT_OK, replyIntent);
                 finish();
@@ -290,14 +319,18 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == SET_START_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            // Get extra
+            // Get extras
             String place = data.getStringExtra(MapsActivity.EXTRA_PLACE);
+            startLatitude = data.getDoubleExtra(MapsActivity.EXTRA_LATITUDE, 0);
+            startLongitude = data.getDoubleExtra(MapsActivity.EXTRA_LONGITUDE, 0);
             // Set place to start location textView
             startLocTextView.setText(place);
 
         } else if (requestCode == SET_END_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extra
             String place = data.getStringExtra(MapsActivity.EXTRA_PLACE);
+            endLatitude = data.getDoubleExtra(MapsActivity.EXTRA_LATITUDE, -6);
+            endLongitude = data.getDoubleExtra(MapsActivity.EXTRA_LONGITUDE, 0);
             // Set place to start location textView
             endLocTextView.setText(place);
         }
