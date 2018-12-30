@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
             String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
             boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
             boolean[] activeDays = data.getBooleanArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+            String startPlace = data.getStringExtra(AddAlarmActivity.EXTRA_START_PLACE);
+            String endPlace = data.getStringExtra(AddAlarmActivity.EXTRA_END_PLACE);
 
             Bundle args = data.getBundleExtra(AddAlarmActivity.BUNDLE_POINTS);
             LatLng startPoint = args.getParcelable(AddAlarmActivity.EXTRA_START_POINT);
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Create new Alarm object.
-            Alarm alarm = new Alarm(time, active, activeDays, startPoint, endPoint);
+            Alarm alarm = new Alarm(time, active, activeDays, startPoint, endPoint, startPlace, endPlace);
             // Insert into ViewModel.
             alarmViewModel.insert(alarm);
 
@@ -136,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
                 String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
                 boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
                 boolean[] activeDays = data.getBooleanArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
+                String startPlace = data.getStringExtra(AddAlarmActivity.EXTRA_START_PLACE);
+                String endPlace = data.getStringExtra(AddAlarmActivity.EXTRA_END_PLACE);
 
                 Bundle args = data.getBundleExtra(AddAlarmActivity.BUNDLE_POINTS);
                 LatLng startPoint = args.getParcelable(AddAlarmActivity.EXTRA_START_POINT);
@@ -156,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
                 alarm.setTime(time);
                 alarm.setActive(active);
                 alarm.setActiveDays(activeDays);
+                alarm.setStartPlace(startPlace);
+                alarm.setEndPlace(endPlace);
                 alarm.setStartPoint(startPoint);
                 alarm.setEndPoint(endPoint);
                 // Update in ViewModel.

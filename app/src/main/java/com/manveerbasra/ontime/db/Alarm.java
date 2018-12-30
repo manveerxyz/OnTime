@@ -48,6 +48,10 @@ public class Alarm {
     public LatLng startPoint;
     @ColumnInfo(name = "alarm_end_point")
     public LatLng endPoint;
+    @ColumnInfo(name = "alarm_start_place")
+    public String startPlace;
+    @ColumnInfo(name = "alarm_end_place")
+    public String endPlace;
 
     // Getters/Setters
 
@@ -99,6 +103,22 @@ public class Alarm {
         return endPoint;
     }
 
+    public void setStartPlace(String startPlace) {
+        this.startPlace = startPlace;
+    }
+
+    public void setEndPlace(String endPlace) {
+        this.endPlace = endPlace;
+    }
+
+    public String getStartPlace() {
+        return startPlace;
+    }
+
+    public String getEndPlace() {
+        return endPlace;
+    }
+
     public Alarm() {
     }
 
@@ -109,12 +129,15 @@ public class Alarm {
             {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
     @Ignore
-    public Alarm(Date time, boolean active, boolean[] activeDays, LatLng startPoint, LatLng endPoint) {
+    public Alarm(Date time, boolean active, boolean[] activeDays, LatLng startPoint, LatLng endPoint,
+                 String startPlace, String endPlace) {
         this.time = time;
         this.active = active;
         this.activeDays = activeDays;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
+        this.startPlace = startPlace;
+        this.endPlace = endPlace;
     }
 
     /**
