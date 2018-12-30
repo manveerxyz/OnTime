@@ -55,10 +55,10 @@
     <!-- General settings -->
     <string name="pref_header_general">General</string>
 
-
-    <string name="pref_title_location">Location</string>
-    <string name="pref_default_location">Toronto, ON</string>
-
+    <string name="pref_title_home_location">Home</string>
+    <string name="pref_default_home_location">Toronto, ON</string>
+    <string name="pref_title_work_location">Work</string>
+    <string name="pref_default_work_location">CN Tower</string>
 
     <!-- Alarm Settings -->
     <string name="pref_header_alarm">Alarm</string>
