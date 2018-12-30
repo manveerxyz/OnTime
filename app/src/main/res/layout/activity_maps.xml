@@ -31,8 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="16dp"
-            android:backgroundTint="@color/colorAccent"
-            android:src="@drawable/ic_check_white_24dp" />
+            android:backgroundTint="@color/colorWhite"
+            android:src="@drawable/ic_check_24dp" />
     </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

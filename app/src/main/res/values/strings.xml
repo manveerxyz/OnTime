@@ -12,7 +12,7 @@
         <item>Saturday</item>
     </string-array>
 
-    <string name="no_alarms">No alarms yet :( \nClick \'+\' to add an alarm.</string>
+    <string name="no_alarms">No alarms yet. \nClick \'+\' to add an alarm.</string>
 
     <!-- AddAlarmActivity -->
     <string name="alarm">Alarm</string>
@@ -30,7 +30,7 @@
     <string name="not_set">Not Set</string>
     <string name="action_loc_save">Save Location</string>
     <string name="loc_not_selected">Choose a location before saving</string>
-    <string name="locs_not_selected">Set starting/ending points before saving</string>
+    <string name="locs_not_selected">Set starting &amp; ending points before saving</string>
 
     <!-- Snackbar -->
     <string name="alarm_not_saved">Alarm not saved</string>

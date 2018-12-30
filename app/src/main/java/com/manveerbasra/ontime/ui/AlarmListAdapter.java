@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -180,12 +181,10 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                 intent.putExtra(AddAlarmActivity.EXTRA_TIME, alarm.getStringTime());
                 intent.putExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS, alarm.getActiveDays());
 
-                LatLng start = alarm.getStartPoint();
-                LatLng end = alarm.getEndPoint();
-                intent.putExtra(AddAlarmActivity.EXTRA_START_LAT, start.latitude);
-                intent.putExtra(AddAlarmActivity.EXTRA_START_LON, start.longitude);
-                intent.putExtra(AddAlarmActivity.EXTRA_END_LAT, end.latitude);
-                intent.putExtra(AddAlarmActivity.EXTRA_END_LON, end.longitude);
+                Bundle args = new Bundle();
+                args.putParcelable(AddAlarmActivity.EXTRA_START_POINT, alarm.getStartPoint());
+                args.putParcelable(AddAlarmActivity.EXTRA_END_POINT, alarm.getEndPoint());
+                intent.putExtra(AddAlarmActivity.BUNDLE_POINTS, args);
 
                 ((MainActivity) context).startActivityForResult(intent, MainActivity.EDIT_ALARM_ACTIVITY_REQUEST_CODE);
             }

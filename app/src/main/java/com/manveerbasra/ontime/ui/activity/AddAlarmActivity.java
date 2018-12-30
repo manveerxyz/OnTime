@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
@@ -35,19 +36,16 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     public static final String EXTRA_ACTIVE = "com.manveerbasra.ontime.AddAlarmActivity.ACTIVE";
     public static final String EXTRA_ACTIVE_DAYS = "com.manveerbasra.ontime.AddAlarmActivity.ACTIVEDAYS";
     public static final String EXTRA_DELETE = "com.manveerbasra.ontime.AddAlarmActivity.DELETE";
-    public static final String EXTRA_START_LAT = "com.manveerbasra.ontime.AddAlarmActivity.START_LAT";
-    public static final String EXTRA_START_LON = "com.manveerbasra.ontime.AddAlarmActivity.START_LON";
-    public static final String EXTRA_END_LAT = "com.manveerbasra.ontime.AddAlarmActivity.END_LAT";
-    public static final String EXTRA_END_LON = "com.manveerbasra.ontime.AddAlarmActivity.END_LON";
+    public static final String BUNDLE_POINTS = "com.manveerbasra.ontime.AddAlarmActivity.BUNDLE.POINTS";
+    public static final String EXTRA_START_POINT = "com.manveerbasra.ontime.AddAlarmActivity.STARTPOINT";
+    public static final String EXTRA_END_POINT = "com.manveerbasra.ontime.AddAlarmActivity.ENDPOINT";
 
     // Alarm attributes.
     int alarmID;
     String time;
     boolean[] activeDays;
-    double startLatitude;
-    double startLongitude;
-    double endLatitude;
-    double endLongitude;
+    LatLng startPoint;
+    LatLng endPoint;
     // Data objects
     Calendar calendar;
     // View objects
@@ -74,10 +72,10 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             alarmID = intent.getIntExtra(EXTRA_ID, -1);
             time = intent.getStringExtra(EXTRA_TIME);
             activeDays = intent.getBooleanArrayExtra(EXTRA_ACTIVE_DAYS);
-            startLongitude = intent.getDoubleExtra(EXTRA_START_LAT, 0);
-            startLatitude = intent.getDoubleExtra(EXTRA_START_LON, 0);
-            endLongitude = intent.getDoubleExtra(EXTRA_END_LAT, 0);
-            endLongitude = intent.getDoubleExtra(EXTRA_END_LON, 0);
+
+            Bundle args = intent.getBundleExtra(BUNDLE_POINTS);
+            startPoint = args.getParcelable(EXTRA_START_POINT);
+            endPoint = args.getParcelable(EXTRA_END_POINT);
 
             setStartEndPointTextViews();
 
@@ -189,8 +187,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     public void setStartEndPointTextViews() {
         // TODO change to use place name instead
         DecimalFormat df = new DecimalFormat("#.#####");
-        startLocTextView.setText(df.format(startLatitude) + ", " + df.format(startLongitude));
-        endLocTextView.setText(df.format(endLatitude) + ", " + df.format(endLongitude));
+        startLocTextView.setText(df.format(startPoint.latitude) + ", " + df.format(startPoint.longitude));
+        endLocTextView.setText(df.format(endPoint.latitude) + ", " + df.format(endPoint.longitude));
     }
 
     /**
@@ -282,23 +280,23 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_alarm_save) {
             if (startLocTextView.getText().equals(getString(R.string.not_set))
-                    && endLocTextView.getText().equals(getString(R.string.not_set))) {
+                    || endLocTextView.getText().equals(getString(R.string.not_set))) {
                 Snackbar.make(findViewById(R.id.fab_add_alarm_delete), getString(R.string.locs_not_selected), Snackbar.LENGTH_SHORT).show();
             } else {
                 Intent replyIntent = new Intent();
 
                 String time = timeTextView.getText().toString();
 
+                Bundle args = new Bundle();
+                args.putParcelable(EXTRA_START_POINT, startPoint);
+                args.putParcelable(EXTRA_END_POINT, endPoint);
+
                 // Add user-selected extras.
                 replyIntent.putExtra(EXTRA_ID, alarmID);
                 replyIntent.putExtra(EXTRA_TIME, time);
                 replyIntent.putExtra(EXTRA_ACTIVE, false);
                 replyIntent.putExtra(EXTRA_ACTIVE_DAYS, activeDays);
-                replyIntent.putExtra(EXTRA_START_LAT, startLatitude);
-                replyIntent.putExtra(EXTRA_START_LON, startLongitude);
-                replyIntent.putExtra(EXTRA_END_LAT, endLatitude);
-                replyIntent.putExtra(EXTRA_END_LON, endLongitude);
-
+                replyIntent.putExtra(BUNDLE_POINTS, args);
                 setResult(RESULT_OK, replyIntent);
                 finish();
             }
@@ -321,16 +319,17 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         if (requestCode == SET_START_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extras
             String place = data.getStringExtra(MapsActivity.EXTRA_PLACE);
-            startLatitude = data.getDoubleExtra(MapsActivity.EXTRA_LATITUDE, 0);
-            startLongitude = data.getDoubleExtra(MapsActivity.EXTRA_LONGITUDE, 0);
+            Bundle args = data.getBundleExtra(MapsActivity.BUNDLE_POINT);
+            startPoint = args.getParcelable(MapsActivity.EXTRA_LATLNG);
+
             // Set place to start location textView
             startLocTextView.setText(place);
 
         } else if (requestCode == SET_END_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extra
             String place = data.getStringExtra(MapsActivity.EXTRA_PLACE);
-            endLatitude = data.getDoubleExtra(MapsActivity.EXTRA_LATITUDE, -6);
-            endLongitude = data.getDoubleExtra(MapsActivity.EXTRA_LONGITUDE, 0);
+            Bundle args = data.getBundleExtra(MapsActivity.BUNDLE_POINT);
+            endPoint = args.getParcelable(MapsActivity.EXTRA_LATLNG);
             // Set place to start location textView
             endLocTextView.setText(place);
         }
