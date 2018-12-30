@@ -167,13 +167,19 @@ public class Alarm {
         return dateFormatter.format(this.time);
     }
 
+    @Ignore
+    public String getStringOfActiveDays() {
+        return getStringOfActiveDays(activeDays);
+    }
+
     /**
      * Get a simple user-readable representation of activeDays
      *
+     * @param activeDays boolean array of days alarm is active
      * @return a String of alarm's active days
      */
     @Ignore
-    public String getStringOfActiveDays() {
+    public static String getStringOfActiveDays(boolean[] activeDays) {
         // Build string based on which indices are true in activeDays
         StringBuilder builder = new StringBuilder();
         int activeCount = 0;

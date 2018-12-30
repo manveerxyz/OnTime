@@ -20,7 +20,6 @@ import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 
 public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDaysDialogFragment.OnDialogCompleteListener {
@@ -88,7 +87,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             startLocTextView.setText(startPlace);
             endLocTextView.setText(endPlace);
             timeTextView.setText(time);
-            repeatTextView.setText(getStringOfActiveDays());
+            repeatTextView.setText(Alarm.getStringOfActiveDays(activeDays));
             setTitle(R.string.edit_alarm);
 
             addDeleteButtonListener();
@@ -255,7 +254,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
      */
     public void onDialogComplete(boolean[] selectedDaysBools) {
         activeDays = selectedDaysBools;
-        String formattedActiveDays = getStringOfActiveDays();
+        String formattedActiveDays = Alarm.getStringOfActiveDays(activeDays);
         repeatTextView.setText(formattedActiveDays);
     }
 
@@ -272,7 +271,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_alarm_save) {
-            if (startPlace.equals(getString(R.string.not_set)) || endPlace.equals(getString(R.string.not_set))) {
+            if (startLocTextView.getText().equals(getString(R.string.not_set))
+                    || endLocTextView.getText().equals(getString(R.string.not_set))) {
                 Snackbar.make(findViewById(R.id.fab_add_alarm_delete), getString(R.string.locs_not_selected), Snackbar.LENGTH_SHORT).show();
             } else {
                 Intent replyIntent = new Intent();
@@ -356,44 +356,5 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         }
 
         return formattedTime;
-    }
-
-    /**
-     * Get a user readable representation of the String Array activeDays
-     *
-     * @return String representation of activeDays
-     */
-    public String getStringOfActiveDays() {
-        // Build string based on which indices are true in activeDays
-        StringBuilder builder = new StringBuilder();
-        int activeCount = 0;
-        for (int i = 0; i < 7; i++) {
-            if (activeDays[i]) {
-                String formattedDay = Alarm.daysOfWeek[i].substring(0, 3) + ", ";
-                builder.append(formattedDay);
-                activeCount++;
-            }
-        }
-
-        if (activeCount == 7) {
-            return "everyday";
-        } else if (activeCount == 0) {
-            return "never";
-        }
-
-        boolean satInArray = activeDays[6]; // "Saturday" in activeDays
-        boolean sunInArray = activeDays[0]; // "Sunday" in activeDays
-
-        if (satInArray && sunInArray && activeCount == 2) {
-            return "weekends";
-        } else if (!satInArray && !sunInArray && activeCount == 5) {
-            return "weekdays";
-        }
-
-        if (builder.length() > 1) {
-            builder.setLength(builder.length() - 2);
-        }
-
-        return builder.toString();
     }
 }
