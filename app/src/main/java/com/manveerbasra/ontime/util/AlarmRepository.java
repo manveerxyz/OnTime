@@ -1,4 +1,4 @@
-package com.manveerbasra.ontime;
+package com.manveerbasra.ontime.util;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;

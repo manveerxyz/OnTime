@@ -4,7 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import com.manveerbasra.ontime.AlarmRepository;
+import com.manveerbasra.ontime.util.AlarmRepository;
 import com.manveerbasra.ontime.db.Alarm;
 
 import java.util.List;
