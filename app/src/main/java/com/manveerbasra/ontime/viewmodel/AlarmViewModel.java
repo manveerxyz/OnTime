@@ -3,6 +3,7 @@ package com.manveerbasra.ontime.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.util.Log;
 
 import com.manveerbasra.ontime.util.AlarmRepository;
 import com.manveerbasra.ontime.db.Alarm;
@@ -16,6 +17,8 @@ import java.util.concurrent.ExecutionException;
  * Completely separates UI from Repository
  */
 public class AlarmViewModel extends AndroidViewModel {
+
+    private final String TAG = "AlarmViewModel";
 
     private AlarmRepository repository;
     private LiveData<List<Alarm>> allAlarms;
@@ -82,6 +85,7 @@ public class AlarmViewModel extends AndroidViewModel {
         try {
             return repository.getById(id);
         } catch (InterruptedException | ExecutionException e) {
+            Log.e(TAG, "Error when retrieving alarm by id: " + id);
             e.printStackTrace();
         }
         return new Alarm();

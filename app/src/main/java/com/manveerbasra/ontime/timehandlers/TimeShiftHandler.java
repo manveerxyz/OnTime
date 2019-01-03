@@ -21,11 +21,12 @@ public class TimeShiftHandler {
      * @param start               starting LatLng point
      * @param end                 destination LatLng point
      * @param departureTimeInSecs time in seconds since epoch of expected departure time
-     * @return
+     * @return long alarm time shift in milliseconds
      */
     public long getTimeShiftInMillis(LatLng start, LatLng end, int departureTimeInSecs) {
-        // TODO use a method other than addition to merge the two shifts
-        return trafficTimeHandler.getTimeShiftInMillis(start, end, departureTimeInSecs)
-                + weatherTimeHandler.getTimeShiftInMillis(start, end);
+        long trafficShift = trafficTimeHandler.getTimeShiftInMillis(start, end, departureTimeInSecs);
+        long weatherShift = weatherTimeHandler.getTimeShiftInMillis(start, end);
+
+        return (long) ((0.5) * (trafficShift + weatherShift));
     }
 }

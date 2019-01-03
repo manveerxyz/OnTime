@@ -1,5 +1,7 @@
 package com.manveerbasra.ontime.util;
 
+import android.util.Log;
+
 import com.manveerbasra.ontime.timehandlers.TrafficTimeHandler;
 import com.manveerbasra.ontime.timehandlers.WeatherTimeHandler;
 
@@ -13,6 +15,8 @@ import java.util.HashMap;
  * Class used to parse JSONObject received from a HTTPS request
  */
 public class JSONParser {
+
+    private final String TAG = "JSONParser";
 
     /**
      * Receives a JSONObject from a GoogleMaps API Request
@@ -40,7 +44,7 @@ public class JSONParser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.i(TAG, "parsed data from Maps: " + routes.toString());
         return routes;
     }
 

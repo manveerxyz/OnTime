@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class TrafficTimeHandler {
 
+    private final String TAG = "TrafficTimeHandler";
+
     // keys for HashMap of parsed JSON data
     public static final String DURATION = "duration";
     public static final String DURATION_TRAFFIC = "duration_in_traffic";
@@ -66,7 +68,10 @@ public class TrafficTimeHandler {
 
         if (data == null) return -1;
         else {
-            long shiftInSecs = data.get(DURATION) - data.get(DURATION_TRAFFIC);
+            long duration = data.get(DURATION);
+            long durationTraffic = data.get(DURATION_TRAFFIC);
+            Log.i(TAG, "Normal trip length: " + duration + " and length in traffic: " + durationTraffic);
+            long shiftInSecs = duration - durationTraffic;
             return TimeUnit.SECONDS.toMillis(shiftInSecs);
         }
     }

@@ -10,10 +10,12 @@ import android.view.View;
 
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.alarmmanager.receiver.AlarmReceiver;
+import com.manveerbasra.ontime.alarmmanager.receiver.TimeShiftReceiver;
 import com.manveerbasra.ontime.db.Alarm;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -34,7 +36,7 @@ public class AlarmHandler {
     }
 
     /**
-     * Schedule alarm notification using AlarmManager
+     * Schedule alarm TimeShiftReceiver an hour before alarm's time using AlarmManager
      *
      * @param alarm Alarm to schedule
      */
@@ -43,8 +45,8 @@ public class AlarmHandler {
             return;
         }
 
-        // Get PendingIntent to AlarmReceiver Broadcast channel
-        Intent intent = new Intent(appContext, AlarmReceiver.class);
+        // Get PendingIntent to TimeShiftReceiver Broadcast channel
+        Intent intent = new Intent(appContext, TimeShiftReceiver.class);
         intent.putExtra(EXTRA_ID, alarm.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -59,17 +61,25 @@ public class AlarmHandler {
             for (long millis : timeToWeeklyRings) {
                 calendar.setTimeInMillis(millis);
                 Log.i(TAG, "Setting weekly repeat at " + calendar.getTime().toString());
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, millis, AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+                alarmManager.setRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        millis - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
+                        AlarmManager.INTERVAL_DAY * 7,
+                        pendingIntent);
+
                 if (millis < nextAlarmRing || nextAlarmRing == 0) nextAlarmRing = millis;
             }
         } else {
             nextAlarmRing = alarm.getTimeToNextRing(); // get time until next alarm ring
 
             Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + nextAlarmRing + " milliseconds");
-            alarmManager.set(AlarmManager.RTC_WAKEUP, nextAlarmRing, pendingIntent);
+            alarmManager.set(
+                    AlarmManager.RTC_WAKEUP,
+                    nextAlarmRing - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
+                    pendingIntent);
         }
 
-        String timeUntilNextRing = getTimeUntilNextRing(nextAlarmRing - System.currentTimeMillis());
+        String timeUntilNextRing = getStringOfTimeUntilNextRing(nextAlarmRing - System.currentTimeMillis());
         // Show snackbar to notify user
         Snackbar.make(snackbarAnchor,
                 String.format(appContext.getString(R.string.alarm_set), timeUntilNextRing),
@@ -82,7 +92,7 @@ public class AlarmHandler {
      * @param millisToRing milliseconds to next alarm ring
      * @return a user readable String of time until next alarm ring
      */
-    private String getTimeUntilNextRing(long millisToRing) {
+    private String getStringOfTimeUntilNextRing(long millisToRing) {
         long seconds = millisToRing / 1000;
         long minutes = seconds / 60;
         long hours = minutes / 60;
@@ -107,12 +117,12 @@ public class AlarmHandler {
     }
 
     /**
-     * Schedule alarm notification based on time until next alarm, used to snooze alarm
+     * Schedule alarm notification based on time until next alarm
      *
      * @param timeToRing time to next alarm in milliseconds
      * @param alarmID    ID of alarm to ring
      */
-    public void scheduleSnoozeAlarm(int timeToRing, int alarmID) {
+    public void scheduleAlarmWithTime(int timeToRing, int alarmID) {
         // Calculate time until alarm from millis since epoch
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MILLISECOND, timeToRing);
@@ -123,13 +133,13 @@ public class AlarmHandler {
         intent.putExtra(EXTRA_ID, alarmID);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Log.i(TAG, "setting snoozed alarm " + alarmID + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
+        Log.i(TAG, "setting timed alarm " + alarmID + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
         AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
     }
 
     /**
-     * Cancel alarm notification using AlarmManager
+     * Cancel alarm notification and TimeShiftIntent using AlarmManager
      *
      * @param alarm Alarm to cancel
      */
@@ -140,14 +150,16 @@ public class AlarmHandler {
 
         // Get PendingIntent to AlarmReceiver Broadcast channel
         Intent intent = new Intent(appContext, AlarmReceiver.class);
+        Intent shiftIntent = new Intent(appContext, TimeShiftReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), intent, PendingIntent.FLAG_NO_CREATE);
+        PendingIntent shiftPendingIntent = PendingIntent.getBroadcast(appContext, alarm.getId(), shiftIntent, PendingIntent.FLAG_NO_CREATE);
+
+        AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
+        Log.i(TAG, "cancelling alarm " + alarm.getId());
 
         // PendingIntent may be null if the alarm hasn't been set
-        if (pendingIntent != null) {
-            Log.i(TAG, "cancelling alarm " + alarm.getId());
-            AlarmManager alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
-            alarmManager.cancel(pendingIntent);
-        }
+        if (pendingIntent != null) alarmManager.cancel(pendingIntent);
+        if (shiftPendingIntent != null) alarmManager.cancel(shiftPendingIntent);
 
         // Show snackbar to notify user
         Snackbar.make(snackbarAnchor, appContext.getString(R.string.alarm_cancelled), Snackbar.LENGTH_SHORT).show();

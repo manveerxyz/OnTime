@@ -38,6 +38,22 @@
             android:label="@string/add_alarm"
             android:parentActivityName=".ui.activity.MainActivity" />
 
+        <activity
+            android:name=".ui.activity.MapsActivity"
+            android:label="@string/title_activity_maps" />
+
+        <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".ui.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.manveerbasra.ontime.ui.activity.MainActivity" />
+        </activity>
+
+        <receiver
+            android:name=".alarmmanager.receiver.TimeShiftReceiver"
+            android:process=":remote" />
         <receiver
             android:name=".alarmmanager.receiver.AlarmReceiver"
             android:process=":remote" />
@@ -56,14 +72,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".ui.activity.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.manveerbasra.ontime.ui.activity.MainActivity" />
-        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -75,10 +83,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".ui.activity.MapsActivity"
-            android:label="@string/title_activity_maps" />
     </application>
 
 </manifest>
