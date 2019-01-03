@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.manveerbasra.ontime.util.MapsJSONParser;
+import com.manveerbasra.ontime.util.JSONParser;
 
 import org.json.JSONObject;
 
@@ -19,9 +19,19 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Class to get and handle time for alarm's origin -> destination commute
+ * Class to get and handle time shift for alarm's origin -> destination commute
  */
 public class TrafficTimeHandler {
+
+    // keys for HashMap of parsed JSON data
+    public static final String DURATION = "duration";
+    public static final String DURATION_TRAFFIC = "duration_in_traffic";
+
+    private String apiKey;
+
+    TrafficTimeHandler(String apiKey) {
+        this.apiKey = apiKey;
+    }
 
     /**
      * Get the difference between the usual and today's commute duration
@@ -29,22 +39,23 @@ public class TrafficTimeHandler {
      * @param start               starting LatLng point
      * @param end                 destination LatLng point
      * @param departureTimeInSecs time in seconds since epoch of expected departure time
-     * @param apiKey              Api Key to gain access to Google Maps API
      * @return long time difference between usual and today's commute in milliseconds
      */
-    public long getTimeShiftInMillis(LatLng start, LatLng end, int departureTimeInSecs, String apiKey) {
+    long getTimeShiftInMillis(LatLng start, LatLng end, int departureTimeInSecs) {
 
         String jsonData;
         HashMap<String, Integer> data;
 
+        // Download data
         DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask();
-        downloadAsyncTask.execute(getHTTPSRequestUrl(start, end, departureTimeInSecs, apiKey));
+        downloadAsyncTask.execute(getHTTPSRequestUrl(start, end, departureTimeInSecs));
         try {
             jsonData = downloadAsyncTask.get();
         } catch (ExecutionException | InterruptedException e) {
             jsonData = "";
         }
 
+        // Parse JSON data
         ParserAsyncTask parserAsyncTask = new ParserAsyncTask();
         parserAsyncTask.execute(jsonData);
         try {
@@ -55,7 +66,7 @@ public class TrafficTimeHandler {
 
         if (data == null) return -1;
         else {
-            long shiftInSecs = data.get("duration") - data.get("duration_in_traffic");
+            long shiftInSecs = data.get(DURATION) - data.get(DURATION_TRAFFIC);
             return TimeUnit.SECONDS.toMillis(shiftInSecs);
         }
     }
@@ -66,10 +77,9 @@ public class TrafficTimeHandler {
      * @param start               starting LatLng point
      * @param end                 destination LatLng point
      * @param departureTimeInSecs time in seconds since epoch of expected departure time
-     * @param apiKey              Api Key to gain access to Google Maps API
      * @return String url of HTTPS request
      */
-    private String getHTTPSRequestUrl(LatLng start, LatLng end, int departureTimeInSecs, String apiKey) {
+    private String getHTTPSRequestUrl(LatLng start, LatLng end, int departureTimeInSecs) {
 
         // Build parameters
         String origin = "origin=" + start.latitude + "," + start.longitude;
@@ -79,7 +89,6 @@ public class TrafficTimeHandler {
 
         String parameters = origin + "&" + dest + "&" + departureTime + "&" + key;
 
-        // Building the url to the web service
         return "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
     }
 
@@ -96,7 +105,6 @@ public class TrafficTimeHandler {
         HttpURLConnection urlConnection = null;
 
         try {
-
             URL url = new URL(strURL);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.connect();
@@ -139,7 +147,7 @@ public class TrafficTimeHandler {
     }
 
     /**
-     * A class to parse the Google Places in JSON format
+     * Asynchronously parse the Google Places in JSON format
      */
     private static class ParserAsyncTask extends AsyncTask<String, Integer, HashMap<String, Integer>> {
 
@@ -151,10 +159,9 @@ public class TrafficTimeHandler {
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                MapsJSONParser parser = new MapsJSONParser();
+                JSONParser parser = new JSONParser();
 
-                // Starts parsing data
-                parsedData = parser.parse(jObject);
+                parsedData = parser.parseFromMaps(jObject);
             } catch (Exception e) {
                 e.printStackTrace();
             }
