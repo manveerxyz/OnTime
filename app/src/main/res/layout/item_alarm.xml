@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:orientation="vertical"
-    android:paddingEnd="@dimen/alarm_margin"
-    android:paddingStart="@dimen/alarm_margin">
+    android:paddingStart="@dimen/alarm_margin"
+    android:paddingEnd="@dimen/alarm_margin">
 
     <Switch
         android:id="@+id/alarm_active_switch"
@@ -50,5 +50,12 @@
         android:background="?android:selectableItemBackground"
         android:padding="7dp"
         android:src="@drawable/ic_edit_24dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@id/add_alarm_repeat_layout"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorGrey300" />
 
 </RelativeLayout>
