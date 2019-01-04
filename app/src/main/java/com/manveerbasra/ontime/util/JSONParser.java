@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -26,12 +27,11 @@ public class JSONParser {
      * @param jObject JSONObject received from API request
      * @return a HashMap of keys (duration) to their respective int durations in seconds
      */
-    public HashMap<String, Integer> parseFromMaps(JSONObject jObject) {
+    public HashMap<String, Integer> parseFromMaps(JSONObject jObject){
 
         HashMap<String, Integer> routes = new HashMap<>();
 
         try {
-
             JSONArray jRoutes = jObject.getJSONArray("routes");
             JSONArray jLegs = (jRoutes.getJSONObject(0)).getJSONArray("legs");
 
@@ -44,7 +44,6 @@ public class JSONParser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "parsed data from Maps: " + routes.toString());
         return routes;
     }
 

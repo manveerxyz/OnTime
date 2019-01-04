@@ -1,11 +1,15 @@
 package com.manveerbasra.ontime.timehandlers;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Class to get and handle time shift required for user to be alerted OnTime
  */
 public class TimeShiftHandler {
+
+    private final String TAG = "TimeShiftHandler";
 
     private TrafficTimeHandler trafficTimeHandler;
     private WeatherTimeHandler weatherTimeHandler;
@@ -27,6 +31,10 @@ public class TimeShiftHandler {
         long trafficShift = trafficTimeHandler.getTimeShiftInMillis(start, end, departureTimeInSecs);
         long weatherShift = weatherTimeHandler.getTimeShiftInMillis(start, end);
 
-        return (long) ((0.5) * (trafficShift + weatherShift));
+        long totalShift = (long) (trafficShift + (0.5 * weatherShift));
+
+        Log.i(TAG, "Total Time shift: " + totalShift +
+                " = (" + trafficShift + " + ((0.5) * " + weatherShift + "))");
+        return totalShift;
     }
 }

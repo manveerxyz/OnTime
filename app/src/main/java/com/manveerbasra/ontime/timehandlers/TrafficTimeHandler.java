@@ -66,12 +66,12 @@ public class TrafficTimeHandler {
             data = null;
         }
 
-        if (data == null) return -1;
+        if (data == null) return 0;
         else {
             long duration = data.get(DURATION);
             long durationTraffic = data.get(DURATION_TRAFFIC);
-            Log.i(TAG, "Normal trip length: " + duration + " and length in traffic: " + durationTraffic);
-            long shiftInSecs = duration - durationTraffic;
+            Log.i(TAG, "Normal trip length: " + duration + " secs and length in traffic: " + durationTraffic + " secs");
+            long shiftInSecs = durationTraffic - duration;
             return TimeUnit.SECONDS.toMillis(shiftInSecs);
         }
     }

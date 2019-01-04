@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class WeatherTimeHandler {
 
+    private final String TAG = "WeatherTimeHandler";
+
     // keys for HashMap of parsed JSON data
     public static final String CONDITIONS = "conditions"; // short summary of conditions
     public static final String CONDITIONS_DESC = "conditions_description";
@@ -80,7 +82,7 @@ public class WeatherTimeHandler {
             data = null;
         }
 
-        if (data == null) return -1;
+        if (data == null) return 0;
         else {
             return calculateTimeShiftFromData(data);
         }
@@ -108,6 +110,7 @@ public class WeatherTimeHandler {
         }
 
         double shiftInMinutes = 60 * ratio;
+        Log.i(TAG, "Shift from weather conditions: " + shiftInMinutes + " minutes");
         return TimeUnit.MINUTES.toMillis((long) shiftInMinutes);
     }
 

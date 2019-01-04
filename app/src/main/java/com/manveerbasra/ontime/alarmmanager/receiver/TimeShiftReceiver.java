@@ -38,12 +38,12 @@ public class TimeShiftReceiver extends BroadcastReceiver {
         AlarmHandler alarmHandler = new AlarmHandler(context, null);
 
         if (alarm != null) {
-            String mapsApiKey = context.getString(R.string.google_maps_key);
+            String mapsApiKey = context.getString(R.string.google_maps_ip_key);
             String weatherApiKey = context.getString(R.string.weather_map_key);
             TimeShiftHandler timeShiftHandler = new TimeShiftHandler(mapsApiKey, weatherApiKey);
 
             long timeToNextRing = alarm.getTimeToNextRing();
-            int departureTimeInSecs = (int) ((timeToNextRing - System.currentTimeMillis()) / 1000) + 30 * 60;
+            int departureTimeInSecs = (int) (timeToNextRing / 1000) + 30 * 60;
             long timeShiftInMillis = timeShiftHandler.getTimeShiftInMillis(alarm.startPoint, alarm.endPoint, departureTimeInSecs);
             Log.i(TAG, "setting alarm's time shift to " + timeShiftInMillis);
 
