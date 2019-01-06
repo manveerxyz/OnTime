@@ -16,6 +16,8 @@ import com.manveerbasra.ontime.db.converter.BooleanArrayConverter;
 import com.manveerbasra.ontime.db.converter.DateConverter;
 import com.manveerbasra.ontime.db.converter.LatLngConverter;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -70,6 +72,15 @@ public class Alarm implements Parcelable {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public void setTime(String stringTime) {
+        DateFormat formatter = new SimpleDateFormat("hh:mm aa");
+        try {
+            time = formatter.parse(stringTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isActive() {
@@ -337,10 +348,9 @@ public class Alarm implements Parcelable {
         Long timestamp = in.readLong();
         time = DateConverter.toDate(timestamp);
 
+        activeDays = new boolean[7];
         in.readBooleanArray(activeDays);
-        for (boolean bool: activeDays) {
-            if (bool) active = true;
-        }
+        active = false;
 
         Bundle args = in.readBundle(getClass().getClassLoader());
         startPoint = args.getParcelable("START_POINT");

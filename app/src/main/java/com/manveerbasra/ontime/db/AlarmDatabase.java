@@ -86,7 +86,7 @@ public abstract class AlarmDatabase extends RoomDatabase {
             } catch (java.text.ParseException e) {
                 e.printStackTrace();
             }
-            boolean[] activeDays = {true, true, false, false, false, false, false};
+            boolean[] activeDays = {false, true, true, true, true, true, false};
 
             LatLng start = new LatLng(43.6426, 79.3871);
             String startPlace = "CN Tower";

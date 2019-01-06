@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Updates AlarmViewModel with data received from AddAlarmActivity.
+     * Notifies user with data received from AddAlarmActivity.
      * <p>
      * Handles both new Alarms and edited Alarms.
      *
@@ -94,84 +94,14 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == NEW_ALARM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            // Get Extras.
-            String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
-            boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
-            boolean[] activeDays = data.getBooleanArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
-            String startPlace = data.getStringExtra(AddAlarmActivity.EXTRA_START_PLACE);
-            String endPlace = data.getStringExtra(AddAlarmActivity.EXTRA_END_PLACE);
-
-            Bundle args = data.getBundleExtra(AddAlarmActivity.BUNDLE_POINTS);
-            LatLng startPoint = args.getParcelable(AddAlarmActivity.EXTRA_START_POINT);
-            LatLng endPoint = args.getParcelable(AddAlarmActivity.EXTRA_END_POINT);
-
-            // Convert String timeStr to Date object.
-            DateFormat formatter = new SimpleDateFormat("hh:mm aa");
-            Date time = null;
-            try {
-                time = formatter.parse(timeStr);
-            } catch (java.text.ParseException e) {
-                e.printStackTrace();
+        if (resultCode == RESULT_OK) {
+            if (data.hasExtra(AddAlarmActivity.EXTRA_DELETE)) {
+                Snackbar.make(snackbarAnchor, R.string.alarm_deleted, Snackbar.LENGTH_SHORT).show();
             }
 
-            // Create new Alarm object.
-            Alarm alarm = new Alarm(time, active, activeDays, startPoint, endPoint, startPlace, endPlace);
-            // Insert into ViewModel.
-            alarmViewModel.insert(alarm);
-
-            // Show snackbar to notify user
             Snackbar.make(snackbarAnchor, R.string.alarm_saved, Snackbar.LENGTH_SHORT).show();
 
-        } else if (requestCode == EDIT_ALARM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            // Get Extras.
-            int id = data.getIntExtra(AddAlarmActivity.EXTRA_ID, -1);
-            if (data.hasExtra(AddAlarmActivity.EXTRA_DELETE)) { // Alarm to be deleted.
-                // Get Alarm object to be deleted.
-                Alarm alarm = alarmViewModel.getAlarmById(id);
-                // Delete alarm.
-                alarmViewModel.delete(alarm);
-
-                // Show snackbar to notify user
-                Snackbar.make(snackbarAnchor, R.string.alarm_deleted, Snackbar.LENGTH_SHORT).show();
-            } else {
-                String timeStr = data.getStringExtra(AddAlarmActivity.EXTRA_TIME);
-                boolean active = data.getBooleanExtra(AddAlarmActivity.EXTRA_ACTIVE, false);
-                boolean[] activeDays = data.getBooleanArrayExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS);
-                String startPlace = data.getStringExtra(AddAlarmActivity.EXTRA_START_PLACE);
-                String endPlace = data.getStringExtra(AddAlarmActivity.EXTRA_END_PLACE);
-
-                Bundle args = data.getBundleExtra(AddAlarmActivity.BUNDLE_POINTS);
-                LatLng startPoint = args.getParcelable(AddAlarmActivity.EXTRA_START_POINT);
-                LatLng endPoint = args.getParcelable(AddAlarmActivity.EXTRA_END_POINT);
-
-                // Convert String timeStr to Date object.
-                DateFormat formatter = new SimpleDateFormat("hh:mm aa");
-                Date time = null;
-                try {
-                    time = formatter.parse(timeStr);
-                } catch (java.text.ParseException e) {
-                    e.printStackTrace();
-                }
-
-                // Get Alarm object that was edited.
-                Alarm alarm = alarmViewModel.getAlarmById(id);
-                // Update Alarm object.
-                alarm.setTime(time);
-                alarm.setActive(active);
-                alarm.setActiveDays(activeDays);
-                alarm.setStartPlace(startPlace);
-                alarm.setEndPlace(endPlace);
-                alarm.setStartPoint(startPoint);
-                alarm.setEndPoint(endPoint);
-                // Update in ViewModel.
-                alarmViewModel.update(alarm);
-
-                // Show snackbar to notify user
-                Snackbar.make(snackbarAnchor, R.string.alarm_saved, Snackbar.LENGTH_SHORT).show();
-            }
         } else {
-            // Show snackbar to notify user
             Snackbar.make(snackbarAnchor, R.string.alarm_not_saved, Snackbar.LENGTH_SHORT).show();
         }
     }

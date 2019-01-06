@@ -57,11 +57,11 @@ public class AlarmRepository {
     }
 
 
-    /**
+    /*
      * Asynchronous Tasks
      *
      * One for each interaction with database.
-     * All are static to prevent memory leaks
+     * All classes are static to prevent memory leaks.
      */
 
     private static class insertAsyncTask extends AsyncTask<Alarm, Void, Void> {

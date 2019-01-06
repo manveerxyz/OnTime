@@ -1,5 +1,6 @@
 package com.manveerbasra.ontime.ui.activity;
 
+import android.app.Application;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -19,9 +20,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
+import com.manveerbasra.ontime.util.AlarmRepository;
 
 import java.util.Calendar;
 
+/**
+ * Used to create and edit alarms, depending on REQUEST_CODE
+ */
 public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDaysDialogFragment.OnDialogCompleteListener {
 
     private final String TAG = "AddAlarmActivity";
@@ -30,34 +35,22 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     private static final int SET_END_LOCATION_ACTIVITY_REQUEST_CODE = 2;
 
     // Key values for returning intent.
-    public static final String EXTRA_ID = "com.manveerbasra.ontime.AddAlarmActivity.ID";
-    public static final String EXTRA_TIME = "com.manveerbasra.ontime.AddAlarmActivity.TIME";
-    public static final String EXTRA_ACTIVE = "com.manveerbasra.ontime.AddAlarmActivity.ACTIVE";
-    public static final String EXTRA_ACTIVE_DAYS = "com.manveerbasra.ontime.AddAlarmActivity.ACTIVEDAYS";
+    public static final String EXTRA_BUNDLE = "com.manveerbasra.ontime.AddAlarmActivity.BUNDLE";
+    public static final String EXTRA_ALARM = "com.manveerbasra.ontime.AddAlarmActivity.ALARM";
     public static final String EXTRA_DELETE = "com.manveerbasra.ontime.AddAlarmActivity.DELETE";
-    public static final String EXTRA_START_PLACE = "com.manveerbasra.ontime.AddAlarmActivity.STARTPLACE";
-    public static final String EXTRA_END_PLACE = "com.manveerbasra.ontime.AddAlarmActivity.ENDPLACE";
-    public static final String BUNDLE_POINTS = "com.manveerbasra.ontime.AddAlarmActivity.BUNDLE.POINTS";
-    public static final String EXTRA_START_POINT = "com.manveerbasra.ontime.AddAlarmActivity.STARTPOINT";
-    public static final String EXTRA_END_POINT = "com.manveerbasra.ontime.AddAlarmActivity.ENDPOINT";
 
-    // Alarm attributes.
+    private AlarmRepository mRepository;
+    private int mCurrRequestCode; // current request code - static values in MainActivity
+
     private Alarm mAlarm;
-    int alarmID;
-    String time;
-    boolean[] activeDays;
-    LatLng startPoint;
-    LatLng endPoint;
-    String startPlace;
-    String endPlace;
     // Data objects
-    Calendar calendar;
+    private Calendar calendar;
     // View objects
-    TextView timeTextView;
-    TextView repeatTextView;
-    TextView startLocTextView;
-    TextView endLocTextView;
-    FloatingActionButton deleteButton;
+    private TextView timeTextView;
+    private TextView repeatTextView;
+    private TextView startLocTextView;
+    private TextView endLocTextView;
+    private FloatingActionButton deleteButton;
 
 
     @Override
@@ -73,30 +66,31 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         startLocTextView = findViewById(R.id.add_alarm_start_loc_text);
         endLocTextView = findViewById(R.id.add_alarm_end_loc_text);
 
+        mRepository = new AlarmRepository(this.getApplication());
+
         Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_ID)) { // Activity called to edit an alarm.
-            alarmID = intent.getIntExtra(EXTRA_ID, -1);
-            time = intent.getStringExtra(EXTRA_TIME);
-            activeDays = intent.getBooleanArrayExtra(EXTRA_ACTIVE_DAYS);
-            startPlace = intent.getStringExtra(EXTRA_START_PLACE);
-            endPlace = intent.getStringExtra(EXTRA_END_PLACE);
+        if (intent.hasExtra(EXTRA_BUNDLE)) { // Activity called to edit an alarm.
+            Bundle args = intent.getBundleExtra(EXTRA_BUNDLE);
+            mAlarm = args.getParcelable(EXTRA_ALARM);
+            mCurrRequestCode = MainActivity.EDIT_ALARM_ACTIVITY_REQUEST_CODE;
+        } else {
+            mCurrRequestCode = MainActivity.NEW_ALARM_ACTIVITY_REQUEST_CODE;
+        }
 
-            Bundle args = intent.getBundleExtra(BUNDLE_POINTS);
-            startPoint = args.getParcelable(EXTRA_START_POINT);
-            endPoint = args.getParcelable(EXTRA_END_POINT);
-
-            startLocTextView.setText(startPlace);
-            endLocTextView.setText(endPlace);
-            timeTextView.setText(time);
-            repeatTextView.setText(Alarm.getStringOfActiveDays(activeDays));
+        if (mAlarm != null) {
+            startLocTextView.setText(mAlarm.startPlace);
+            endLocTextView.setText(mAlarm.endPlace);
+            timeTextView.setText(mAlarm.getStringTime());
+            repeatTextView.setText(mAlarm.getStringOfActiveDays());
             setTitle(R.string.edit_alarm);
 
             addDeleteButtonListener();
         } else {
-            activeDays = new boolean[7];
+            mAlarm = new Alarm();
+            mAlarm.activeDays = new boolean[7];
             deleteButton.hide();
             setInitialAlarmTime();
-            setInitialRepetition();
+            repeatTextView.setText(R.string.never);
         }
 
         addSetTimeLayoutListener();
@@ -107,7 +101,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
 
     /**
-     * Initialize timeTextView with current time
+     * Initialize timeTextView and mAlarm's time with current time
      */
     private void setInitialAlarmTime() {
         // Get time and set it to alarm time TextView
@@ -116,14 +110,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         String currentTime = getFormattedTime(hour, minute);
         timeTextView.setText(currentTime);
-
-    }
-
-    /**
-     * Initialize timeTextView with current time
-     */
-    private void setInitialRepetition() {
-        repeatTextView.setText(getString(R.string.never));
+        mAlarm.setTime(currentTime);
     }
 
     private void addDeleteButtonListener() {
@@ -132,8 +119,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             public void onClick(View view) {
                 Intent replyIntent = new Intent();
 
-                // Add user-selected extras.
-                replyIntent.putExtra(EXTRA_ID, alarmID);
+                mRepository.delete(mAlarm);
                 replyIntent.putExtra(EXTRA_DELETE, true);
 
                 setResult(RESULT_OK, replyIntent);
@@ -155,11 +141,11 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
                 // Get initial hour and minute values to display in dialog;
                 int hour, minute;
-                if (time == null) {
+                if (mAlarm.time == null) {
                     hour = calendar.get(Calendar.HOUR_OF_DAY);
                     minute = calendar.get(Calendar.MINUTE);
                 } else {
-                    String[] splitTime = time.split(":");
+                    String[] splitTime = mAlarm.getStringTime().split(":");
                     hour = Integer.parseInt(splitTime[0]);
                     minute = Integer.parseInt(splitTime[1].substring(0, 2));
                     if (splitTime[1].endsWith("PM")) {
@@ -174,7 +160,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         String formattedTime = getFormattedTime(selectedHour, selectedMinute);
-                        time = formattedTime;
+                        mAlarm.setTime(formattedTime);
                         timeTextView.setText(formattedTime);
                     }
                 }, hour, minute, false);
@@ -236,14 +222,12 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
     /**
      * Get Bundle of arguments for SetRepeatDaysDialogFragment, arguments include alarm's active days.
-     *
-     * @return Bundle of arguments
      */
     @NonNull
     private Bundle getBundle() {
         Bundle args = new Bundle();
 
-        args.putBooleanArray("activeDays", activeDays);
+        args.putBooleanArray("activeDays", mAlarm.activeDays);
         return args;
     }
 
@@ -254,8 +238,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
      * @param selectedDaysBools boolean array of selected days of the week
      */
     public void onDialogComplete(boolean[] selectedDaysBools) {
-        activeDays = selectedDaysBools;
-        String formattedActiveDays = Alarm.getStringOfActiveDays(activeDays);
+        mAlarm.activeDays = selectedDaysBools;
+        String formattedActiveDays = Alarm.getStringOfActiveDays(mAlarm.activeDays);
         repeatTextView.setText(formattedActiveDays);
     }
 
@@ -278,20 +262,12 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             } else {
                 Intent replyIntent = new Intent();
 
-                String time = timeTextView.getText().toString();
+                if (mCurrRequestCode == MainActivity.EDIT_ALARM_ACTIVITY_REQUEST_CODE) {
+                    mRepository.update(mAlarm);
+                } else {
+                    mRepository.insert(mAlarm);
+                }
 
-                Bundle args = new Bundle();
-                args.putParcelable(EXTRA_START_POINT, startPoint);
-                args.putParcelable(EXTRA_END_POINT, endPoint);
-
-                // Add user-selected extras.
-                replyIntent.putExtra(EXTRA_ID, alarmID);
-                replyIntent.putExtra(EXTRA_TIME, time);
-                replyIntent.putExtra(EXTRA_ACTIVE, false);
-                replyIntent.putExtra(EXTRA_ACTIVE_DAYS, activeDays);
-                replyIntent.putExtra(EXTRA_START_PLACE, startPlace);
-                replyIntent.putExtra(EXTRA_END_PLACE, endPlace);
-                replyIntent.putExtra(BUNDLE_POINTS, args);
                 setResult(RESULT_OK, replyIntent);
                 finish();
             }
@@ -313,20 +289,20 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         if (requestCode == SET_START_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extras
-            startPlace = data.getStringExtra(MapsActivity.EXTRA_PLACE);
+            mAlarm.startPlace = data.getStringExtra(MapsActivity.EXTRA_PLACE);
             Bundle args = data.getBundleExtra(MapsActivity.BUNDLE_POINT);
-            startPoint = args.getParcelable(MapsActivity.EXTRA_LATLNG);
+            mAlarm.startPoint = args.getParcelable(MapsActivity.EXTRA_LATLNG);
 
             // Set place to start location textView
-            startLocTextView.setText(startPlace);
+            startLocTextView.setText(mAlarm.startPlace);
 
         } else if (requestCode == SET_END_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extra
-            endPlace = data.getStringExtra(MapsActivity.EXTRA_PLACE);
+            mAlarm.endPlace = data.getStringExtra(MapsActivity.EXTRA_PLACE);
             Bundle args = data.getBundleExtra(MapsActivity.BUNDLE_POINT);
-            endPoint = args.getParcelable(MapsActivity.EXTRA_LATLNG);
+            mAlarm.endPoint = args.getParcelable(MapsActivity.EXTRA_LATLNG);
             // Set place to start location textView
-            endLocTextView.setText(endPlace);
+            endLocTextView.setText(mAlarm.endPlace);
         }
     }
 

@@ -176,16 +176,9 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                 Context context = view.getContext();
                 Intent intent = new Intent(context, AddAlarmActivity.class);
 
-                intent.putExtra(AddAlarmActivity.EXTRA_ID, alarm.getId());
-                intent.putExtra(AddAlarmActivity.EXTRA_TIME, alarm.getStringTime());
-                intent.putExtra(AddAlarmActivity.EXTRA_ACTIVE_DAYS, alarm.getActiveDays());
-                intent.putExtra(AddAlarmActivity.EXTRA_START_PLACE, alarm.getStartPlace());
-                intent.putExtra(AddAlarmActivity.EXTRA_END_PLACE, alarm.getEndPlace());
-
                 Bundle args = new Bundle();
-                args.putParcelable(AddAlarmActivity.EXTRA_START_POINT, alarm.getStartPoint());
-                args.putParcelable(AddAlarmActivity.EXTRA_END_POINT, alarm.getEndPoint());
-                intent.putExtra(AddAlarmActivity.BUNDLE_POINTS, args);
+                args.putParcelable(AddAlarmActivity.EXTRA_ALARM, alarm);
+                intent.putExtra(AddAlarmActivity.EXTRA_BUNDLE, args);
 
                 ((MainActivity) context).startActivityForResult(intent, MainActivity.EDIT_ALARM_ACTIVITY_REQUEST_CODE);
             }
