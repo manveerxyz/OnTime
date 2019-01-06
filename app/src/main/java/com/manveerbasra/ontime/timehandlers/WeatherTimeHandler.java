@@ -35,23 +35,23 @@ public class WeatherTimeHandler {
     public static final String RAIN = "rain";
     public static final String SNOW = "snow";
 
-    private static Map<String, Double> conditionsToRatio = new HashMap<>();
+    private static Map<String, Double> mConditionsToRatio = new HashMap<>();
 
-    static { // initialize conditionsToRatio Map
-        conditionsToRatio.put("Thunderstorm", 0.4);
-        conditionsToRatio.put("Drizzle", 0.1);
-        conditionsToRatio.put("Rain", 0.2);
-        conditionsToRatio.put("Snow", 0.2);
-        conditionsToRatio.put("Atmosphere", 0.2);
-        conditionsToRatio.put("Clear", 0.0);
-        conditionsToRatio.put("Mist", 0.0);
-        conditionsToRatio.put("Clouds", 0.0);
+    static { // initialize mConditionsToRatio Map
+        mConditionsToRatio.put("Thunderstorm", 0.4);
+        mConditionsToRatio.put("Drizzle", 0.1);
+        mConditionsToRatio.put("Rain", 0.2);
+        mConditionsToRatio.put("Snow", 0.2);
+        mConditionsToRatio.put("Atmosphere", 0.2);
+        mConditionsToRatio.put("Clear", 0.0);
+        mConditionsToRatio.put("Mist", 0.0);
+        mConditionsToRatio.put("Clouds", 0.0);
     }
 
-    private String apiKey;
+    private String mApiKey;
 
     WeatherTimeHandler(String apiKey) {
-        this.apiKey = apiKey;
+        this.mApiKey = apiKey;
     }
 
     /**
@@ -125,7 +125,7 @@ public class WeatherTimeHandler {
      * @return double from [0-1) representing ratio of an hour to shift alarm forward
      */
     private double getShiftRatioFromWeatherConditions(String condition, String desc) {
-        double ratio = conditionsToRatio.get(condition);
+        double ratio = mConditionsToRatio.get(condition);
         if (desc.contains("light")) ratio -= 0.1;
         else if (desc.contains("heavy") && !condition.equals("Drizzle")) ratio += 0.1;
         else if (desc.equals("tornado")) ratio = 0.5;
@@ -143,7 +143,7 @@ public class WeatherTimeHandler {
         // Build parameters
         String lat = "lat=" + point.latitude;
         String lon = "lon=" + point.longitude;
-        String key = "appid=" + apiKey;
+        String key = "appid=" + mApiKey;
 
         String parameters = lat + "&" + lon + "&" + key;
 

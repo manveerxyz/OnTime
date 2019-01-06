@@ -17,11 +17,11 @@ import com.manveerbasra.ontime.alarmmanager.AlarmSoundControl;
 public class AlarmSnoozeReceiver extends BroadcastReceiver {
 
     private final String TAG = "AlarmSnoozeReceiver";
-    private SharedPreferences preferences;
+    private SharedPreferences mPreferences;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         int alarmID = intent.getIntExtra(AlarmHandler.EXTRA_ID, 0);
 
@@ -34,7 +34,7 @@ public class AlarmSnoozeReceiver extends BroadcastReceiver {
         notificationManager.cancelAll();
 
         // Get snooze length from shared preferences
-        int snoozeInSecs = Integer.parseInt(preferences.getString("alarm_snooze_length_list", "300"));
+        int snoozeInSecs = Integer.parseInt(mPreferences.getString("alarm_snooze_length_list", "300"));
 
         // Schedule next ring
         Log.i(TAG, "Snoozing alarm " + alarmID + " for " + snoozeInSecs + " seconds");

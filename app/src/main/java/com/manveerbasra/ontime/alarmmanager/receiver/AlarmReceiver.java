@@ -23,14 +23,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private final String TAG = "AlarmReceiver";
     private final String CHANNEL_ID = "AlarmReceiverChannel";
-    private SharedPreferences preferences;
+    private SharedPreferences mPreferences;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "received alarm intent");
 
         // Initialize preferences
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         int alarmID = intent.getIntExtra(AlarmHandler.EXTRA_ID, 0);
 
@@ -104,7 +104,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                         snoozeAlarmPendingIntent);
 
         // Set vibrate based on preferences, default is vibrate
-        if (!preferences.getBoolean("alarm_ring_vibrate", true)) {
+        if (!mPreferences.getBoolean("alarm_ring_vibrate", true)) {
             Log.i(TAG, "notification vibrate set to false");
             notification.setVibrate(null);
         }

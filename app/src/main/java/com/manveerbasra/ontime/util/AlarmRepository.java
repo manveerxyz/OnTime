@@ -16,8 +16,8 @@ import java.util.concurrent.ExecutionException;
  */
 public class AlarmRepository {
 
-    private AlarmDao alarmModel;
-    private LiveData<List<Alarm>> allAlarms;
+    private AlarmDao mAlarmModel;
+    private LiveData<List<Alarm>> mAllAlarms;
 
     /**
      * Application is used instead of Context in order to prevent memory leaks
@@ -27,8 +27,8 @@ public class AlarmRepository {
      */
     public AlarmRepository(Application application) {
         AlarmDatabase db = AlarmDatabase.getInstance(application);
-        alarmModel = db.alarmModel();
-        allAlarms = alarmModel.getAllAlarms();
+        mAlarmModel = db.alarmModel();
+        mAllAlarms = mAlarmModel.getAllAlarms();
     }
 
     /**
@@ -37,7 +37,7 @@ public class AlarmRepository {
      * @return List of AlarmEntitys wrapped in a LiveData object
      */
     public LiveData<List<Alarm>> getAllAlarms() {
-        return allAlarms;
+        return mAllAlarms;
     }
 
     /**
@@ -46,7 +46,7 @@ public class AlarmRepository {
      * @param alarm Alarm to insert.
      */
     public void insert(Alarm alarm) {
-        new insertAsyncTask(alarmModel).execute(alarm);
+        new insertAsyncTask(mAlarmModel).execute(alarm);
     }
 
     /**
@@ -55,7 +55,7 @@ public class AlarmRepository {
      * @param alarm Alarm to update.
      */
     public void update(Alarm alarm) {
-        new updateAsyncTask(alarmModel).execute(alarm);
+        new updateAsyncTask(mAlarmModel).execute(alarm);
     }
 
     /**
@@ -64,7 +64,7 @@ public class AlarmRepository {
      * @param alarm Alarm to update.
      */
     public void updateActive(Alarm alarm) {
-        new updateActiveAsyncTask(alarmModel).execute(alarm);
+        new updateActiveAsyncTask(mAlarmModel).execute(alarm);
     }
 
     /**
@@ -73,7 +73,7 @@ public class AlarmRepository {
      * @param alarm Alarm to delete.
      */
     public void delete(Alarm alarm) {
-        new deleteAsyncTask(alarmModel).execute(alarm);
+        new deleteAsyncTask(mAlarmModel).execute(alarm);
     }
 
     /**
@@ -85,7 +85,7 @@ public class AlarmRepository {
      * @throws InterruptedException error thrown from AsyncTask
      */
     public Alarm getById(int id) throws ExecutionException, InterruptedException {
-        return new getByIdAsyncTask(alarmModel).execute(id).get();
+        return new getByIdAsyncTask(mAlarmModel).execute(id).get();
     }
 
     /**

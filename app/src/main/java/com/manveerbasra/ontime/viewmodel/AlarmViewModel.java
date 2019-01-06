@@ -20,13 +20,13 @@ public class AlarmViewModel extends AndroidViewModel {
 
     private final String TAG = "AlarmViewModel";
 
-    private AlarmRepository repository;
-    private LiveData<List<Alarm>> allAlarms;
+    private AlarmRepository mRepository;
+    private LiveData<List<Alarm>> mAllAlarms;
 
     public AlarmViewModel(Application application) {
         super(application);
-        repository = new AlarmRepository(application);
-        allAlarms = repository.getAllAlarms();
+        mRepository = new AlarmRepository(application);
+        mAllAlarms = mRepository.getAllAlarms();
     }
 
     /**
@@ -36,7 +36,7 @@ public class AlarmViewModel extends AndroidViewModel {
      * @return LiveData wrapped List of Alarm objects
      */
     public LiveData<List<Alarm>> getAllAlarms() {
-        return allAlarms;
+        return mAllAlarms;
     }
 
     /**
@@ -45,7 +45,7 @@ public class AlarmViewModel extends AndroidViewModel {
      * @param alarm Alarm object to insert
      */
     public void insert(Alarm alarm) {
-        repository.insert(alarm);
+        mRepository.insert(alarm);
     }
 
     /**
@@ -54,7 +54,7 @@ public class AlarmViewModel extends AndroidViewModel {
      * @param alarm Alarm object to update
      */
     public void update(Alarm alarm) {
-        repository.update(alarm);
+        mRepository.update(alarm);
     }
 
     /**
@@ -63,7 +63,7 @@ public class AlarmViewModel extends AndroidViewModel {
      * @param alarm Alarm object to update
      */
     public void updateActive(Alarm alarm) {
-        repository.updateActive(alarm);
+        mRepository.updateActive(alarm);
     }
 
     /**
@@ -72,7 +72,7 @@ public class AlarmViewModel extends AndroidViewModel {
      * @param alarm Alarm object to delete
      */
     public void delete(Alarm alarm) {
-        repository.delete(alarm);
+        mRepository.delete(alarm);
     }
 
     /**
@@ -83,7 +83,7 @@ public class AlarmViewModel extends AndroidViewModel {
      */
     public Alarm getById(int id) {
         try {
-            return repository.getById(id);
+            return mRepository.getById(id);
         } catch (InterruptedException | ExecutionException e) {
             Log.e(TAG, "Error when retrieving alarm by id: " + id);
             e.printStackTrace();

@@ -16,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.alarmmanager.AlarmHandler;
 import com.manveerbasra.ontime.db.Alarm;
@@ -54,20 +53,20 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
 
     // Layout members
     private final LayoutInflater mInflater;
-    private final TextView emptyTextView;
+    private final TextView mEmptyTextView;
     // Data list (cached copy of alarms)
-    private List<Alarm> alarms = Collections.emptyList();
+    private List<Alarm> mAlarms = Collections.emptyList();
     // To handle interactions with database
-    private AlarmViewModel alarmViewModel;
+    private AlarmViewModel mAlarmViewModel;
     // To schedule alarms
-    private AlarmHandler alarmHandler;
+    private AlarmHandler mAlarmHandler;
 
     public AlarmListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        emptyTextView = ((MainActivity) context).findViewById(R.id.no_alarms_text);
+        mEmptyTextView = ((MainActivity) context).findViewById(R.id.no_alarms_text);
 
-        alarmViewModel = ViewModelProviders.of((MainActivity) context).get(AlarmViewModel.class);
-        alarmHandler = new AlarmHandler(context, ((MainActivity) context).findViewById(R.id.fab));
+        mAlarmViewModel = ViewModelProviders.of((MainActivity) context).get(AlarmViewModel.class);
+        mAlarmHandler = new AlarmHandler(context, ((MainActivity) context).findViewById(R.id.fab));
 
         setHasStableIds(true); // so Switch interaction has smooth animations
     }
@@ -82,7 +81,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
     @Override
     public void onBindViewHolder(@NonNull AlarmViewHolder viewHolder, int position) {
         Resources resources = viewHolder.itemView.getContext().getResources();
-        Alarm alarm = alarms.get(position);
+        Alarm alarm = mAlarms.get(position);
 
         viewHolder.timeTextView.setText(alarm.getStringTime()); // set alarm time
 
@@ -117,19 +116,19 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
      */
     public void setAlarms(List<Alarm> alarms) {
         Log.i(TAG, "updating alarms data-set");
-        this.alarms = alarms;
+        this.mAlarms = alarms;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        emptyTextView.setVisibility(alarms.size() > 0 ? View.GONE : View.VISIBLE);
-        return alarms.size();
+        mEmptyTextView.setVisibility(mAlarms.size() > 0 ? View.GONE : View.VISIBLE);
+        return mAlarms.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return alarms.get(position).getId();
+        return mAlarms.get(position).getId();
     }
 
     /**
@@ -149,17 +148,17 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                     viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorDarkText));
                     // schedule alarm
                     Log.i(TAG, "scheduling alarm: " + alarm.getId());
-                    alarmHandler.scheduleAlarm(alarm);
+                    mAlarmHandler.scheduleAlarm(alarm);
                 } else {
                     alarm.setActive(false);
                     viewHolder.timeTextView.setTextColor(resources.getColor(R.color.colorGrey500));
                     viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorGrey500));
-                    alarmHandler.cancelAlarm(alarm);
+                    mAlarmHandler.cancelAlarm(alarm);
                 }
 
                 // Update database and schedule alarm
                 Log.i(TAG, "updating database with alarm: " + alarm.getId());
-                alarmViewModel.updateActive(alarm);
+                mAlarmViewModel.updateActive(alarm);
             }
         });
     }

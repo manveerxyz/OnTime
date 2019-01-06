@@ -10,14 +10,9 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.db.converter.BooleanArrayConverter;
 import com.manveerbasra.ontime.db.converter.DateConverter;
 import com.manveerbasra.ontime.db.converter.LatLngConverter;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Backend Database
@@ -26,7 +21,7 @@ import java.util.Date;
 @TypeConverters({DateConverter.class, BooleanArrayConverter.class, LatLngConverter.class})
 public abstract class AlarmDatabase extends RoomDatabase {
 
-    private static AlarmDatabase INSTANCE;
+    private static AlarmDatabase mINSTANCE;
 
     @VisibleForTesting
     public static final String DATABASE_NAME = "alarm-db";
@@ -34,10 +29,10 @@ public abstract class AlarmDatabase extends RoomDatabase {
     public abstract AlarmDao alarmModel();
 
     public static AlarmDatabase getInstance(final Context context) {
-        if (INSTANCE == null) {
+        if (mINSTANCE == null) {
             synchronized (AlarmDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                if (mINSTANCE == null) {
+                    mINSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AlarmDatabase.class, DATABASE_NAME)
                             .fallbackToDestructiveMigration() // TODO Add Proper Migration
                             .addCallback(roomDatabaseCallback)
@@ -45,7 +40,7 @@ public abstract class AlarmDatabase extends RoomDatabase {
                 }
             }
         }
-        return INSTANCE;
+        return mINSTANCE;
     }
 
     /**
@@ -56,7 +51,7 @@ public abstract class AlarmDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new PopulateDbAsync(INSTANCE).execute();
+            new PopulateDbAsync(mINSTANCE).execute();
         }
 
         @Override

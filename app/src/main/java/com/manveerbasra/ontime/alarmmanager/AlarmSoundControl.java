@@ -16,17 +16,17 @@ public class AlarmSoundControl {
 
     private final String TAG = "AlarmSoundControl";
 
-    private static AlarmSoundControl INSTANCE;
-    private MediaPlayer mediaPlayer;
+    private static AlarmSoundControl mINSTANCE;
+    private MediaPlayer mMediaPlayer;
 
     private AlarmSoundControl() {
     }
 
     public static AlarmSoundControl getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new AlarmSoundControl();
+        if (mINSTANCE == null) {
+            mINSTANCE = new AlarmSoundControl();
         }
-        return INSTANCE;
+        return mINSTANCE;
     }
 
     /**
@@ -34,15 +34,15 @@ public class AlarmSoundControl {
      */
     public void playAlarmSound(Context context) {
         Log.i(TAG, "Playing alarm ringing sound");
-        mediaPlayer = new MediaPlayer();
+        mMediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(context, getAlarmUri());
+            mMediaPlayer.setDataSource(context, getAlarmUri());
             final AudioManager audioManager = (AudioManager) context
                     .getSystemService(Context.AUDIO_SERVICE);
             if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-                mediaPlayer.prepare();
-                mediaPlayer.start();
+                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                mMediaPlayer.prepare();
+                mMediaPlayer.start();
             }
         } catch (IOException e) {
             System.out.println("Can't read Alarm uri: " + getAlarmUri());
@@ -53,8 +53,8 @@ public class AlarmSoundControl {
      * Stop Alarm Sound currently playing
      */
     public void stopAlarmSound() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
         }
     }
 

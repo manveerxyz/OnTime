@@ -11,12 +11,12 @@ public class TimeShiftHandler {
 
     private final String TAG = "TimeShiftHandler";
 
-    private TrafficTimeHandler trafficTimeHandler;
-    private WeatherTimeHandler weatherTimeHandler;
+    private TrafficTimeHandler mTrafficTimeHandler;
+    private WeatherTimeHandler mWeatherTimeHandler;
 
     public TimeShiftHandler(String mapsApiKey, String weatherApiKey) {
-        trafficTimeHandler = new TrafficTimeHandler(mapsApiKey);
-        weatherTimeHandler = new WeatherTimeHandler(weatherApiKey);
+        mTrafficTimeHandler = new TrafficTimeHandler(mapsApiKey);
+        mWeatherTimeHandler = new WeatherTimeHandler(weatherApiKey);
     }
 
     /**
@@ -28,8 +28,8 @@ public class TimeShiftHandler {
      * @return long alarm time shift in milliseconds
      */
     public long getTimeShiftInMillis(LatLng start, LatLng end, int departureTimeInSecs) {
-        long trafficShift = trafficTimeHandler.getTimeShiftInMillis(start, end, departureTimeInSecs);
-        long weatherShift = weatherTimeHandler.getTimeShiftInMillis(start, end);
+        long trafficShift = mTrafficTimeHandler.getTimeShiftInMillis(start, end, departureTimeInSecs);
+        long weatherShift = mWeatherTimeHandler.getTimeShiftInMillis(start, end);
 
         long totalShift = (long) (trafficShift + (0.5 * weatherShift));
 

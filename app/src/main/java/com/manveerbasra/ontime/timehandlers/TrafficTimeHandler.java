@@ -30,10 +30,10 @@ public class TrafficTimeHandler {
     public static final String DURATION = "duration";
     public static final String DURATION_TRAFFIC = "duration_in_traffic";
 
-    private String apiKey;
+    private String mApiKey;
 
     TrafficTimeHandler(String apiKey) {
-        this.apiKey = apiKey;
+        this.mApiKey = apiKey;
     }
 
     /**
@@ -91,7 +91,7 @@ public class TrafficTimeHandler {
         String origin = "origin=" + start.latitude + "," + start.longitude;
         String dest = "destination=" + end.latitude + "," + end.longitude;
         String departureTime = "departure_time=" + departureTimeInSecs;
-        String key = "key=" + apiKey;
+        String key = "key=" + mApiKey;
 
         String parameters = origin + "&" + dest + "&" + departureTime + "&" + key;
 

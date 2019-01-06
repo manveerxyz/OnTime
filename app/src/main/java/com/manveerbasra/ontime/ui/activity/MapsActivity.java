@@ -33,8 +33,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String BUNDLE_POINT = "com.manveerbasra.ontime.MapsActivity.BUNDLE.POINT";
     public static final String EXTRA_LATLNG = "com.manveerbasra.ontime.MapsActivity.LATLNG";
 
-    private GoogleMap map;
-    private Marker marker;
+    private GoogleMap mMap;
+    private Marker mMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +58,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                if (marker != null) marker.remove(); // remove old marker
+                if (mMarker != null) mMarker.remove(); // remove old marker
 
                 // Add marker in selected place
                 LatLng latLng = place.getLatLng();
-                marker = map.addMarker(new MarkerOptions().position(latLng).title(place.getName().toString()));
+                mMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(place.getName().toString()));
 
                 // Animate camera's movement to selected place
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(latLng)             // Sets the center of the map to place's coordinates
                         .zoom(14)                   // Sets the zoom
                         .build();                   // Creates a CameraPosition from the builder
-                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                 Log.d(TAG, "Place selected: " + place.getName());
             }
@@ -89,15 +89,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (marker != null) {
+                if (mMarker != null) {
                     Intent replyIntent = new Intent();
 
                     Bundle args = new Bundle();
-                    args.putParcelable(EXTRA_LATLNG, marker.getPosition());
+                    args.putParcelable(EXTRA_LATLNG, mMarker.getPosition());
 
                     // Add extras
                     replyIntent.putExtra(BUNDLE_POINT, args);
-                    replyIntent.putExtra(EXTRA_PLACE, marker.getTitle());
+                    replyIntent.putExtra(EXTRA_PLACE, mMarker.getTitle());
                     setResult(RESULT_OK, replyIntent);
                     finish();
                 } else {
@@ -117,7 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
+        mMap = googleMap;
     }
 
 }
