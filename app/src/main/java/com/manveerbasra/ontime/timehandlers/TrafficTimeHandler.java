@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.util.JSONParser;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -167,7 +168,7 @@ public class TrafficTimeHandler {
                 JSONParser parser = new JSONParser();
 
                 parsedData = parser.parseFromMaps(jObject);
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
             return parsedData;

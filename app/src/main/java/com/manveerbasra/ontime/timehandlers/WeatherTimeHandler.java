@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.util.JSONParser;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class WeatherTimeHandler {
 
-    private final String TAG = "WeatherTimeHandler";
+    private static final String TAG = "WeatherTimeHandler";
 
     // keys for HashMap of parsed JSON data
     public static final String CONDITIONS = "conditions"; // short summary of conditions
@@ -43,6 +44,7 @@ public class WeatherTimeHandler {
         conditionsToRatio.put("Snow", 0.2);
         conditionsToRatio.put("Atmosphere", 0.2);
         conditionsToRatio.put("Clear", 0.0);
+        conditionsToRatio.put("Mist", 0.0);
         conditionsToRatio.put("Clouds", 0.0);
     }
 
@@ -145,7 +147,7 @@ public class WeatherTimeHandler {
 
         String parameters = lat + "&" + lon + "&" + key;
 
-        return "api.openweathermap.org/data/2.5/weather?" + parameters;
+        return "https://api.openweathermap.org/data/2.5/weather?" + parameters;
     }
 
     /**
@@ -218,7 +220,7 @@ public class WeatherTimeHandler {
                 JSONParser parser = new JSONParser();
 
                 parsedData = parser.parseFromWeather(jObject);
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
             return parsedData;

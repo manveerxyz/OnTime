@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -32,6 +31,11 @@ public class JSONParser {
         HashMap<String, Integer> routes = new HashMap<>();
 
         try {
+            String statusCode = jObject.getString("status");
+            if (!statusCode.equals("OK")) {
+                Log.e(TAG, "Status code from GoogleMaps API: " + statusCode);
+                return null;
+            }
             JSONArray jRoutes = jObject.getJSONArray("routes");
             JSONArray jLegs = (jRoutes.getJSONObject(0)).getJSONArray("legs");
 
@@ -60,36 +64,42 @@ public class JSONParser {
         HashMap<String, Object> conditions = new HashMap<>();
 
         try {
-
-            JSONObject jWeather = jObject.getJSONObject("weather");
+            JSONArray jWeather = jObject.getJSONArray("weather");
             JSONObject jMain = jObject.getJSONObject("main");
 
-            conditions.put(WeatherTimeHandler.CONDITIONS, jWeather.getString("main"));
-            conditions.put(WeatherTimeHandler.CONDITIONS_DESC, jWeather.getInt("description"));
+            conditions.put(WeatherTimeHandler.CONDITIONS, jWeather.getJSONObject(0).getString("main"));
+            conditions.put(WeatherTimeHandler.CONDITIONS_DESC, jWeather.getJSONObject(0).getString("description"));
             conditions.put(WeatherTimeHandler.TEMPERATURE, jMain.get("temp"));
+
             if (jObject.has("wind"))
                 conditions.put(WeatherTimeHandler.WIND, jObject.getJSONObject("wind").get("speed"));
+
+            int rainAmount = 0;
             if (jObject.has("rain")) {
                 JSONObject jRain = jObject.getJSONObject("rain");
                 if (jRain.has("1h")) {
-                    conditions.put(WeatherTimeHandler.RAIN, jRain.get("1h"));
+                    rainAmount =  jRain.getInt("1h");
                 } else if (jRain.has("3h")) {
-                    conditions.put(WeatherTimeHandler.RAIN, jRain.get("3h"));
+                    rainAmount =  jRain.getInt("3h");
                 }
             }
+
+            int snowAmount = 0;
             if (jObject.has("snow")) {
                 JSONObject jSnow = jObject.getJSONObject("snow");
                 if (jSnow.has("1h")) {
-                    conditions.put(WeatherTimeHandler.SNOW, jSnow.get("1h"));
+                    snowAmount = jSnow.getInt("1h");
                 } else if (jSnow.has("3h")) {
-                    conditions.put(WeatherTimeHandler.SNOW, jSnow.get("3h"));
+                    snowAmount = jSnow.getInt("3h");
                 }
             }
+
+            conditions.put(WeatherTimeHandler.RAIN, rainAmount);
+            conditions.put(WeatherTimeHandler.SNOW, snowAmount);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return conditions;
     }
 }

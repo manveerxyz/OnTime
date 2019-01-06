@@ -72,7 +72,7 @@ public class AlarmHandler {
         } else {
             nextAlarmRing = alarm.getTimeToNextRing(); // get time until next alarm ring
 
-            Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager for " + nextAlarmRing + " milliseconds");
+            Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager");
             alarmManager.set(
                     AlarmManager.RTC_WAKEUP,
                     nextAlarmRing - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
