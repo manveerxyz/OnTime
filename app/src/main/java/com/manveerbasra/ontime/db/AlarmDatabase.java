@@ -10,9 +10,14 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.db.converter.BooleanArrayConverter;
 import com.manveerbasra.ontime.db.converter.DateConverter;
 import com.manveerbasra.ontime.db.converter.LatLngConverter;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Backend Database
@@ -73,18 +78,27 @@ public abstract class AlarmDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
-//            String str = "08:00 am";
-//            DateFormat formatter = new SimpleDateFormat("hh:mm aa");
-//            Date time = null;
-//            try {
-//                time = formatter.parse(str);
-//            } catch (java.text.ParseException e) {
-//                e.printStackTrace();
-//            }
-//            boolean[] activeDays = {true, true, false, false, false, false, false};
-//
-//            Alarm alarm = new Alarm(time, false, activeDays);
-//            alarmModel.insert(alarm);
+            String str = "08:00 am";
+            DateFormat formatter = new SimpleDateFormat("hh:mm aa");
+            Date time = null;
+            try {
+                time = formatter.parse(str);
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+            boolean[] activeDays = {true, true, false, false, false, false, false};
+
+            LatLng start = new LatLng(43.6426, 79.3871);
+            String startPlace = "CN Tower";
+            LatLng end = new LatLng(43.6777, 79.6248);
+            String endPlace = "Toronto Pearson International Airport";
+
+            Alarm alarm = new Alarm(
+                    time, false, activeDays,
+                    start, end,
+                    startPlace, endPlace
+            );
+            alarmModel.insert(alarm);
             return null;
         }
     }
