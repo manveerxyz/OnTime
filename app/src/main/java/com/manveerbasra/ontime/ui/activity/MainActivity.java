@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             int id = data.getIntExtra(AddAlarmActivity.EXTRA_ID, -1);
             if (data.hasExtra(AddAlarmActivity.EXTRA_DELETE)) { // Alarm to be deleted.
                 // Get Alarm object to be deleted.
-                Alarm alarm = alarmViewModel.getById(id);
+                Alarm alarm = alarmViewModel.getAlarmById(id);
                 // Delete alarm.
                 alarmViewModel.delete(alarm);
 
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // Get Alarm object that was edited.
-                Alarm alarm = alarmViewModel.getById(id);
+                Alarm alarm = alarmViewModel.getAlarmById(id);
                 // Update Alarm object.
                 alarm.setTime(time);
                 alarm.setActive(active);

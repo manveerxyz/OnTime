@@ -10,6 +10,7 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
+import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 
 /**
@@ -35,11 +36,8 @@ public interface AlarmDao {
     @Query("UPDATE alarms set alarm_active=:active where alarm_id=:id")
     void updateActive(int id, boolean active);
 
-    @Insert(onConflict = IGNORE)
-    void insertOrReplaceAlarms(Alarm... alarms);
-
-    @Delete
-    void deleteAlarms(Alarm alarm1, Alarm alarm2);
+    @Insert(onConflict = REPLACE)
+    void insertOrReplaceAlarm(Alarm alarm);
 
     @Query("DELETE FROM alarms")
     void deleteAll();

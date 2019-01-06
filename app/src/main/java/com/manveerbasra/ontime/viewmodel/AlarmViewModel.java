@@ -29,61 +29,34 @@ public class AlarmViewModel extends AndroidViewModel {
         mAllAlarms = mRepository.getAllAlarms();
     }
 
-    /**
-     * Get a List of all Alarm objects in repository. List is wrapped in LiveData
-     * in order to be observed and updated efficiently
-     *
-     * @return LiveData wrapped List of Alarm objects
-     */
+    // List is wrapped in LiveData in order to be observed and updated efficiently
     public LiveData<List<Alarm>> getAllAlarms() {
         return mAllAlarms;
     }
 
-    /**
-     * Insert new Alarm in repository
-     *
-     * @param alarm Alarm object to insert
-     */
     public void insert(Alarm alarm) {
         mRepository.insert(alarm);
     }
 
-    /**
-     * Update Alarm in repository
-     *
-     * @param alarm Alarm object to update
-     */
+    public void replace(Alarm alarm) {
+        mRepository.replace(alarm);
+    }
+
     public void update(Alarm alarm) {
         mRepository.update(alarm);
     }
 
-    /**
-     * Update Alarm's activity in repository
-     *
-     * @param alarm Alarm object to update
-     */
     public void updateActive(Alarm alarm) {
         mRepository.updateActive(alarm);
     }
 
-    /**
-     * Delete Alarm in repository
-     *
-     * @param alarm Alarm object to delete
-     */
     public void delete(Alarm alarm) {
         mRepository.delete(alarm);
     }
 
-    /**
-     * Get Alarm by id from repository
-     *
-     * @param id Alarm's int id
-     * @return requested Alarm object
-     */
-    public Alarm getById(int id) {
+    public Alarm getAlarmById(int id) {
         try {
-            return mRepository.getById(id);
+            return mRepository.getAlarmById(id);
         } catch (InterruptedException | ExecutionException e) {
             Log.e(TAG, "Error when retrieving alarm by id: " + id);
             e.printStackTrace();

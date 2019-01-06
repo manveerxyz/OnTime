@@ -42,6 +42,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     public static final String EXTRA_END_POINT = "com.manveerbasra.ontime.AddAlarmActivity.ENDPOINT";
 
     // Alarm attributes.
+    private Alarm mAlarm;
     int alarmID;
     String time;
     boolean[] activeDays;

@@ -15,6 +15,10 @@ import com.manveerbasra.ontime.util.AlarmRepository;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * BroadcastReceiver to process time shift required to alarm time
+ * and set respective alarm.
+ */
 public class TimeShiftReceiver extends BroadcastReceiver {
 
     private final String TAG = "TimeShiftReceiver";
@@ -25,10 +29,11 @@ public class TimeShiftReceiver extends BroadcastReceiver {
 
         int alarmID = intent.getIntExtra(AlarmHandler.EXTRA_ID, 0);
 
+        // Get alarm from repository
         AlarmRepository repository = new AlarmRepository((Application) context.getApplicationContext());
         Alarm alarm;
         try {
-            alarm = repository.getById(alarmID);
+            alarm = repository.getAlarmById(alarmID);
         } catch (InterruptedException | ExecutionException e) {
             Log.e(TAG, "Error when retrieving alarm by id: " + alarmID);
             e.printStackTrace();
