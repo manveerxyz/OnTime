@@ -5,6 +5,9 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -23,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 @Entity(tableName = "alarms")
 @TypeConverters({DateConverter.class, BooleanArrayConverter.class, LatLngConverter.class})
-public class Alarm {
+public class Alarm implements Parcelable {
 
     // Class members
 
@@ -37,10 +40,8 @@ public class Alarm {
     @ColumnInfo(name = "alarm_active")
     public boolean active;
 
-    /**
-     * Must have length 7
-     * i'th item being true means alarm is active on i'th day
-     */
+    // Must have length 7
+    // i'th item being true means alarm is active on i'th day
     @ColumnInfo(name = "alarm_active_days")
     public boolean[] activeDays;
 
@@ -157,9 +158,7 @@ public class Alarm {
     }
 
     /**
-     * Get alarm ring time in 12 hour format
-     *
-     * @return String of alarm ring time
+     * Get String of alarm ring time in 12 hour format
      */
     @Ignore
     public String getStringTime() {
@@ -214,9 +213,7 @@ public class Alarm {
     }
 
     /**
-     * Get time until next alarm ring
-     *
-     * @return time to ring in milliseconds since epoch
+     * Get time until next alarm ring in milliseconds since epoch
      */
     @Ignore
     public long getTimeToNextRing() {
@@ -231,9 +228,7 @@ public class Alarm {
     }
 
     /**
-     * Get Alarm time as a calendar object set to current date
-     *
-     * @return Alarm time parsed into a Calendar object
+     * Get Alarm time as a calendar object set to current date\
      */
     @NonNull
     private Calendar getAlarmTimeAsCalendar() {
@@ -294,5 +289,63 @@ public class Alarm {
             }
         }
         return alarmTime;
+    }
+
+    // Parcelable implementation
+
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Write all alarm contents to Parcel out
+     */
+    @Ignore
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(id);
+        out.writeLong(DateConverter.toTimestamp(time));
+        out.writeBooleanArray(activeDays);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("START_POINT", startPoint);
+        bundle.putParcelable("END_POINT", endPoint);
+        bundle.putString("START_PLACE", startPlace);
+        bundle.putString("END_PLACE", endPlace);
+
+        out.writeBundle(bundle);
+    }
+
+    @Ignore
+    public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
+        public Alarm createFromParcel(Parcel in) {
+            return new Alarm(in);
+        }
+
+        public Alarm[] newArray(int size) {
+            return new Alarm[size];
+        }
+    };
+
+    /**
+     * Construct alarm from Parcel of data written to using writeToParcel (above)
+     */
+    @Ignore
+    private Alarm(Parcel in) {
+        id = in.readInt();
+
+        Long timestamp = in.readLong();
+        time = DateConverter.toDate(timestamp);
+
+        in.readBooleanArray(activeDays);
+        for (boolean bool: activeDays) {
+            if (bool) active = true;
+        }
+
+        Bundle args = in.readBundle(getClass().getClassLoader());
+        startPoint = args.getParcelable("START_POINT");
+        endPoint = args.getParcelable("END_POINT");
+        startPlace = args.getString("START_PLACE");
+        endPlace = args.getString("END_PLACE");
     }
 }
