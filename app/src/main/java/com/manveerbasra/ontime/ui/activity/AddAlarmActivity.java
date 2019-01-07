@@ -21,6 +21,8 @@ import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
 import com.manveerbasra.ontime.util.AlarmRepository;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Used to create and edit alarms, depending on REQUEST_CODE
@@ -143,14 +145,11 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                     hour = calendar.get(Calendar.HOUR_OF_DAY);
                     minute = calendar.get(Calendar.MINUTE);
                 } else {
-                    String[] splitTime = mAlarm.getStringTime().split(":");
-                    hour = Integer.parseInt(splitTime[0]);
-                    minute = Integer.parseInt(splitTime[1].substring(0, 2));
-                    if (splitTime[1].endsWith("PM")) {
-                        hour += 12;
-                    } else if (splitTime[1].endsWith("AM")) {
-                        if (hour == 12) hour = 0;
-                    }
+                    Date date = mAlarm.getTime();
+                    Calendar calendar = GregorianCalendar.getInstance();
+                    calendar.setTime(date);
+                    hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    minute = calendar.get(Calendar.MINUTE);
                 }
 
                 TimePickerDialog timePicker;
