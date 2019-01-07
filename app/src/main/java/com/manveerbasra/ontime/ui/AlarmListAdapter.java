@@ -128,7 +128,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
 
     @Override
     public long getItemId(int position) {
-        return mAlarms.get(position).getId();
+        return mAlarms.get(position).id;
     }
 
     /**
@@ -147,7 +147,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                     viewHolder.timeTextView.setTextColor(resources.getColor(R.color.colorAccent));
                     viewHolder.repetitionTextView.setTextColor(resources.getColor(R.color.colorDarkText));
                     // schedule alarm
-                    Log.i(TAG, "scheduling alarm: " + alarm.getId());
+                    Log.i(TAG, "scheduling alarm: " + alarm.id);
                     mAlarmHandler.scheduleAlarm(alarm);
                 } else {
                     alarm.setActive(false);
@@ -157,7 +157,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                 }
 
                 // Update database and schedule alarm
-                Log.i(TAG, "updating database with alarm: " + alarm.getId());
+                Log.i(TAG, "updating database with alarm: " + alarm.id);
                 mAlarmViewModel.updateActive(alarm);
             }
         });

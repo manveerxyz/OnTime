@@ -47,8 +47,8 @@ public class AlarmHandler {
 
         // Get PendingIntent to TimeShiftReceiver Broadcast channel
         Intent intent = new Intent(mContext, TimeShiftReceiver.class);
-        intent.putExtra(EXTRA_ID, alarm.getId());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        intent.putExtra(EXTRA_ID, alarm.id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
@@ -72,7 +72,7 @@ public class AlarmHandler {
         } else {
             nextAlarmRing = alarm.getTimeToNextRing(); // get time until next alarm ring
 
-            Log.i(TAG, "setting alarm " + alarm.getId() + " to AlarmManager");
+            Log.i(TAG, "setting alarm " + alarm.id + " to AlarmManager");
             alarmManager.set(
                     AlarmManager.RTC_WAKEUP,
                     nextAlarmRing - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
@@ -163,11 +163,11 @@ public class AlarmHandler {
         // Get PendingIntent to AlarmReceiver Broadcast channel
         Intent intent = new Intent(mContext, AlarmReceiver.class);
         Intent shiftIntent = new Intent(mContext, TimeShiftReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, alarm.getId(), intent, PendingIntent.FLAG_NO_CREATE);
-        PendingIntent shiftPendingIntent = PendingIntent.getBroadcast(mContext, alarm.getId(), shiftIntent, PendingIntent.FLAG_NO_CREATE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, alarm.id, intent, PendingIntent.FLAG_NO_CREATE);
+        PendingIntent shiftPendingIntent = PendingIntent.getBroadcast(mContext, alarm.id, shiftIntent, PendingIntent.FLAG_NO_CREATE);
 
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        Log.i(TAG, "cancelling alarm " + alarm.getId());
+        Log.i(TAG, "cancelling alarm " + alarm.id);
 
         // PendingIntent may be null if the alarm hasn't been set
         if (pendingIntent != null) alarmManager.cancel(pendingIntent);

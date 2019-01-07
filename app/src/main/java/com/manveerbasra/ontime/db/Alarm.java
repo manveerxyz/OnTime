@@ -56,23 +56,10 @@ public class Alarm implements Parcelable {
     @ColumnInfo(name = "alarm_end_place")
     public String endPlace;
 
+    public Alarm() {
+    }
+
     // Getters/Setters
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
 
     public void setTime(String stringTime) {
         DateFormat formatter = new SimpleDateFormat("hh:mm aa");
@@ -91,13 +78,21 @@ public class Alarm implements Parcelable {
         this.active = active;
     }
 
-    public Alarm() {
+    public boolean isRepeating() {
+        // Iterate through active days to see if one is true
+        boolean isRepeat = false;
+        for (boolean bool : activeDays) {
+            if (bool) isRepeat = true;
+        }
+        return isRepeat;
     }
+
 
     // Ignored Members
 
+    // Used to get user-readable String representation of activeDays
     @Ignore
-    public static final String[] daysOfWeek =
+    private static final String[] daysOfWeek =
             {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
     @Ignore
@@ -110,22 +105,6 @@ public class Alarm implements Parcelable {
         this.endPoint = endPoint;
         this.startPlace = startPlace;
         this.endPlace = endPlace;
-    }
-
-    /**
-     * Iterates through active days to see if one's set to repeat
-     *
-     * @return boolean for whether alarm repeats or not
-     */
-    @Ignore
-    public boolean isRepeating() {
-        boolean isRepeat = false;
-        for (boolean bool : activeDays) {
-            if (bool) {
-                isRepeat = true;
-            }
-        }
-        return isRepeat;
     }
 
     /**
@@ -201,6 +180,7 @@ public class Alarm implements Parcelable {
     /**
      * Get Alarm time as a calendar object set to current date\
      */
+    @Ignore
     @NonNull
     private Calendar getAlarmTimeAsCalendar() {
         String[] timeString = new SimpleDateFormat("HH:mm").format(this.time).split(":");
@@ -264,6 +244,7 @@ public class Alarm implements Parcelable {
 
     // Parcelable implementation
 
+    @Ignore
     public int describeContents() {
         return 0;
     }

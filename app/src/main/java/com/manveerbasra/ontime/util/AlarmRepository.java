@@ -119,7 +119,7 @@ public class AlarmRepository {
 
         @Override
         protected Void doInBackground(final Alarm... params) {
-            alarmModel.updateActive(params[0].getId(), params[0].isActive());
+            alarmModel.updateActive(params[0].id, params[0].isActive());
             return null;
         }
     }
