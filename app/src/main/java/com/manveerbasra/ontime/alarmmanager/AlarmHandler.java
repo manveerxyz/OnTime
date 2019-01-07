@@ -54,29 +54,31 @@ public class AlarmHandler {
 
         long nextAlarmRing = 0; // used in Snackbar
 
-        if (alarm.isRepeating()) {
-            // get list of time to ring in milliseconds for each active day, and repeat weekly
-            List<Long> timeToWeeklyRings = alarm.getTimeToWeeklyRings();
-            Calendar calendar = Calendar.getInstance();
-            for (long millis : timeToWeeklyRings) {
-                calendar.setTimeInMillis(millis);
-                Log.i(TAG, "Setting weekly repeat at " + calendar.getTime().toString());
-                alarmManager.setRepeating(
+        if (alarmManager != null) {
+            if (alarm.isRepeating()) {
+                // get list of time to ring in milliseconds for each active day, and repeat weekly
+                List<Long> timeToWeeklyRings = alarm.getTimeToWeeklyRings();
+                Calendar calendar = Calendar.getInstance();
+                for (long millis : timeToWeeklyRings) {
+                    calendar.setTimeInMillis(millis);
+                    Log.i(TAG, "Setting weekly repeat at " + calendar.getTime().toString());
+                    alarmManager.setRepeating(
+                            AlarmManager.RTC_WAKEUP,
+                            millis - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
+                            AlarmManager.INTERVAL_DAY * 7,
+                            pendingIntent);
+
+                    if (millis < nextAlarmRing || nextAlarmRing == 0) nextAlarmRing = millis;
+                }
+            } else {
+                nextAlarmRing = alarm.getTimeToNextRing(); // get time until next alarm ring
+
+                Log.i(TAG, "setting alarm " + alarm.id + " to AlarmManager");
+                alarmManager.set(
                         AlarmManager.RTC_WAKEUP,
-                        millis - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
-                        AlarmManager.INTERVAL_DAY * 7,
+                        nextAlarmRing - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
                         pendingIntent);
-
-                if (millis < nextAlarmRing || nextAlarmRing == 0) nextAlarmRing = millis;
             }
-        } else {
-            nextAlarmRing = alarm.getTimeToNextRing(); // get time until next alarm ring
-
-            Log.i(TAG, "setting alarm " + alarm.id + " to AlarmManager");
-            alarmManager.set(
-                    AlarmManager.RTC_WAKEUP,
-                    nextAlarmRing - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
-                    pendingIntent);
         }
 
         String timeUntilNextRing = getStringOfTimeUntilNextRing(nextAlarmRing - System.currentTimeMillis());
@@ -147,7 +149,9 @@ public class AlarmHandler {
 
         Log.i(TAG, "setting timed alarm " + alarmID + " to AlarmManager for " + alarmTimeInMillis + " milliseconds");
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
+        if (alarmManager != null) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeInMillis, pendingIntent);
+        }
     }
 
     /**
@@ -169,9 +173,11 @@ public class AlarmHandler {
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Log.i(TAG, "cancelling alarm " + alarm.id);
 
-        // PendingIntent may be null if the alarm hasn't been set
-        if (pendingIntent != null) alarmManager.cancel(pendingIntent);
-        if (shiftPendingIntent != null) alarmManager.cancel(shiftPendingIntent);
+        if (alarmManager != null) {
+            // PendingIntent may be null if the alarm hasn't been set
+            if (pendingIntent != null) alarmManager.cancel(pendingIntent);
+            if (shiftPendingIntent != null) alarmManager.cancel(shiftPendingIntent);
+        }
 
         // Show snackbar to notify user
         Snackbar.make(mSnackBarAnchor, mContext.getString(R.string.alarm_cancelled), Snackbar.LENGTH_SHORT).show();

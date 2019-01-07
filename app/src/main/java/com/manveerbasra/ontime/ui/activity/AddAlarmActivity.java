@@ -1,6 +1,7 @@
 package com.manveerbasra.ontime.ui.activity;
 
 import android.app.TimePickerDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,7 +19,7 @@ import android.widget.TimePicker;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
-import com.manveerbasra.ontime.util.AlarmRepository;
+import com.manveerbasra.ontime.viewmodel.AlarmViewModel;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -38,7 +39,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     public static final String EXTRA_ALARM = "com.manveerbasra.ontime.AddAlarmActivity.ALARM";
     public static final String EXTRA_DELETE = "com.manveerbasra.ontime.AddAlarmActivity.DELETE";
 
-    private AlarmRepository mRepository;
+    private AlarmViewModel alarmViewModel;
     private int mCurrRequestCode; // current request code - static values in MainActivity
 
     private Alarm mAlarm;
@@ -65,7 +66,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         mStartLocTextView = findViewById(R.id.add_alarm_start_loc_text);
         mEndLocTextView = findViewById(R.id.add_alarm_end_loc_text);
 
-        mRepository = new AlarmRepository(this.getApplication());
+        // Get a new or existing ViewModel from the ViewModelProvider.
+        alarmViewModel = ViewModelProviders.of(this).get(AlarmViewModel.class);
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_BUNDLE)) { // Activity called to edit an alarm.
@@ -118,7 +120,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             public void onClick(View view) {
                 Intent replyIntent = new Intent();
 
-                mRepository.delete(mAlarm);
+                alarmViewModel.delete(mAlarm);
                 replyIntent.putExtra(EXTRA_DELETE, true);
 
                 setResult(RESULT_OK, replyIntent);
@@ -258,9 +260,9 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                 Intent replyIntent = new Intent();
 
                 if (mCurrRequestCode == MainActivity.EDIT_ALARM_ACTIVITY_REQUEST_CODE) {
-                    mRepository.update(mAlarm);
+                    alarmViewModel.update(mAlarm);
                 } else {
-                    mRepository.insert(mAlarm);
+                    alarmViewModel.insert(mAlarm);
                 }
 
                 setResult(RESULT_OK, replyIntent);
@@ -281,6 +283,10 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (data == null) {
+            return;
+        }
 
         if (requestCode == SET_START_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extras

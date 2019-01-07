@@ -38,7 +38,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         // Create and add notification channel
         NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, TAG, NotificationManager.IMPORTANCE_HIGH);
-        notificationManager.createNotificationChannel(mChannel);
+        if (notificationManager != null) notificationManager.createNotificationChannel(mChannel);
 
         Notification notification = buildNotification(
                 context,
@@ -51,7 +51,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         alarmSoundControl.playAlarmSound(context.getApplicationContext());
 
         Log.i(TAG, "displaying notification for alarm " + alarmID);
-        notificationManager.notify(alarmID, notification);
+        if (notificationManager != null) notificationManager.notify(alarmID, notification);
     }
 
     /**

@@ -39,7 +39,8 @@ public class AlarmSoundControl {
             mMediaPlayer.setDataSource(context, getAlarmUri());
             final AudioManager audioManager = (AudioManager) context
                     .getSystemService(Context.AUDIO_SERVICE);
-            if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
+            if (audioManager != null &&
+                    audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();

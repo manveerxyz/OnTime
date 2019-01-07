@@ -31,7 +31,7 @@ public class AlarmSnoozeReceiver extends BroadcastReceiver {
 
         // Dismiss notification
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
+        if (notificationManager != null) notificationManager.cancelAll();
 
         // Get snooze length from shared preferences
         int snoozeInSecs = Integer.parseInt(mPreferences.getString("alarm_snooze_length_list", "300"));
