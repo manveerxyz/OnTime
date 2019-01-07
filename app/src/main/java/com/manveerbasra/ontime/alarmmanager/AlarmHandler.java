@@ -98,22 +98,34 @@ public class AlarmHandler {
         long hours = minutes / 60;
         long days = hours / 24;
 
-        minutes -= hours*60;
-        hours -= days*24;
+        minutes -= hours * 60;
+        hours -= days * 24;
 
-        StringBuilder timeUntilNextRing = new StringBuilder();
+        if (days == 0 && hours == 0 && minutes == 0) {
+            return "less than a minute";
+        }
+
+        StringBuilder sbTime = new StringBuilder();
         if (days >= 1) {
-            timeUntilNextRing.append(days);
-            timeUntilNextRing.append(days > 1 ? " days, " : " day, ");
+            sbTime.append(days);
+            sbTime.append(days > 1 ? " days" : " day");
+            if (hours >= 1 || minutes >= 1) {
+                sbTime.append(", ");
+            }
         }
         if (hours >= 1) {
-            timeUntilNextRing.append(hours);
-            timeUntilNextRing.append(hours > 1 ? " hours, " : " hour, ");
+            sbTime.append(hours);
+            sbTime.append(hours > 1 ? " hours" : " hour");
+            if (minutes >= 1) {
+                sbTime.append(", ");
+            }
         }
-        timeUntilNextRing.append(minutes);
-        timeUntilNextRing.append(minutes > 1 ? " minutes" : " minute");
+        if (minutes >= 1) {
+            sbTime.append(minutes);
+            sbTime.append(minutes > 1 ? " minutes" : " minute");
+        }
 
-        return timeUntilNextRing.toString();
+        return sbTime.toString();
     }
 
     /**

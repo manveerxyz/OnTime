@@ -91,46 +91,6 @@ public class Alarm implements Parcelable {
         this.active = active;
     }
 
-    public boolean[] getActiveDays() {
-        return activeDays;
-    }
-
-    public void setActiveDays(boolean[] activeDays) {
-        this.activeDays = activeDays;
-    }
-
-    public void setStartPoint(LatLng startPoint) {
-        this.startPoint = startPoint;
-    }
-
-    public void setEndPoint(LatLng endPoint) {
-        this.endPoint = endPoint;
-    }
-
-    public LatLng getStartPoint() {
-        return startPoint;
-    }
-
-    public LatLng getEndPoint() {
-        return endPoint;
-    }
-
-    public void setStartPlace(String startPlace) {
-        this.startPlace = startPlace;
-    }
-
-    public void setEndPlace(String endPlace) {
-        this.endPlace = endPlace;
-    }
-
-    public String getStartPlace() {
-        return startPlace;
-    }
-
-    public String getEndPlace() {
-        return endPlace;
-    }
-
     public Alarm() {
     }
 

@@ -1,6 +1,5 @@
 package com.manveerbasra.ontime.ui.activity;
 
-import android.app.Application;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -16,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.manveerbasra.ontime.R;
 import com.manveerbasra.ontime.db.Alarm;
 import com.manveerbasra.ontime.ui.SetRepeatDaysDialogFragment;
@@ -46,11 +44,11 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     // Data objects
     private Calendar calendar;
     // View objects
-    private TextView timeTextView;
-    private TextView repeatTextView;
-    private TextView startLocTextView;
-    private TextView endLocTextView;
-    private FloatingActionButton deleteButton;
+    private TextView mTimeTextView;
+    private TextView mRepeatTextView;
+    private TextView mStartLocTextView;
+    private TextView mEndLocTextView;
+    private FloatingActionButton mDeleteButton;
 
 
     @Override
@@ -59,12 +57,12 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         setContentView(R.layout.activity_add_alarm);
 
         calendar = Calendar.getInstance();
-        deleteButton = findViewById(R.id.fab_add_alarm_delete);
+        mDeleteButton = findViewById(R.id.fab_add_alarm_delete);
 
-        timeTextView = findViewById(R.id.add_alarm_time_text);
-        repeatTextView = findViewById(R.id.add_alarm_repeat_text);
-        startLocTextView = findViewById(R.id.add_alarm_start_loc_text);
-        endLocTextView = findViewById(R.id.add_alarm_end_loc_text);
+        mTimeTextView = findViewById(R.id.add_alarm_time_text);
+        mRepeatTextView = findViewById(R.id.add_alarm_repeat_text);
+        mStartLocTextView = findViewById(R.id.add_alarm_start_loc_text);
+        mEndLocTextView = findViewById(R.id.add_alarm_end_loc_text);
 
         mRepository = new AlarmRepository(this.getApplication());
 
@@ -78,19 +76,19 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         }
 
         if (mAlarm != null) {
-            startLocTextView.setText(mAlarm.startPlace);
-            endLocTextView.setText(mAlarm.endPlace);
-            timeTextView.setText(mAlarm.getStringTime());
-            repeatTextView.setText(mAlarm.getStringOfActiveDays());
+            mStartLocTextView.setText(mAlarm.startPlace);
+            mEndLocTextView.setText(mAlarm.endPlace);
+            mTimeTextView.setText(mAlarm.getStringTime());
+            mRepeatTextView.setText(mAlarm.getStringOfActiveDays());
             setTitle(R.string.edit_alarm);
 
             addDeleteButtonListener();
         } else {
             mAlarm = new Alarm();
             mAlarm.activeDays = new boolean[7];
-            deleteButton.hide();
+            mDeleteButton.hide();
             setInitialAlarmTime();
-            repeatTextView.setText(R.string.never);
+            mRepeatTextView.setText(R.string.never);
         }
 
         addSetTimeLayoutListener();
@@ -101,7 +99,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
 
     /**
-     * Initialize timeTextView and mAlarm's time with current time
+     * Initialize TimeTextView and Alarm's time with current time
      */
     private void setInitialAlarmTime() {
         // Get time and set it to alarm time TextView
@@ -109,12 +107,12 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         int minute = calendar.get(Calendar.MINUTE);
 
         String currentTime = getFormattedTime(hour, minute);
-        timeTextView.setText(currentTime);
+        mTimeTextView.setText(currentTime);
         mAlarm.setTime(currentTime);
     }
 
     private void addDeleteButtonListener() {
-        deleteButton.setOnClickListener(new View.OnClickListener() {
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent replyIntent = new Intent();
@@ -161,7 +159,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         String formattedTime = getFormattedTime(selectedHour, selectedMinute);
                         mAlarm.setTime(formattedTime);
-                        timeTextView.setText(formattedTime);
+                        mTimeTextView.setText(formattedTime);
                     }
                 }, hour, minute, false);
                 timePicker.setTitle("Select Time");
@@ -240,7 +238,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
     public void onDialogComplete(boolean[] selectedDaysBools) {
         mAlarm.activeDays = selectedDaysBools;
         String formattedActiveDays = Alarm.getStringOfActiveDays(mAlarm.activeDays);
-        repeatTextView.setText(formattedActiveDays);
+        mRepeatTextView.setText(formattedActiveDays);
     }
 
     @Override
@@ -256,8 +254,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_alarm_save) {
-            if (startLocTextView.getText().equals(getString(R.string.not_set))
-                    || endLocTextView.getText().equals(getString(R.string.not_set))) {
+            if (mStartLocTextView.getText().equals(getString(R.string.not_set))
+                    || mEndLocTextView.getText().equals(getString(R.string.not_set))) {
                 Snackbar.make(findViewById(R.id.fab_add_alarm_delete), getString(R.string.locs_not_selected), Snackbar.LENGTH_SHORT).show();
             } else {
                 Intent replyIntent = new Intent();
@@ -294,7 +292,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             mAlarm.startPoint = args.getParcelable(MapsActivity.EXTRA_LATLNG);
 
             // Set place to start location textView
-            startLocTextView.setText(mAlarm.startPlace);
+            mStartLocTextView.setText(mAlarm.startPlace);
 
         } else if (requestCode == SET_END_LOCATION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             // Get extra
@@ -302,7 +300,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             Bundle args = data.getBundleExtra(MapsActivity.BUNDLE_POINT);
             mAlarm.endPoint = args.getParcelable(MapsActivity.EXTRA_LATLNG);
             // Set place to start location textView
-            endLocTextView.setText(mAlarm.endPlace);
+            mEndLocTextView.setText(mAlarm.endPlace);
         }
     }
 
