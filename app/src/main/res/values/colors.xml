@@ -6,6 +6,7 @@
 
     <color name="colorActivityBG">#FAFAFA</color>
     <color name="colorGrey300">#E0E0E0</color>
+    <color name="colorGrey400">#BDBDBD</color>
     <color name="colorGrey500">#9E9E9E</color>
     <color name="colorDarkText">#616161</color>
 

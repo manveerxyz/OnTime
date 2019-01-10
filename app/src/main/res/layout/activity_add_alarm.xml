@@ -187,7 +187,7 @@
         android:layout_below="@id/add_alarm_start_loc_layout"
         android:layout_marginStart="28.5dp"
         android:layout_marginTop="-9dp"
-        android:background="@drawable/solid_circle" />
+        android:background="@drawable/solid_circle_blue" />
 
     <View
         android:layout_width="5dp"
@@ -195,7 +195,7 @@
         android:layout_below="@id/add_alarm_start_loc_layout"
         android:layout_marginStart="28.5dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/solid_circle" />
+        android:background="@drawable/solid_circle_blue" />
 
     <RelativeLayout
         android:id="@+id/add_alarm_end_loc_layout"
@@ -245,14 +245,68 @@
 
     </RelativeLayout>
 
+
+    <LinearLayout
+        android:id="@+id/add_alarm_mode_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_alarm_end_loc_layout"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="14dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/mode_walk_button"
+            style="@style/directionsButton"
+            android:background="@drawable/solid_circle_grey"
+            android:src="@drawable/ic_directions_walk_white_24dp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/mode_bike_button"
+            style="@style/directionsButton"
+            android:background="@drawable/solid_circle_grey"
+            android:src="@drawable/ic_directions_bike_white_24dp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/mode_transit_button"
+            style="@style/directionsButton"
+            android:background="@drawable/solid_circle_grey"
+            android:src="@drawable/ic_directions_transit_white_24dp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/mode_drive_button"
+            style="@style/directionsButton"
+            android:background="@drawable/solid_circle_blue"
+            android:src="@drawable/ic_directions_car_white_24dp" />
+
+
+    </LinearLayout>
+
     <!-- More Options -->
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/add_alarm_end_loc_layout"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="22dp">
+        android:layout_below="@id/add_alarm_mode_layout"
+        android:layout_marginStart="64dp">
 
         <Button
             android:id="@+id/add_alarm_more_options"
@@ -264,34 +318,12 @@
 
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_below="@id/add_alarm_end_loc_layout"
-        android:layout_marginTop="14dp"
-        android:background="@color/colorGrey300" />
-
-    <TextView
-        android:id="@+id/add_alarm_advanced_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add_alarm_end_loc_layout"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="34dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@string/font_family_medium"
-        android:text="@string/advanced"
-        android:textAllCaps="true"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/small_text_size"
-        android:visibility="invisible" />
-
 
     <RelativeLayout
         android:id="@+id/add_alarm_departure_time_layout"
         style="@style/settingsItem"
         android:layout_width="match_parent"
-        android:layout_below="@id/add_alarm_advanced_header"
+        android:layout_below="@id/add_alarm_mode_layout"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
