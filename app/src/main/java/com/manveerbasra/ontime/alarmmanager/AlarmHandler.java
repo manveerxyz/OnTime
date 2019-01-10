@@ -54,31 +54,37 @@ public class AlarmHandler {
 
         long nextAlarmRing = 0; // used in Snackbar
 
-        if (alarmManager != null) {
-            if (alarm.isRepeating()) {
-                // get list of time to ring in milliseconds for each active day, and repeat weekly
-                List<Long> timeToWeeklyRings = alarm.getTimeToWeeklyRings();
-                Calendar calendar = Calendar.getInstance();
-                for (long millis : timeToWeeklyRings) {
-                    calendar.setTimeInMillis(millis);
-                    Log.i(TAG, "Setting weekly repeat at " + calendar.getTime().toString());
-                    alarmManager.setRepeating(
-                            AlarmManager.RTC_WAKEUP,
-                            millis - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
-                            AlarmManager.INTERVAL_DAY * 7,
-                            pendingIntent);
+        if (alarmManager == null) {
+            alarm.setActive(false);
+            Snackbar.make(mSnackBarAnchor,
+                    mContext.getString(R.string.alarm_set_error),
+                    Snackbar.LENGTH_SHORT).show();
+            return;
+        }
 
-                    if (millis < nextAlarmRing || nextAlarmRing == 0) nextAlarmRing = millis;
-                }
-            } else {
-                nextAlarmRing = alarm.getTimeToNextRing(); // get time until next alarm ring
-
-                Log.i(TAG, "setting alarm " + alarm.id + " to AlarmManager");
-                alarmManager.set(
+        if (alarm.isRepeating()) {
+            // get list of time to ring in milliseconds for each active day, and repeat weekly
+            List<Long> timeToWeeklyRings = alarm.getTimeToWeeklyRings();
+            Calendar calendar = Calendar.getInstance();
+            for (long millis : timeToWeeklyRings) {
+                calendar.setTimeInMillis(millis);
+                Log.i(TAG, "Setting weekly repeat at " + calendar.getTime().toString());
+                alarmManager.setRepeating(
                         AlarmManager.RTC_WAKEUP,
-                        nextAlarmRing - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
+                        millis - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
+                        AlarmManager.INTERVAL_DAY * 7,
                         pendingIntent);
+
+                if (millis < nextAlarmRing || nextAlarmRing == 0) nextAlarmRing = millis;
             }
+        } else {
+            nextAlarmRing = alarm.getTimeToNextRing(); // get time until next alarm ring
+
+            Log.i(TAG, "setting alarm " + alarm.id + " to AlarmManager");
+            alarmManager.set(
+                    AlarmManager.RTC_WAKEUP,
+                    nextAlarmRing - TimeUnit.HOURS.toMillis(1), // need to call TimeShift an hour early
+                    pendingIntent);
         }
 
         String timeUntilNextRing = getStringOfTimeUntilNextRing(nextAlarmRing - System.currentTimeMillis());

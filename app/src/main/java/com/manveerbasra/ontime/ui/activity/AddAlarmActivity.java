@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -98,6 +99,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         addSetRepeatLayoutListener();
         addSetStartLocationListener();
         addEndStartLocationListener();
+        addMoreOptionLayoutListener();
     }
 
 
@@ -213,6 +215,29 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             public void onClick(View view) {
                 Intent intent = new Intent(AddAlarmActivity.this, MapsActivity.class);
                 startActivityForResult(intent, SET_END_LOCATION_ACTIVITY_REQUEST_CODE);
+            }
+        });
+    }
+
+    private void addMoreOptionLayoutListener() {
+        final Button moreOptButton = findViewById(R.id.add_alarm_more_options);
+
+        moreOptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                moreOptButton.setVisibility(View.INVISIBLE);
+
+                RelativeLayout setDepTimeButton = findViewById(R.id.add_alarm_departure_time_layout);
+                TextView advancedTextView = findViewById(R.id.add_alarm_advanced_header);
+
+                advancedTextView.setVisibility(View.VISIBLE);
+                setDepTimeButton.setVisibility(View.VISIBLE);
+                setDepTimeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // TODO open TimePickerDialog
+                    }
+                });
             }
         });
     }

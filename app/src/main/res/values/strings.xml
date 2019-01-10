@@ -29,15 +29,20 @@
     <string name="set_end_location">Destination</string>
     <string name="not_set">Not Set</string>
     <string name="action_loc_save">Save Location</string>
-    <string name="loc_not_selected">Choose a location before saving</string>
-    <string name="locs_not_selected">Set starting &amp; ending points before saving</string>
+    <string name="more_options">More Options</string>
+    <string name="advanced">Advanced</string>
+    <string name="set_departure_time">Departure Time</string>
+    <!-- Snackbar -->
+    <string name="loc_not_selected">Choose a location before saving.</string>
+    <string name="locs_not_selected">Set starting &amp; ending points before saving.</string>
 
     <!-- Snackbar -->
-    <string name="alarm_not_saved">Alarm not saved</string>
-    <string name="alarm_saved">Alarm saved</string>
-    <string name="alarm_deleted">Alarm deleted</string>
-    <string name="alarm_set">Alarm set for %s from now</string>
-    <string name="alarm_cancelled">Alarm cancelled</string>
+    <string name="alarm_not_saved">Alarm not saved.</string>
+    <string name="alarm_saved">Alarm saved.</string>
+    <string name="alarm_deleted">Alarm deleted.</string>
+    <string name="alarm_set">Alarm set for %s from now.</string>
+    <string name="alarm_cancelled">Alarm cancelled.</string>
+    <string name="alarm_set_error">Error setting alarm.</string>
 
     <!-- Notification -->
     <string name="alarm_notification_title">Alarm going off!</string>
@@ -62,8 +67,6 @@
 
     <!-- Alarm Settings -->
     <string name="pref_header_alarm">Alarm</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
