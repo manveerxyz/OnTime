@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -85,6 +86,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             mTimeTextView.setText(mAlarm.getStringTime());
             mRepeatTextView.setText(mAlarm.getStringOfActiveDays());
             setTitle(R.string.edit_alarm);
+            addModeButtonListeners(mAlarm.transMode);
 
             addDeleteButtonListener();
         } else {
@@ -92,6 +94,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             mAlarm.activeDays = new boolean[7];
             mDeleteButton.hide();
             setInitialAlarmTime();
+            addModeButtonListeners("drive");
             mRepeatTextView.setText(R.string.never);
         }
 
@@ -99,7 +102,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         addSetRepeatLayoutListener();
         addSetStartLocationListener();
         addEndStartLocationListener();
-        addMoreOptionLayoutListener();
+        addMoreOptionsLayoutListener();
     }
 
 
@@ -219,7 +222,72 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         });
     }
 
-    private void addMoreOptionLayoutListener() {
+    private void addModeButtonListeners(String currMode) {
+        final ImageButton walkButton = findViewById(R.id.mode_walk_button);
+        final ImageButton bikeButton = findViewById(R.id.mode_bike_button);
+        final ImageButton transitButton = findViewById(R.id.mode_transit_button);
+        final ImageButton driveButton = findViewById(R.id.mode_drive_button);
+
+        switch (currMode) { // Set initial backgrounds based on currMode parameter
+            case "drive":
+                updateBackgrounds(driveButton, walkButton, bikeButton, transitButton);
+                break;
+            case "transit":
+                updateBackgrounds(transitButton, walkButton, bikeButton, driveButton);
+                break;
+            case "bike":
+                updateBackgrounds(bikeButton, walkButton, transitButton, driveButton);
+                break;
+            case "walk":
+                updateBackgrounds(walkButton, bikeButton, transitButton, driveButton);
+                break;
+        }
+
+        walkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateBackgrounds(walkButton, bikeButton, transitButton, driveButton);
+                mAlarm.transMode = "walk";
+            }
+        });
+
+        bikeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateBackgrounds(bikeButton, walkButton, transitButton, driveButton);
+                mAlarm.transMode = "bike";
+            }
+        });
+
+        transitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateBackgrounds(transitButton, walkButton, bikeButton, driveButton);
+                mAlarm.transMode = "transit";
+            }
+        });
+
+        driveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateBackgrounds(driveButton, walkButton, bikeButton, transitButton);
+                mAlarm.transMode = "drive";
+            }
+        });
+    }
+
+    /**
+     * Update backgrounds of different ImageButtons based on whether they should be active or not.
+     * First parameter button is set to active
+     */
+    private void updateBackgrounds(ImageButton active, ImageButton inactive1, ImageButton inactive2, ImageButton inactive3) {
+        active.setBackground(getDrawable(R.drawable.solid_circle_blue));
+        inactive1.setBackground(getDrawable(R.drawable.solid_circle_grey));
+        inactive2.setBackground(getDrawable(R.drawable.solid_circle_grey));
+        inactive3.setBackground(getDrawable(R.drawable.solid_circle_grey));
+    }
+
+    private void addMoreOptionsLayoutListener() {
         final Button moreOptButton = findViewById(R.id.add_alarm_more_options);
 
         moreOptButton.setOnClickListener(new View.OnClickListener() {
@@ -228,9 +296,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
                 moreOptButton.setVisibility(View.INVISIBLE);
 
                 RelativeLayout setDepTimeButton = findViewById(R.id.add_alarm_departure_time_layout);
-                TextView advancedTextView = findViewById(R.id.add_alarm_advanced_header);
 
-                advancedTextView.setVisibility(View.VISIBLE);
                 setDepTimeButton.setVisibility(View.VISIBLE);
                 setDepTimeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -278,8 +344,8 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_alarm_save) {
-            if (mStartLocTextView.getText().equals(getString(R.string.not_set))
-                    || mEndLocTextView.getText().equals(getString(R.string.not_set))) {
+            if (mStartLocTextView.getText().equals(getString(R.string.set_start_location))
+                    || mEndLocTextView.getText().equals(getString(R.string.set_end_location))) {
                 Snackbar.make(findViewById(R.id.fab_add_alarm_delete), getString(R.string.locs_not_selected), Snackbar.LENGTH_SHORT).show();
             } else {
                 Intent replyIntent = new Intent();

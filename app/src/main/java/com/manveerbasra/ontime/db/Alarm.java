@@ -55,6 +55,8 @@ public class Alarm implements Parcelable {
     public String startPlace;
     @ColumnInfo(name = "alarm_end_place")
     public String endPlace;
+    @ColumnInfo(name = "alarm_transportation_mode")
+    public String transMode;
 
     public Alarm() {
     }
@@ -97,7 +99,7 @@ public class Alarm implements Parcelable {
 
     @Ignore
     public Alarm(Date time, boolean active, boolean[] activeDays, LatLng startPoint, LatLng endPoint,
-                 String startPlace, String endPlace) {
+                 String startPlace, String endPlace, String transMode) {
         this.time = time;
         this.active = active;
         this.activeDays = activeDays;
@@ -105,6 +107,7 @@ public class Alarm implements Parcelable {
         this.endPoint = endPoint;
         this.startPlace = startPlace;
         this.endPlace = endPlace;
+        this.transMode = transMode;
     }
 
     /**
@@ -264,6 +267,7 @@ public class Alarm implements Parcelable {
         bundle.putParcelable("END_POINT", endPoint);
         bundle.putString("START_PLACE", startPlace);
         bundle.putString("END_PLACE", endPlace);
+        bundle.putString("TRANS_MODE", transMode);
 
         out.writeBundle(bundle);
     }
@@ -298,5 +302,6 @@ public class Alarm implements Parcelable {
         endPoint = args.getParcelable("END_POINT");
         startPlace = args.getString("START_PLACE");
         endPlace = args.getString("END_PLACE");
+        transMode = args.getString("TRANS_MODE");
     }
 }

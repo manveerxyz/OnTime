@@ -96,7 +96,8 @@ public abstract class AlarmDatabase extends RoomDatabase {
             Alarm alarm = new Alarm(
                     time, false, activeDays,
                     start, end,
-                    startPlace, endPlace
+                    startPlace, endPlace,
+                    "drive"
             );
             alarmModel.insert(alarm);
             return null;
