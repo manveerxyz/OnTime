@@ -135,48 +135,45 @@
 
     <RelativeLayout
         android:id="@+id/add_alarm_start_loc_layout"
-        style="@style/settingsItem"
         android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:layout_below="@id/add_alarm_location_header"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="5dp"
-            android:src="@drawable/ic_location_24dp" />
+            android:src="@drawable/ic_start_location_24dp" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingStart="50dp"
-            android:paddingEnd="14dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:fontFamily="@string/font_family_medium"
-                android:text="@string/set_start_location"
-                android:textColor="@color/colorDarkText"
-                android:textSize="@dimen/big_text_size" />
+            android:layout_marginStart="50dp"
+            android:background="@drawable/rounded_rectangle"
+            android:paddingStart="14dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="10dp">
 
             <TextView
                 android:id="@+id/add_alarm_start_loc_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:ellipsize="end"
-                android:fontFamily="@string/font_family_medium"
-                android:maxWidth="185dp"
+                android:fontFamily="@string/font_family_regular"
                 android:maxLines="1"
-                android:text="@string/not_set"
+                android:text="@string/set_start_location"
+                android:textColor="@color/colorDarkText"
                 android:textSize="@dimen/med_text_size" />
 
         </RelativeLayout>
@@ -184,15 +181,33 @@
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_below="@id/add_alarm_start_loc_layout"
+        android:layout_marginStart="28.5dp"
+        android:layout_marginTop="-9dp"
+        android:background="@drawable/solid_circle" />
+
+    <View
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_below="@id/add_alarm_start_loc_layout"
+        android:layout_marginStart="28.5dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/solid_circle" />
+
     <RelativeLayout
         android:id="@+id/add_alarm_end_loc_layout"
-        style="@style/settingsItem"
         android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:layout_below="@id/add_alarm_start_loc_layout"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -202,32 +217,27 @@
             android:src="@drawable/ic_location_24dp" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingStart="50dp"
-            android:paddingEnd="14dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:fontFamily="@string/font_family_medium"
-                android:text="@string/set_end_location"
-                android:textColor="@color/colorDarkText"
-                android:textSize="@dimen/big_text_size" />
+            android:layout_marginStart="50dp"
+            android:background="@drawable/rounded_rectangle"
+            android:paddingStart="14dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="10dp">
 
             <TextView
                 android:id="@+id/add_alarm_end_loc_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:ellipsize="end"
-                android:fontFamily="@string/font_family_medium"
-                android:maxWidth="185dp"
+                android:fontFamily="@string/font_family_regular"
                 android:maxLines="1"
-                android:text="@string/not_set"
+                android:text="@string/set_end_location"
+                android:textColor="@color/colorDarkText"
                 android:textSize="@dimen/med_text_size" />
 
         </RelativeLayout>
@@ -242,7 +252,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/add_alarm_end_loc_layout"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="22dp">
 
         <Button
             android:id="@+id/add_alarm_more_options"
@@ -258,6 +268,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:layout_below="@id/add_alarm_end_loc_layout"
+        android:layout_marginTop="14dp"
         android:background="@color/colorGrey300" />
 
     <TextView
@@ -266,14 +277,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/add_alarm_end_loc_layout"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="34dp"
         android:layout_marginBottom="10dp"
         android:fontFamily="@string/font_family_medium"
         android:text="@string/advanced"
         android:textAllCaps="true"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/small_text_size"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
 
     <RelativeLayout
@@ -335,11 +346,9 @@
             android:layout_gravity="bottom|center"
             android:layout_margin="16dp"
             android:backgroundTint="@color/colorRed"
-            android:src="@drawable/ic_delete_white_24dp"/>
+            android:src="@drawable/ic_delete_white_24dp" />
 
     </android.support.design.widget.CoordinatorLayout>
-
-
 
 
 </RelativeLayout>
