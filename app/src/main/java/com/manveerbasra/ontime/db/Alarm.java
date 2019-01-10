@@ -116,7 +116,11 @@ public class Alarm implements Parcelable {
     @Ignore
     public String getStringTime() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm aa");
-        return dateFormatter.format(this.time);
+        String stringTime = dateFormatter.format(this.time);
+        if (stringTime.startsWith("0")) {
+            return stringTime.substring(1);
+        }
+        return stringTime;
     }
 
     @Ignore

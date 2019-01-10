@@ -21,47 +21,48 @@
 
     <RelativeLayout
         android:id="@+id/add_alarm_time_layout"
-        style="@style/settingsItem"
+        android:layout_height="68dp"
         android:layout_width="match_parent"
+        android:paddingStart="64dp"
+        android:paddingEnd="14dp"
         android:layout_below="@id/add_alarm_alarm_header"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/add_alarm_time_text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
-            android:src="@drawable/ic_set_time_24dp" />
+            android:fontFamily="@string/font_family_medium"
+            android:textSize="@dimen/alarm_text_size"
+            android:textColor="@color/colorAccent"/>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingStart="50dp"
-            android:paddingEnd="14dp">
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginStart="5dp"-->
+            <!--android:src="@drawable/ic_set_time_24dp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:fontFamily="@string/font_family_medium"
-                android:text="@string/set_time"
-                android:textColor="@color/colorDarkText"
-                android:textSize="@dimen/big_text_size" />
+        <!--<RelativeLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:paddingStart="50dp"-->
+            <!--android:paddingEnd="14dp">-->
 
-            <TextView
-                android:id="@+id/add_alarm_time_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:fontFamily="@string/font_family_medium"
-                android:textSize="@dimen/med_text_size" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentStart="true"-->
+                <!--android:fontFamily="@string/font_family_medium"-->
+                <!--android:text="@string/set_time"-->
+                <!--android:textColor="@color/colorDarkText"-->
+                <!--android:textSize="@dimen/big_text_size" />-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
     </RelativeLayout>
 
@@ -127,7 +128,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:fontFamily="@string/font_family_medium"
-        android:text="@string/location"
+        android:text="@string/location_header"
         android:textAllCaps="true"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/small_text_size" />
@@ -142,21 +143,14 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
+        android:layout_marginStart="50dp"
         android:paddingStart="14dp"
         android:paddingEnd="14dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
-            android:src="@drawable/ic_start_location_24dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="50dp"
             android:background="@drawable/rounded_rectangle"
             android:paddingStart="14dp"
             android:paddingTop="10dp"
@@ -181,13 +175,21 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_below="@id/add_alarm_location_header"
+        android:layout_marginStart="19dp"
+        android:src="@drawable/ic_start_location_24dp" />
+
     <View
         android:layout_width="5dp"
         android:layout_height="5dp"
         android:layout_below="@id/add_alarm_start_loc_layout"
         android:layout_marginStart="28.5dp"
         android:layout_marginTop="-9dp"
-        android:background="@drawable/solid_circle_blue" />
+        android:background="@drawable/solid_circle_light_blue" />
 
     <View
         android:layout_width="5dp"
@@ -195,7 +197,15 @@
         android:layout_below="@id/add_alarm_start_loc_layout"
         android:layout_marginStart="28.5dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/solid_circle_blue" />
+        android:background="@drawable/solid_circle_light_blue" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="19dp"
+        android:layout_below="@id/add_alarm_start_loc_layout"
+        android:src="@drawable/ic_location_24dp" />
 
     <RelativeLayout
         android:id="@+id/add_alarm_end_loc_layout"
@@ -206,21 +216,14 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
+        android:layout_marginStart="50dp"
         android:paddingStart="14dp"
         android:paddingEnd="14dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
-            android:src="@drawable/ic_location_24dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="50dp"
             android:background="@drawable/rounded_rectangle"
             android:paddingStart="14dp"
             android:paddingTop="10dp"
@@ -254,7 +257,7 @@
         android:layout_marginStart="75dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="75dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="7dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -300,24 +303,6 @@
 
     </LinearLayout>
 
-    <!-- More Options -->
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add_alarm_mode_layout"
-        android:layout_marginStart="64dp">
-
-        <Button
-            android:id="@+id/add_alarm_more_options"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorActivityBG"
-            android:text="@string/more_options"
-            android:textColor="@color/colorGrey500" />
-
-    </RelativeLayout>
-
 
     <RelativeLayout
         android:id="@+id/add_alarm_departure_time_layout"
@@ -327,8 +312,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:gravity="center_vertical"
-        android:visibility="invisible">
+        android:gravity="center_vertical">
 
         <ImageView
             android:layout_width="wrap_content"

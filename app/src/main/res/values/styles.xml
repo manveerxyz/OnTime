@@ -18,7 +18,7 @@
 
     <!-- Settings item theme. -->
     <style name="settingsItem">
-        <item name="android:layout_height">75dp</item>
+        <item name="android:layout_height">64dp</item>
         <item name="android:padding">14dp</item>
     </style>
 

@@ -18,13 +18,12 @@
     <string name="alarm">Alarm</string>
     <string name="add_alarm">Add New Alarm</string>
     <string name="edit_alarm">Edit Alarm</string>
-    <string name="set_time">Time</string>
     <string name="repeat">Repeat</string>
     <string name="set_repeat">Set Repeat</string>
     <string name="no_repeat">no repeat</string>
     <string name="never">never</string>
     <string name="action_alarm_save">Save Alarm</string>
-    <string name="location">Location</string>
+    <string name="location_header">Commute</string>
     <string name="set_start_location">Choose Starting Point</string>
     <string name="set_end_location">Destination</string>
     <string name="not_set">Not Set</string>

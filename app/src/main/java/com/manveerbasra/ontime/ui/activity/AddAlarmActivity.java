@@ -102,7 +102,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         addSetRepeatLayoutListener();
         addSetStartLocationListener();
         addEndStartLocationListener();
-        addMoreOptionsLayoutListener();
     }
 
 
@@ -285,27 +284,6 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         inactive1.setBackground(getDrawable(R.drawable.solid_circle_grey));
         inactive2.setBackground(getDrawable(R.drawable.solid_circle_grey));
         inactive3.setBackground(getDrawable(R.drawable.solid_circle_grey));
-    }
-
-    private void addMoreOptionsLayoutListener() {
-        final Button moreOptButton = findViewById(R.id.add_alarm_more_options);
-
-        moreOptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moreOptButton.setVisibility(View.INVISIBLE);
-
-                RelativeLayout setDepTimeButton = findViewById(R.id.add_alarm_departure_time_layout);
-
-                setDepTimeButton.setVisibility(View.VISIBLE);
-                setDepTimeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // TODO open TimePickerDialog
-                    }
-                });
-            }
-        });
     }
 
     /**
