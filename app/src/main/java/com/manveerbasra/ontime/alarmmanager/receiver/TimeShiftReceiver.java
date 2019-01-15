@@ -49,7 +49,7 @@ public class TimeShiftReceiver extends BroadcastReceiver {
 
             long timeToNextRing = alarm.getTimeToNextRing();
             int departureTimeInSecs = (int) (timeToNextRing / 1000) + 30 * 60;
-            long timeShiftInMillis = timeShiftHandler.getTimeShiftInMillis(alarm.startPoint, alarm.endPoint, departureTimeInSecs);
+            long timeShiftInMillis = timeShiftHandler.getTimeShiftInMillis(alarm.startPoint, alarm.endPoint, departureTimeInSecs, alarm.transMode);
             Log.i(TAG, "setting alarm's time shift to " + timeShiftInMillis);
 
             // Set alarm to 1 hour from now minus time shift

@@ -25,10 +25,11 @@ public class TimeShiftHandler {
      * @param start               starting LatLng point
      * @param end                 destination LatLng point
      * @param departureTimeInSecs time in seconds since epoch of expected departure time
+     * @param transMode String of transportation mode
      * @return long alarm time shift in milliseconds
      */
-    public long getTimeShiftInMillis(LatLng start, LatLng end, int departureTimeInSecs) {
-        long trafficShift = mTrafficTimeHandler.getTimeShiftInMillis(start, end, departureTimeInSecs);
+    public long getTimeShiftInMillis(LatLng start, LatLng end, int departureTimeInSecs, String transMode) {
+        long trafficShift = mTrafficTimeHandler.getTimeShiftInMillis(start, end, departureTimeInSecs, transMode);
         long weatherShift = mWeatherTimeHandler.getTimeShiftInMillis(start, end);
 
         long totalShift = (long) (trafficShift + (0.5 * weatherShift));

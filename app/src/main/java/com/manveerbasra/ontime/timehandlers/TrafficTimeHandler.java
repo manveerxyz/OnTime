@@ -42,16 +42,17 @@ public class TrafficTimeHandler {
      * @param start               starting LatLng point
      * @param end                 destination LatLng point
      * @param departureTimeInSecs time in seconds since epoch of expected departure time
+     * @param transMode String of transportation mode
      * @return long time difference between usual and today's commute in milliseconds
      */
-    long getTimeShiftInMillis(LatLng start, LatLng end, int departureTimeInSecs) {
+    long getTimeShiftInMillis(LatLng start, LatLng end, int departureTimeInSecs, String transMode) {
 
         String jsonData;
         HashMap<String, Integer> data;
 
         // Download data
         DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask();
-        downloadAsyncTask.execute(getHTTPSRequestUrl(start, end, departureTimeInSecs));
+        downloadAsyncTask.execute(getHTTPSRequestUrl(start, end, departureTimeInSecs, transMode));
         try {
             jsonData = downloadAsyncTask.get();
         } catch (ExecutionException | InterruptedException e) {
@@ -83,17 +84,19 @@ public class TrafficTimeHandler {
      * @param start               starting LatLng point
      * @param end                 destination LatLng point
      * @param departureTimeInSecs time in seconds since epoch of expected departure time
+     * @param transMode String of transportation mode
      * @return String url of HTTPS request
      */
-    private String getHTTPSRequestUrl(LatLng start, LatLng end, int departureTimeInSecs) {
+    private String getHTTPSRequestUrl(LatLng start, LatLng end, int departureTimeInSecs, String transMode) {
 
         // Build parameters
         String origin = "origin=" + start.latitude + "," + start.longitude;
         String dest = "destination=" + end.latitude + "," + end.longitude;
         String departureTime = "departure_time=" + departureTimeInSecs;
+        String mode = "mode=" + transMode;
         String key = "key=" + mApiKey;
 
-        String parameters = origin + "&" + dest + "&" + departureTime + "&" + key;
+        String parameters = origin + "&" + dest + "&" + departureTime + "&" + mode + "&" + key;
 
         return "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
     }

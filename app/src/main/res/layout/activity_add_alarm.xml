@@ -21,50 +21,50 @@
 
     <RelativeLayout
         android:id="@+id/add_alarm_time_layout"
-        android:layout_height="68dp"
+        style="@style/settingsItem"
         android:layout_width="match_parent"
-        android:paddingStart="64dp"
-        android:paddingEnd="14dp"
         android:layout_below="@id/add_alarm_alarm_header"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/add_alarm_time_text"
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@string/font_family_medium"
-            android:textSize="@dimen/alarm_text_size"
-            android:textColor="@color/colorAccent"/>
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_set_time_24dp" />
 
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginStart="5dp"-->
-            <!--android:src="@drawable/ic_set_time_24dp" />-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingStart="50dp"
+            android:paddingEnd="14dp">
 
-        <!--<RelativeLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:paddingStart="50dp"-->
-            <!--android:paddingEnd="14dp">-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@string/font_family_medium"
+                android:text="@string/set_time"
+                android:textColor="@color/colorDarkText"
+                android:textSize="@dimen/big_text_size" />
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentStart="true"-->
-                <!--android:fontFamily="@string/font_family_medium"-->
-                <!--android:text="@string/set_time"-->
-                <!--android:textColor="@color/colorDarkText"-->
-                <!--android:textSize="@dimen/big_text_size" />-->
+            <TextView
+                android:id="@+id/add_alarm_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@string/font_family_medium"
+                android:textSize="@dimen/med_text_size" />
 
-        <!--</RelativeLayout>-->
+        </RelativeLayout>
 
     </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/add_alarm_repeat_layout"
@@ -302,53 +302,6 @@
 
 
     </LinearLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/add_alarm_departure_time_layout"
-        style="@style/settingsItem"
-        android:layout_width="match_parent"
-        android:layout_below="@id/add_alarm_mode_layout"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
-            android:src="@drawable/ic_set_time_24dp" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingStart="50dp"
-            android:paddingEnd="14dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:fontFamily="@string/font_family_medium"
-                android:text="@string/set_departure_time"
-                android:textColor="@color/colorDarkText"
-                android:textSize="@dimen/big_text_size" />
-
-            <TextView
-                android:id="@+id/add_alarm_departure_time_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:fontFamily="@string/font_family_medium"
-                android:textSize="@dimen/med_text_size" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

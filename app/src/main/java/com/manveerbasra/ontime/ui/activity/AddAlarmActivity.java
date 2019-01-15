@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -228,16 +227,16 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         final ImageButton driveButton = findViewById(R.id.mode_drive_button);
 
         switch (currMode) { // Set initial backgrounds based on currMode parameter
-            case "drive":
+            case "driving":
                 updateBackgrounds(driveButton, walkButton, bikeButton, transitButton);
                 break;
             case "transit":
                 updateBackgrounds(transitButton, walkButton, bikeButton, driveButton);
                 break;
-            case "bike":
+            case "bicycling":
                 updateBackgrounds(bikeButton, walkButton, transitButton, driveButton);
                 break;
-            case "walk":
+            case "walking":
                 updateBackgrounds(walkButton, bikeButton, transitButton, driveButton);
                 break;
         }
@@ -246,7 +245,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             @Override
             public void onClick(View view) {
                 updateBackgrounds(walkButton, bikeButton, transitButton, driveButton);
-                mAlarm.transMode = "walk";
+                mAlarm.transMode = "walking";
             }
         });
 
@@ -254,7 +253,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             @Override
             public void onClick(View view) {
                 updateBackgrounds(bikeButton, walkButton, transitButton, driveButton);
-                mAlarm.transMode = "bike";
+                mAlarm.transMode = "bicycling";
             }
         });
 
@@ -270,7 +269,7 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             @Override
             public void onClick(View view) {
                 updateBackgrounds(driveButton, walkButton, bikeButton, transitButton);
-                mAlarm.transMode = "drive";
+                mAlarm.transMode = "driving";
             }
         });
     }

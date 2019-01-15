@@ -18,6 +18,7 @@
     <string name="alarm">Alarm</string>
     <string name="add_alarm">Add New Alarm</string>
     <string name="edit_alarm">Edit Alarm</string>
+    <string name="set_time">Time</string>
     <string name="repeat">Repeat</string>
     <string name="set_repeat">Set Repeat</string>
     <string name="no_repeat">no repeat</string>
