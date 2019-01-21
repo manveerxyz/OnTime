@@ -200,6 +200,12 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AddAlarmActivity.this, MapsActivity.class);
+
+                Bundle args = new Bundle();
+                args.putParcelable(MapsActivity.EXTRA_LATLNG, mAlarm.startPoint);
+                intent.putExtra(MapsActivity.BUNDLE_POINT, args);
+                intent.putExtra(MapsActivity.EXTRA_PLACE, mAlarm.startPlace);
+
                 startActivityForResult(intent, SET_START_LOCATION_ACTIVITY_REQUEST_CODE);
             }
         });
@@ -215,6 +221,12 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AddAlarmActivity.this, MapsActivity.class);
+
+                Bundle args = new Bundle();
+                args.putParcelable(MapsActivity.EXTRA_LATLNG, mAlarm.endPoint);
+                intent.putExtra(MapsActivity.BUNDLE_POINT, args);
+                intent.putExtra(MapsActivity.EXTRA_PLACE, mAlarm.endPlace);
+
                 startActivityForResult(intent, SET_END_LOCATION_ACTIVITY_REQUEST_CODE);
             }
         });

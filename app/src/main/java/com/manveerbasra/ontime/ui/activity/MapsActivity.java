@@ -36,10 +36,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Marker mMarker;
 
+    private LatLng mPoint;
+    private String mPlace;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra(BUNDLE_POINT);
+        mPoint = args.getParcelable(EXTRA_LATLNG);
+        mPlace = intent.getStringExtra(EXTRA_PLACE);
 
         setPlaceSearchBarListener();
         setFABClickListener();
@@ -118,6 +126,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (mPoint != null) { // add starting marker and move camera
+            mMarker = mMap.addMarker(new MarkerOptions().position(mPoint).title(mPlace));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mPoint, 14));
+        }
     }
 
 }
