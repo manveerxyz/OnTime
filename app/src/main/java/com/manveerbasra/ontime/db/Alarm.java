@@ -236,8 +236,8 @@ public class Alarm implements Parcelable {
         int currDay = currentCalendar.get(Calendar.DAY_OF_WEEK);
         currDay--; // index using 0 = Sunday
 
-        if (alarmTime < System.currentTimeMillis() // alarm time has passed for today
-                || !activeDays[currDay]) { // current day is not an active day
+        if ((alarmTime < System.currentTimeMillis() && currDay == activeDay) // alarm time has passed for today
+                || currDay != activeDay) { // current day is not an active day
 
             if (activeDay > currDay) { // Alarm is active a later day of the week
                 alarmTime += TimeUnit.MILLISECONDS.convert(activeDay - currDay, TimeUnit.DAYS);
