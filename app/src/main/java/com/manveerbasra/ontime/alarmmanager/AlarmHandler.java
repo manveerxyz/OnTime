@@ -46,7 +46,7 @@ public class AlarmHandler {
         }
 
         // Get PendingIntent to TimeShiftReceiver Broadcast channel
-        Intent intent = new Intent(mContext, TimeShiftReceiver.class);
+        Intent intent = new Intent(mContext, AlarmReceiver.class);
         intent.putExtra(EXTRA_ID, alarm.id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

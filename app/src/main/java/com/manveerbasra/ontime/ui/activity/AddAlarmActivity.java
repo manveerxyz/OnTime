@@ -91,9 +91,10 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         } else {
             mAlarm = new Alarm();
             mAlarm.activeDays = new boolean[7];
+            mAlarm.transMode = "driving";
             mDeleteButton.hide();
             setInitialAlarmTime();
-            addModeButtonListeners("drive");
+            addModeButtonListeners("driving");
             mRepeatTextView.setText(R.string.never);
         }
 
@@ -237,6 +238,10 @@ public class AddAlarmActivity extends AppCompatActivity implements SetRepeatDays
         final ImageButton bikeButton = findViewById(R.id.mode_bike_button);
         final ImageButton transitButton = findViewById(R.id.mode_transit_button);
         final ImageButton driveButton = findViewById(R.id.mode_drive_button);
+
+        if (currMode == null) {
+            currMode = "driving";
+        }
 
         switch (currMode) { // Set initial backgrounds based on currMode parameter
             case "driving":

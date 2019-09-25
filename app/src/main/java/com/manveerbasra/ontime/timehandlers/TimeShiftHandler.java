@@ -32,10 +32,10 @@ public class TimeShiftHandler {
         long trafficShift = mTrafficTimeHandler.getTimeShiftInMillis(start, end, departureTimeInSecs, transMode);
         long weatherShift = mWeatherTimeHandler.getTimeShiftInMillis(start, end);
 
-        long totalShift = (long) (trafficShift + (0.5 * weatherShift));
+        long totalShift = (long) (trafficShift + weatherShift);
 
         Log.i(TAG, "Total Time shift: " + totalShift +
-                " = (" + trafficShift + " + ((0.5) * " + weatherShift + "))");
+                " = (" + trafficShift + " + " + weatherShift + ")");
         return totalShift;
     }
 }

@@ -97,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (data.hasExtra(AddAlarmActivity.EXTRA_DELETE)) {
                 Snackbar.make(snackbarAnchor, R.string.alarm_deleted, Snackbar.LENGTH_SHORT).show();
+            } else {
+                Snackbar.make(snackbarAnchor, R.string.alarm_saved, Snackbar.LENGTH_SHORT).show();
             }
-
-            Snackbar.make(snackbarAnchor, R.string.alarm_saved, Snackbar.LENGTH_SHORT).show();
 
         } else {
             Snackbar.make(snackbarAnchor, R.string.alarm_not_saved, Snackbar.LENGTH_SHORT).show();
